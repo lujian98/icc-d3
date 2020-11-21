@@ -3,5 +3,166 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "icc": {
+      "projectType": "library",
+      "root": "projects/icc",
+      "sourceRoot": "projects/icc/src",
+      "prefix": "icc",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/icc/tsconfig.lib.json",
+            "project": "projects/icc/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/icc/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/icc/src/test.ts",
+            "tsConfig": "projects/icc/tsconfig.spec.json",
+            "karmaConfig": "projects/icc/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/icc/tsconfig.lib.json",
+              "projects/icc/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "d3-demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/d3-demo",
+      "sourceRoot": "projects/d3-demo/src",
+      "prefix": "d3-demo",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/d3-demo",
+            "index": "projects/d3-demo/src/index.html",
+            "main": "projects/d3-demo/src/main.ts",
+            "polyfills": "projects/d3-demo/src/polyfills.ts",
+            "tsConfig": "projects/d3-demo/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/d3-demo/src/favicon.ico",
+              "projects/d3-demo/src/assets"
+            ],
+            "styles": [
+              "projects/d3-demo/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/d3-demo/src/environments/environment.ts",
+                  "with": "projects/d3-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "d3-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "d3-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "d3-demo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/d3-demo/src/test.ts",
+            "polyfills": "projects/d3-demo/src/polyfills.ts",
+            "tsConfig": "projects/d3-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/d3-demo/karma.conf.js",
+            "assets": [
+              "projects/d3-demo/src/favicon.ico",
+              "projects/d3-demo/src/assets"
+            ],
+            "styles": [
+              "projects/d3-demo/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/d3-demo/tsconfig.app.json",
+              "projects/d3-demo/tsconfig.spec.json",
+              "projects/d3-demo/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/d3-demo/e2e/protractor.conf.js",
+            "devServerTarget": "d3-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "d3-demo:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "icc"
 }
