@@ -27,9 +27,6 @@ export class IccLinearScale extends IccAbstractScale {
       minv = minv > 0 ? 0 : minv;
       maxv = maxv < 0 ? 0 : maxv;
     }
-
-    // console.log( ' data =', data);
-    // console.log(' minv =', minv, ' maxv=', maxv, ' this.options.chartTypes =', this.options.chartType)
     scale.domain([minv, maxv]).nice();
   }
 
@@ -38,7 +35,7 @@ export class IccLinearScale extends IccAbstractScale {
     if (type === 'stacked') {
       minv = d3Array.min(data, (c) => d3Array.min(c, (d) => d[0]));
       maxv = d3Array.max(data, (c) => d3Array.max(c, (d) => d[1]));
-    } else if (type === 'normalized') { // possible negative
+    } else if (type === 'normalized') { // possible negative?
       minv = 0;
       maxv = 1;
     } else {
@@ -49,7 +46,6 @@ export class IccLinearScale extends IccAbstractScale {
       minv = minv > 0 ? 0 : minv;
       maxv = maxv < 0 ? 0 : maxv;
     }
-    // console.log(' minv =', minv, ' maxv=', maxv, ' this.options.chartTypes =', this.options.chartTypes)
     scale.domain([minv, maxv]).nice();
   }
 }

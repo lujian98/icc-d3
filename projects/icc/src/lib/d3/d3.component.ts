@@ -31,6 +31,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   @Input() options: any;
   @Input() data: T[];
 
+  protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
   chartTypes = [];
   scale: IccScaleDraw;
   draw: IccDraw;
@@ -39,12 +40,9 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   interactive: IccInteractiveDraw<T>;
   drawAxis: IccAxisDraw;
   drawColor: IccColorDraw;
-
   private alive = true;
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
-
-  protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 
   constructor(
     protected elementRef: ElementRef,
@@ -82,7 +80,6 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         this.createChart(data);
       } else {
         this.draw.drawLegend(this.scale, data);
-        // this.drawColor.setDomain(data); // UPDATE color domain shall not change
         this.setDispatch(data);
         this.setDrawDomain(data);
         this.drawChart(data);
@@ -109,7 +106,6 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public createChart(data: any[]): void {
-    // console.log(' input data =', data)
     this.chartTypes = this.getChartTypes(this.data);
     this.scale = new IccScaleDraw();
     this.drawColor = new IccColorDraw(this.scale, data, this.options);
@@ -145,7 +141,6 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.scale.setDrawDomain(data);
     this.svg.select('.axis--x').call(this.scale.xAxis);
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);
-
     this.svg.select('.axis--y').call(this.scale.yAxis);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
@@ -166,23 +161,16 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     });
     this.scale.dispatch.on('legendMouseover', (d) => {
       this.legendMouseover(d, true);
-      // this.popoverService.openPopover(e);
     });
     this.scale.dispatch.on('legendMouseout', (d) => {
       this.legendMouseover(d, false);
     });
     this.scale.dispatch.on('drawMouseover', (p) => {
-      // this.legendMouseover(d, true);
       this.popoverService.openPopover(p.event);
-      // console.log('over e =', p);
     });
-
     this.scale.dispatch.on('drawMouseout', (p) => {
-      // this.legendMouseover(d, true);
       this.popoverService.closePopover();
-      // console.log('out e =', p);
     });
-
   }
 
   legendMouseover(data: T[], mouseover: boolean): void {

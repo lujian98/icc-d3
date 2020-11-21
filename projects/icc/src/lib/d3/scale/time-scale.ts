@@ -14,7 +14,6 @@ export class IccTimeScale extends IccAbstractScale {
 
   setXDomain(scale: any, data: any[], type = null): void {
     const xdata = data.map((v) => v.values.map((d) => this.options.x(d)))[0];
-    // console.log(' this.options =', this.options)
     if (this.options.chartType === 'barChart') { // TODO options with add extra range for bar chart
       const max = d3Array.max(xdata);
       const addMax = new Date(max);
@@ -24,15 +23,11 @@ export class IccTimeScale extends IccAbstractScale {
       const addMin = new Date(minD);
       addMin.setDate(addMin.getDate() - 10);
       xdata.push(addMin);
-      // console.log( ' scale =', scale)
     }
     scale.domain(d3Array.extent(xdata, (d: Date) => d));
   }
 
   setYDomain(scale: any, data: any[], type = null): void { // TODO
-    // const ydomain = this.options.y0(this.data[0]).map((d) => this.options.y(d));
-    // console.log(' ywwwwwdomain =', ydomain);
-    // scale.domain(ydomain);
   }
 }
 

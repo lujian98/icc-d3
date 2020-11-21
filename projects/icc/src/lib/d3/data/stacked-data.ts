@@ -48,7 +48,6 @@ export class IccStackedData {
       });
     });
     const keys = Object.getOwnPropertyNames(ndata[0]).slice(1); // TODO if [0] not include all keys? (d3.stackOffsetExpand)
-    // console.log( ' keys =', keys);
     const stacks = d3Shape.stack().keys(keys);
     if (this.offset === 'stackOffsetDiverging') {
       stacks.offset(d3Shape.stackOffsetDiverging);
@@ -58,13 +57,11 @@ export class IccStackedData {
       stacks.offset(d3Shape.stackOffsetWiggle)
         .order(d3Shape.stackOrderInsideOut);
     }
-    // console.log('stacked  ndata =', ndata)
     return stacks(ndata);
   }
 
   setStackedYDomain(data: any[]): void {
     this.scale.setYDomain(data, this.normalized ? 'normalized' : 'stacked');
-    // console.log(' this.scale.y ', this.scale.y.domain())
     this.svg.select('.axis--y').call(this.scale.yAxis);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }

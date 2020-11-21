@@ -25,7 +25,10 @@ import { TooltipDemoComponent } from './popover/tooltip-demo.component';
   entryComponents: [
     TooltipDemoComponent
   ],
-  providers: [IccDrawServie, IccPopoverService]
+  providers: [
+    IccDrawServie,
+    IccPopoverService
+  ]
 })
 export class IccD3Module { }
 

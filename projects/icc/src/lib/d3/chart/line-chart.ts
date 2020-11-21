@@ -17,7 +17,6 @@ export class IccLineChart<T> extends IccAbstractDraw<T> {
 
   redrawContent(drawName, scaleX, scaleY): void {
     const drawLine = d3Shape.line()
-      // .curve(d3Shape.curveBasis)
       .x((d: any) => scaleX(this.options.x(d)))
       .y((d: any) => scaleY(this.options.y(d)));
     const drawContent = (d) => drawLine(this.options.y0(d));

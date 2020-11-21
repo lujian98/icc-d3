@@ -102,7 +102,7 @@ export class IccZoomDraw {
       if (yrange[1] < yrange[0]) {
         yrange.reverse();
       }
-      const y1 = Math.min(yrange[1], this.yRange[1]); //  + (this.yRange[0] - y0));
+      const y1 = Math.min(yrange[1], this.yRange[1]);
       const y0 = Math.max(yrange[0], this.yRange[0] - (this.yRange[1] - y1));
       const range = [y0, y1];
       this.setBrushedYRange(range);
@@ -186,7 +186,7 @@ export class IccZoomDraw {
       ];
       this.scale.y.range(x);
     }
-    this.redraw(); // TODO check any issue here
+    this.redraw();
   }
 
   private brushed(event): void {

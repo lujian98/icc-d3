@@ -23,7 +23,6 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     if (drawName === `.${this.chartType}`) {
       drawContents
         .on('mouseover', (e: MouseEvent, d) => {
-          // console.log(' d =', d)
           this.drawMouseover(d, true);
           this.scale.dispatch.call('drawMouseover', this, { event: e, data: d });
         })
@@ -62,30 +61,4 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 }
-
-/*
-
-    if (drawName === `.${this.chartType}`) {
-      drawContents.attr('class', 'barChart series').style('fill-opacity', 0.75);
-      const tooltipDraw = this.svg.select('.interactiveDraw').append('text'); // TODO remove this
-      tooltipDraw
-        .attr('class', 'tooltip')
-        .style('fill-opacity', 0.0)
-        .attr('fill', 'blue');
-      draw.on('mouseover', (e: MouseEvent, d) => {
-        tooltipDraw
-          .attr('x', e.offsetX - this.options.margin.left + 10)
-          .attr('y', e.offsetY - this.options.margin.top - 5)
-          .text(() => this.options.y(d))
-          .style('fill-opacity', 1);
-        this.drawMouseover(d, true);
-        this.scale.dispatch.call('drawMouseover', this, { event: e, data: d });
-      })
-        .on('mouseout', (e, d) => {
-          tooltipDraw.style('fill-opacity', 0);
-          this.drawMouseover(d, false);
-          this.scale.dispatch.call('drawMouseout', this, { event: e, data: d });
-        });
-    }
-    */
 

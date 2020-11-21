@@ -39,12 +39,6 @@ export abstract class IccAbstractDraw<T> {
     this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
   }
 
-  clearDraw(): void { // TODO not used and can be removed
-    // this.svg.select(`.${this.chartType}`).selectAll('g').remove();
-    // this.svg.select(`.${this.chartType}Brush`).selectAll('g').remove();
-    // this.svg.select(`.${this.chartType}BrushY`).selectAll('g').remove();
-  }
-
   getdrawColor = (d, i) => d.color || this.scale.colors(this.options.drawColor(d, i));
 
   getBarColor = (d, i) => d.color || (this.options.barColor && this.scale.colors(this.options.barColor(d, i)));

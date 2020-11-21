@@ -71,7 +71,6 @@ export class IccLegendDraw {
     legendDraw
       .on('click', (e, d: any) => {
         d.disabled = !d.disabled;
-        // console.log(' d =', d);
         this.setLegendShape(d);
         this.scale.dispatch.call('legendClick', this, d);
       })
@@ -81,7 +80,7 @@ export class IccLegendDraw {
 
   private setLegendAlign(): void {
     const availableWidth = this.options.drawWidth - this.margin.left - this.margin.right;
-    const versPadding = 20; // classic only for now
+    const versPadding = 20;
     if (this.align) {
       const seriesWidths = [];
       const legendText = this.svg.select('.legendArea').selectAll('text');
@@ -96,7 +95,7 @@ export class IccLegendDraw {
         legendWidth += seriesWidths[seriesPerRow++];
       }
       if (seriesPerRow === 0) {
-        seriesPerRow = 1; // minimum of one series per row
+        seriesPerRow = 1;
       }
       while (legendWidth > availableWidth && seriesPerRow > 1) {
         columnWidths = [];

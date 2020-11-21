@@ -6,8 +6,8 @@ export const DEFAULT_CHART_OPTIONS = {
   width: '100%',
   height: 500,
   brushYWidth: 50,
-  xScaleType: 'time', // time, band  TO DO add others
-  yScaleType: 'linear', // linear    TO DO add others
+  xScaleType: 'time',
+  yScaleType: 'linear',
   legendHeight: 20,
   x0: (d) => d.key,
   y0: (d) => d.values,

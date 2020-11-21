@@ -176,7 +176,6 @@ export class IccInteractiveDraw<T> {
         }
       });
     }
-    // console.log(' 111111 mdata =', mdata)
     return ndata;
   }
 
@@ -195,7 +194,6 @@ export class IccInteractiveDraw<T> {
               return this.scale.y(values[1]);
             } else {
               const value = this.options.y0(data[i])[0];
-              // console.log(' value =', value)
               if (value) {
                 return this.scale.y(this.options.y(value)) + 0;
               }

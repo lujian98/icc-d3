@@ -30,11 +30,6 @@ export class IccDraw {
   }
 
   public clearElement(): void {
-    // !!!!Caution!!!
-    // Make sure not to do;
-    //     d3.select('svg').remove();
-    // That will clear all other SVG elements in the DOM
-    // d3.select(this.hostElement).select('svg').remove();
     d3.select(this.elementRef.nativeElement).select('g').remove();
   }
 
@@ -47,7 +42,6 @@ export class IccDraw {
     this.setZoomOptions();
     const margin = this.options.margin;
     this.width = this.elementRef.nativeElement.clientWidth;
-    // console.log( ' this.width =', this.width)
     this.height = this.elementRef.nativeElement.clientHeight;
     const zoom = this.options.zoom;
     const drawDimension = {
