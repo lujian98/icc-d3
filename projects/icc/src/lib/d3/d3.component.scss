@@ -1,0 +1,22 @@
+icc-d3 {
+  display: flex;
+  flex: 1;
+  .line {
+    fill: none;
+  }
+
+  .zoom {
+    fill: none;
+    pointer-events: all;
+  }
+  .grid line, .grid .tick {
+    // stroke: lightgrey;
+    opacity: 0.1;
+    shape-rendering: crispEdges;
+  }
+
+  .grid path {
+    stroke-width: 0;
+  }
+}
+

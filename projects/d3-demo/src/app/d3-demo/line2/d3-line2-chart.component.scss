@@ -1,0 +1,14 @@
+app-d3-line2-chart {
+
+  .bar {
+    // fill: steelblue;
+    clip-path: url(#clip);
+  }
+
+  .zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }
+}
+

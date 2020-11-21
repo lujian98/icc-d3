@@ -1,0 +1,78 @@
+import * as d3 from 'd3-selection';
+import * as d3Shape from 'd3-shape';
+import { IccScaleDraw } from '../draw/scale-draw';
+
+export class IccStackedData {
+  offset = 'stackOffsetDiverging';
+  normalized = false;
+
+  constructor(
+    private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
+    private scale: IccScaleDraw,
+    private options: any,
+    private chartType: string
+  ) {
+    if (this.chartType === 'stackedNormalizedAreaChart' || this.chartType === 'stackedNormalizedBarChart' ||
+      this.chartType === 'stackedNormalizedHorizontalBarChart') {
+      this.offset = 'stackOffsetExpand';
+      this.normalized = true;
+    } else if (this.chartType === 'stackedStreamAreaChart') {
+      this.offset = 'stackOffsetWiggle';
+    }
+  }
+
+  public getStackedData(data, isStackedY) {
+    let ndata = [];
+    data.forEach((d) => {
+      ndata = this.options.y0(d).map((v, i) => {
+        if (ndata.length === i) {
+          ndata.push({});
+        }
+        const o = ndata[i];
+        if (isStackedY) {
+          for (const [key, value] of Object.entries(v)) {
+            if (this.options.x(v) === value) {
+              o[key] = value;
+            }
+          }
+          o[this.options.x0(d)] = this.options.y(v);
+        } else {
+          for (const [key, value] of Object.entries(v)) {
+            if (this.options.y(v) === value) {
+              o[key] = value;
+            }
+          }
+          o[this.options.x0(d)] = this.options.x(v);
+        }
+        return o;
+      });
+    });
+    const keys = Object.getOwnPropertyNames(ndata[0]).slice(1); // TODO if [0] not include all keys? (d3.stackOffsetExpand)
+    // console.log( ' keys =', keys);
+    const stacks = d3Shape.stack().keys(keys);
+    if (this.offset === 'stackOffsetDiverging') {
+      stacks.offset(d3Shape.stackOffsetDiverging);
+    } else if (this.offset === 'stackOffsetExpand') {
+      stacks.offset(d3Shape.stackOffsetExpand);
+    } else if (this.offset === 'stackOffsetWiggle') {
+      stacks.offset(d3Shape.stackOffsetWiggle)
+        .order(d3Shape.stackOrderInsideOut);
+    }
+    // console.log('stacked  ndata =', ndata)
+    return stacks(ndata);
+  }
+
+  setStackedYDomain(data: any[]) {
+    this.scale.setYDomain(data, this.normalized ? 'normalized' : 'stacked');
+    // console.log(' this.scale.y ', this.scale.y.domain())
+    this.svg.select('.axis--y').call(this.scale.yAxis);
+    this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
+  }
+
+  setStackedXDomain(data: any[]) {
+    this.scale.setXDomain(data, this.normalized ? 'normalized' : 'stacked');
+    this.svg.select('.axis--x').call(this.scale.xAxis);
+    this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);
+  }
+}
+

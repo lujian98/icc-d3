@@ -1,0 +1,13 @@
+app-d3-brush-chart {
+  .area {
+    // fill: steelblue;
+    clip-path: url(#clip);
+  }
+
+  .zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }
+}
+
