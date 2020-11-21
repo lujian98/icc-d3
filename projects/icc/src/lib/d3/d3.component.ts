@@ -18,8 +18,8 @@ import { IccInteractiveDraw } from './draw/interactive-draw';
 
 import { DEFAULT_CHART_OPTIONS } from './model/model';
 
-// import { IccPopoverService } from '../tooltip/directives/popover/popover.service';
-// import { TooltipDemoComponent } from './popover/tooltip-demo.component';
+import { IccPopoverService } from '../tooltip/directives/popover/popover.service';
+import { TooltipDemoComponent } from './popover/tooltip-demo.component';
 
 @Component({
   selector: 'icc-d3',
@@ -49,7 +49,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   constructor(
     protected elementRef: ElementRef,
     private drawServie: IccDrawServie,
-    // private popoverService: IccPopoverService
+    private popoverService: IccPopoverService
   ) {
     // this.popoverService.content = TooltipDemoComponent;
     // this.popoverService.context = {

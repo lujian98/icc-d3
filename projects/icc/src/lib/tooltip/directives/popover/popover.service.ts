@@ -12,7 +12,9 @@ import {
   IccPopoverContextmenuStrategy
 } from './popover.strategy';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class IccPopoverService implements OnInit, OnDestroy {
   content: IccPortalContent<any>;
   context = {};
@@ -28,10 +30,11 @@ export class IccPopoverService implements OnInit, OnDestroy {
 
   @Output() iccItemChangedEvent: EventEmitter<any> = new EventEmitter();
 
-  constructor(
+  constructor( // TODO elementRef
     private overlayService: IccOverlayService<any>,
-    private elementRef: ElementRef,
+    // private elementRef: ElementRef,
   ) {
+    /*
     if (this.popoverType !== 'disabled') { // afterClosed$
       if (this.popoverType === 'click') {
         this.popoverStrategy = new IccPopoverClickStrategy(document, this.elementRef.nativeElement);
@@ -43,7 +46,7 @@ export class IccPopoverService implements OnInit, OnDestroy {
       }
       this.popoverStrategy.show$.subscribe((event: MouseEvent) => this.openPopover(event));
       this.popoverStrategy.hide$.subscribe(() => this.closePopover());
-    }
+    } */
   }
 
   ngOnInit() {
@@ -52,7 +55,8 @@ export class IccPopoverService implements OnInit, OnDestroy {
 
   public openPopover(mouseEvent: MouseEvent) {
     if (!this.isOpened) {
-      let origin = this.elementRef.nativeElement;
+      let origin: any = null;
+      // let origin = this.elementRef.nativeElement;
       if (this.popoverType === 'contextmenu') {
         const fakeElement = {
           getBoundingClientRect: (): ClientRect => ({
