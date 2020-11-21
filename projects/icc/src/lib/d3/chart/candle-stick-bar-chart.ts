@@ -2,12 +2,12 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 
 export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     this.svg.select(drawName).selectAll('g').data(this.data).join('g');
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const barWidth = this.getBarWidth(drawName, scaleX);
 
     this.svg.select(drawName).selectAll('g').selectAll('rect')
@@ -33,14 +33,14 @@ export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
       .attr('stroke', (d: any) => (d.open === d.close) ? 'white' : (d.open > d.close) ? 'red' : 'green');
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.y(d) === this.options.y(data)) || this.options.y0(data)))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private getBarWidth(drawName, scaleX) {
+  private getBarWidth(drawName, scaleX): number {
     if (this.data.length > 0) {
       const range = scaleX.range();
       const barWidth = (range[1] / this.options.y0(this.data[0]).length) * .45;

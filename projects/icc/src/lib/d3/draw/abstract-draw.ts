@@ -8,9 +8,9 @@ export abstract class IccAbstractDraw<T> {
   chartType: string;
   protected isAnimation = false;
 
-  abstract drawContents(drawName, scaleX, scaleY, xGroup, yGroup);
-  abstract redrawContent(drawName, scaleX, scaleY, xGroup, yGroup);
-  abstract legendMouseover(data, mouseover: boolean);
+  abstract drawContents(drawName, scaleX, scaleY, xGroup, yGroup): void;
+  abstract redrawContent(drawName, scaleX, scaleY, xGroup, yGroup): void;
+  abstract legendMouseover(data, mouseover: boolean): void;
 
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
@@ -21,7 +21,7 @@ export abstract class IccAbstractDraw<T> {
     this.chartType = chartType;
   }
 
-  drawChart(data: any[]) {
+  drawChart(data: any[]): void {
     this.prevData = this.data;
     this.data = data;
     this.isAnimation = true; // TODO with options
@@ -35,11 +35,11 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  redraw() {
+  redraw(): void {
     this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
   }
 
-  clearDraw() { // TODO not used and can be removed
+  clearDraw(): void { // TODO not used and can be removed
     // this.svg.select(`.${this.chartType}`).selectAll('g').remove();
     // this.svg.select(`.${this.chartType}Brush`).selectAll('g').remove();
     // this.svg.select(`.${this.chartType}BrushY`).selectAll('g').remove();

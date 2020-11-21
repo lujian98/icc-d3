@@ -19,7 +19,7 @@ export class IccZoomDraw {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.initZoom();
     if (this.options.zoom.horizontalBrushShow) {
       this.initHorizontalBrush();
@@ -30,12 +30,12 @@ export class IccZoomDraw {
     this.update();
   }
 
-  updateOptions(options: any) {
+  updateOptions(options: any): void {
     this.options = options;
     this.update();
   }
 
-  update() {
+  update(): void {
     this.updateZoom();
     if (this.options.zoom.horizontalBrushShow) {
       this.updateHorizontalBrush();
@@ -45,24 +45,24 @@ export class IccZoomDraw {
     }
   }
 
-  private initZoom() {
+  private initZoom(): void {
     this.zoom = d3Zoom.zoom().scaleExtent([1, Infinity]);
     this.svg.select('.drawArea').call(this.zoom);
     this.zoom.on('zoom', this.zoomed.bind(this));
   }
 
-  private updateZoom() {
+  private updateZoom(): void {
     this.zoom.translateExtent([[0, 0], [this.options.drawWidth, this.options.drawHeight]])
       .extent([[0, 0], [this.options.drawWidth, this.options.drawHeight]]);
   }
 
-  private initHorizontalBrush() {
+  private initHorizontalBrush(): void {
     const context = this.svg.select('.context');
     context.append('g').attr('class', 'axis axis--x').call(this.scale.x2Axis);
     context.append('g').attr('class', 'brush');
   }
 
-  private updateHorizontalBrush() {
+  private updateHorizontalBrush(): void {
     const context = this.svg.select('.context');
     this.brush = d3Brush.brushX().extent([[0, 0], [this.options.drawWidth, this.options.drawHeight2]]);
     context.select('.axis--x').attr('transform', 'translate(0,' + this.options.drawHeight2 + ')');
@@ -70,13 +70,13 @@ export class IccZoomDraw {
     this.brush.on('brush end', this.brushed.bind(this));
   }
 
-  private initVerticalBrush() {
+  private initVerticalBrush(): void {
     const context = this.svg.select('.contextBrushY');
     context.append('g').attr('class', 'axis axis--y').call(this.scale.y3Axis);
     context.append('g').attr('class', 'brush');
   }
 
-  private updateVerticalBrush() {
+  private updateVerticalBrush(): void {
     const context = this.svg.select('.contextBrushY');
     this.brushY = d3Brush.brushY().extent([[0, 0], [this.options.brushYWidth, this.options.drawHeight]]);
     context.select('.axis--y').attr('transform', 'translate(50,0)');
@@ -86,7 +86,7 @@ export class IccZoomDraw {
     this.brushY.on('brush end', this.brueshedY.bind(this));
   }
 
-  setZoomRange() {
+  setZoomRange(): void {
     if (this.xRange) {
       const xrange = this.scale.x.range();
       const x1 = Math.min(xrange[1], this.xRange[1]);
@@ -112,7 +112,7 @@ export class IccZoomDraw {
     }
   }
 
-  private zoomed(event) {
+  private zoomed(event): void {
     if (event.sourceEvent) {
       if (!this.options.zoom.horizontalOff) {
         if (this.options.xScaleType === 'linear' || this.options.xScaleType === 'time') {
@@ -166,14 +166,14 @@ export class IccZoomDraw {
     }
   }
 
-  private brueshedY(event) {
+  private brueshedY(event): void {
     if (event.sourceEvent) {
       this.yRange = event.selection || this.scale.y3.range();
       this.setBrushedYRange(this.yRange);
     }
   }
 
-  private setBrushedYRange(range) {
+  private setBrushedYRange(range): void {
     if (this.options.yScaleType === 'linear' || this.options.yScaleType === 'time') {
       const ydoman = range.map(this.scale.y3.invert, this.scale.y3).reverse();
       this.scale.y.domain(ydoman);
@@ -189,14 +189,14 @@ export class IccZoomDraw {
     this.redraw(); // TODO check any issue here
   }
 
-  private brushed(event) {
+  private brushed(event): void {
     if (event.sourceEvent) {
       this.xRange = event.selection || this.scale.x2.range();
       this.setBrushedRange(this.xRange);
     }
   }
 
-  private setBrushedRange(range) {
+  private setBrushedRange(range): void {
     if (this.options.xScaleType === 'linear' || this.options.xScaleType === 'time') {
       this.brushXScaleLinear(range);
     } else if (this.options.xScaleType === 'band') {
@@ -208,11 +208,11 @@ export class IccZoomDraw {
       .translate(-range[0], 0));
   }
 
-  private brushXScaleLinear(range) {
+  private brushXScaleLinear(range): void {
     this.scale.x.domain(range.map(this.scale.x2.invert, this.scale.x2));
   }
 
-  private brushXScaleBand(range) {
+  private brushXScaleBand(range): void {
     const x0 = this.scale.x2.range();
     const scale = this.options.drawWidth / (range[1] - range[0]);
     const x = [
@@ -222,7 +222,7 @@ export class IccZoomDraw {
     this.scale.x.range(x);
   }
 
-  private redraw() {
+  private redraw(): void {
     this.draw.redraw();
     this.svg.select('.axis--x').call(this.scale.xAxis);
     this.svg.select('.axis--y').call(this.scale.yAxis);

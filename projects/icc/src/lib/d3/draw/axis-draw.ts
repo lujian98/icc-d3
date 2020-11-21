@@ -14,22 +14,22 @@ export class IccAxisDraw {
     this.update();
   }
 
-  init() {
+  init(): void {
     this.drawXAxis();
     this.drawYAxis();
   }
 
-  updateOptions(options: any) {
+  updateOptions(options: any): void {
     this.options = options;
     this.update();
   }
 
-  update() {
+  update(): void {
     this.updateXAxis();
     this.updateYAxis();
   }
 
-  updateXAxis() {
+  updateXAxis(): void {
     const xAxisDraw = this.svg.select('.xAxisDraw');
     xAxisDraw.select('.axis--x')
       .attr('transform', 'translate(0,' + this.options.drawHeight + ')')
@@ -44,7 +44,7 @@ export class IccAxisDraw {
     }
   }
 
-  updateYAxis() {
+  updateYAxis(): void {
     const yAxisDraw = this.svg.select('.yAxisDraw');
     yAxisDraw.select('.axis--y')
       .call(this.scale.yAxis)
@@ -58,7 +58,7 @@ export class IccAxisDraw {
     }
   }
 
-  private drawXAxis() {
+  private drawXAxis(): void {
     const xAxisDraw = this.svg.select('.xAxisDraw');
     if (this.options.xScaleType === 'band') {
       xAxisDraw.append('defs').append('clipPath').attr('id', `clip-axis--x${this.drawID}`).append('rect');
@@ -67,7 +67,7 @@ export class IccAxisDraw {
     xAxisDraw.append('g').attr('class', 'axis axis--x');
   }
 
-  private drawYAxis() {
+  private drawYAxis(): void {
     const yAxisDraw = this.svg.select('.yAxisDraw');
     if (this.options.yScaleType === 'band') {
       yAxisDraw.append('defs').append('clipPath').attr('id', `clip-axis--y${this.drawID}`).append('rect');

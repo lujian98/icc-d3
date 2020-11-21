@@ -2,7 +2,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 
@@ -12,7 +12,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'bar draw')
@@ -25,12 +25,11 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
         .on('mouseover', (e: MouseEvent, d) => {
           // console.log(' d =', d)
           this.drawMouseover(d, true);
-          // this.scale.dispatch.call('drawMouseover', this, { event: e, data: d });
+          this.scale.dispatch.call('drawMouseover', this, { event: e, data: d });
         })
         .on('mouseout', (e, d) => {
-
           this.drawMouseover(d, false);
-          // this.scale.dispatch.call('drawMouseout', this, { event: e, data: d });
+          this.scale.dispatch.call('drawMouseout', this, { event: e, data: d });
         });
     }
     if (this.isAnimation && this.options.duration > 0) {
@@ -48,7 +47,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     }
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .style('fill-opacity', (d) => mouseover ? null : 0.75);
 
@@ -57,7 +56,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private drawMouseover(data, mouseover: boolean) {
+  private drawMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x(d) === this.options.x(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);

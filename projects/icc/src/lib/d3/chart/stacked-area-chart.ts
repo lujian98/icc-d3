@@ -4,7 +4,7 @@ import { IccStackedData } from '../data/stacked-data';
 
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
-  drawChart(data: any[]) {
+  drawChart(data: any[]): void {
     this.isStacked = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
     const stackdata = data.length > 0 ? stacked.getStackedData(data, true) : [];
@@ -14,7 +14,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
     super.drawChart(stackdata);
   }
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .append('path')
       .attr('class', 'stackedarea draw')
@@ -28,7 +28,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const drawContent = d3Shape.area()
       .x((d: any) => scaleX(this.options.x(d.data)))
       .y0((d: any) => scaleY(d[0]))
@@ -38,7 +38,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
       .attr('d', drawContent);
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => d.key === this.options.x0(data)) // key is from stacked data
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.5);

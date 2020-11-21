@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './draw/scale-draw';
 
+import { IccAbstractDraw } from './draw/abstract-draw';
 import { IccLineChart } from './chart/line-chart';
 import { IccAreaChart } from './chart/area-chart';
 import { IccStackedAreaChart } from './chart/stacked-area-chart';
@@ -16,7 +17,7 @@ import { IccStackedHorizontalBarChart } from './chart/stacked-horizontal-bar-cha
 import { IccCandleStickBarChart } from './chart/candle-stick-bar-chart';
 
 @Injectable()
-export class IccDrawServie {
+export class IccDrawServie<T> {
   componentMapper: {};
 
   constructor() {
@@ -46,7 +47,7 @@ export class IccDrawServie {
     scale: IccScaleDraw,
     options: any,
     chartType: string
-  ) {
+  ): IccAbstractDraw<T> {
     let component = this.componentMapper[chartType];
     if (!component) {
       component = this.componentMapper['lineChart'];

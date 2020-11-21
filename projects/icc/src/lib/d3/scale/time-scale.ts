@@ -4,15 +4,15 @@ import { IccAbstractScale } from './abstract-scale';
 
 export class IccTimeScale extends IccAbstractScale {
 
-  getScale(range: any[], reverse = false) {
+  getScale(range: any[], reverse = false): any {
     return d3Scale.scaleTime().range(range);
   }
 
-  updateRange(scale: any, range: [], reverse: boolean) {
+  updateRange(scale: any, range: [], reverse: boolean): void {
     scale.range(range);
   }
 
-  setXDomain(scale: any, data: any[], type = null) {
+  setXDomain(scale: any, data: any[], type = null): void {
     const xdata = data.map((v) => v.values.map((d) => this.options.x(d)))[0];
     // console.log(' this.options =', this.options)
     if (this.options.chartType === 'barChart') { // TODO options with add extra range for bar chart
@@ -29,7 +29,7 @@ export class IccTimeScale extends IccAbstractScale {
     scale.domain(d3Array.extent(xdata, (d: Date) => d));
   }
 
-  setYDomain(scale: any, data: any[], type = null) { // TODO
+  setYDomain(scale: any, data: any[], type = null): void { // TODO
     // const ydomain = this.options.y0(this.data[0]).map((d) => this.options.y(d));
     // console.log(' ywwwwwdomain =', ydomain);
     // scale.domain(ydomain);

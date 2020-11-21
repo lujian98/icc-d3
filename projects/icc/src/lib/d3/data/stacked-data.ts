@@ -21,7 +21,7 @@ export class IccStackedData {
     }
   }
 
-  public getStackedData(data, isStackedY) {
+  public getStackedData(data, isStackedY): any[] {
     let ndata = [];
     data.forEach((d) => {
       ndata = this.options.y0(d).map((v, i) => {
@@ -62,14 +62,14 @@ export class IccStackedData {
     return stacks(ndata);
   }
 
-  setStackedYDomain(data: any[]) {
+  setStackedYDomain(data: any[]): void {
     this.scale.setYDomain(data, this.normalized ? 'normalized' : 'stacked');
     // console.log(' this.scale.y ', this.scale.y.domain())
     this.svg.select('.axis--y').call(this.scale.yAxis);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 
-  setStackedXDomain(data: any[]) {
+  setStackedXDomain(data: any[]): void {
     this.scale.setXDomain(data, this.normalized ? 'normalized' : 'stacked');
     this.svg.select('.axis--x').call(this.scale.xAxis);
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);

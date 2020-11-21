@@ -38,7 +38,7 @@ export class IccScaleDraw {
 
   constructor() { }
 
-  buildScales(options: any) {
+  buildScales(options: any): void {
     this.options = options;
     this.setXScale();
     this.setYScale();
@@ -47,26 +47,26 @@ export class IccScaleDraw {
     this.setYAxis();
   }
 
-  update(options: any) {
+  update(options: any): void {
     this.options = options;
     this.updateXScale();
     this.updateYScale();
   }
 
-  updateXScale() {
+  updateXScale(): void {
     this.xFactory.updateRange(this.x,  [0, this.options.drawWidth]);
     this.xFactory.updateRange(this.x2, [0, this.options.drawWidth]);
     this.xFactory.updateRange(this.x3, [0, this.options.brushYWidth]);
   }
 
-  updateYScale() {
+  updateYScale(): void {
     const reverse = this.options.yScaleType === 'band';
     this.yFactory.updateRange(this.y,  [this.options.drawHeight,  0], reverse);
     this.yFactory.updateRange(this.y2, [this.options.drawHeight2, 0], reverse);
     this.yFactory.updateRange(this.y3, [this.options.drawHeight,  0], reverse);
   }
 
-  setDrawDomain(data: any[]) {
+  setDrawDomain(data: any[]): void {
     const drawData = data.filter((d: any) => !d.disabled);
     if (drawData.length > 0) {
       this.setXDomain(drawData);
@@ -74,7 +74,7 @@ export class IccScaleDraw {
     }
   }
 
-  private setXScale() {
+  private setXScale(): void {
     this.xFactory = new IccScaleFactory(this.options.xScaleType, this.options);
     this.x = this.xFactory.getScale([0, this.options.drawWidth]);
     this.x2 = this.xFactory.getScale([0, this.options.drawWidth]);
@@ -87,7 +87,7 @@ export class IccScaleDraw {
     }
   }
 
-  private setYScale() {
+  private setYScale(): void {
     this.yFactory = new IccScaleFactory(this.options.yScaleType, this.options);
     const reverse = this.options.yScaleType === 'band';
     this.y = this.yFactory.getScale([this.options.drawHeight, 0], reverse);
@@ -101,7 +101,7 @@ export class IccScaleDraw {
     }
   }
 
-  setXDomain(data, type = null) { // stacked / normalized / null
+  setXDomain(data, type = null): void { // stacked / normalized / null
     this.xFactory.setXDomain(this.x, data, type);
     this.x2.domain(this.x.domain());
     this.x3.domain(this.x.domain());
@@ -118,7 +118,7 @@ export class IccScaleDraw {
     }
   }
 
-  setYDomain(data, type = null) {
+  setYDomain(data, type = null): void {
     this.yFactory.setYDomain(this.y, data, type);
     this.y2.domain(this.y.domain());
     this.y3.domain(this.y.domain());
@@ -131,12 +131,12 @@ export class IccScaleDraw {
     }
   }
 
-  setXAxis() {
+  setXAxis(): void {
     this.xAxis = d3Axis.axisBottom(this.x);
     this.x2Axis = d3Axis.axisBottom(this.x2);
   }
 
-  setYAxis() {
+  setYAxis(): void {
     this.yAxis = d3Axis.axisLeft(this.y);
     this.y3Axis = d3Axis.axisRight(this.y3);
   }

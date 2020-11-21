@@ -2,7 +2,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 
@@ -12,7 +12,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'horizontalbar draw')
@@ -41,7 +41,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     }
   }
 
-  public legendMouseover(data, mouseover: boolean) {
+  public legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .style('fill-opacity', (d) => mouseover ? null : 0.75);
 
@@ -50,7 +50,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private drawMouseover(data, mouseover: boolean) {
+  private drawMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.y(d) === this.options.y(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);

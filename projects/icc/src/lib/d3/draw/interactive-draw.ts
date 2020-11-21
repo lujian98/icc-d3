@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
-import { IccAbstractDraw } from './abstract-draw'
+import { IccAbstractDraw } from './abstract-draw';
 
 export class IccInteractiveDraw<T> {
   constructor(
@@ -30,18 +30,18 @@ export class IccInteractiveDraw<T> {
     });
   }
 
-  updateOptions(options: any) {
+  updateOptions(options: any): void {
     this.options = options;
     this.update();
   }
 
-  update() {
+  update(): void {
     if (this.options.useInteractiveGuideline) {
       this.updateGuideline();
     }
   }
 
-  private initGuideline() {
+  private initGuideline(): void {
     this.svg.select('.interactiveDraw').append('line')
       .attr('class', 'guideLine')
       .style('stroke', 'red')
@@ -66,11 +66,11 @@ export class IccInteractiveDraw<T> {
       .style('opacity', 0);
   }
 
-  private updateGuideline() {
+  private updateGuideline(): void {
     this.svg.select('.interactiveDraw').select('.guideLine').attr('y2', this.options.drawHeight);
   }
 
-  public drawAllCircles() {
+  public drawAllCircles(): void {
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       let data = [];
       this.data.forEach((d, i) => {
@@ -81,7 +81,6 @@ export class IccInteractiveDraw<T> {
           data = [...data, ...fdata];
         });
       });
-      // console.log('xxxx  ndata =', ndata)
       this.svg.select('.interactiveDraw').selectAll('g').remove();
       const scatterDraw = this.svg.select('.interactiveDraw').selectAll('g')
         .data(data).enter().append('g')
@@ -101,7 +100,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private onMouseOverNode(currentTarget, mouseover: boolean) {
+  private onMouseOverNode(currentTarget, mouseover: boolean): void {
     this.data.forEach((ed, i) => {
       const group = this.svg.select('.interactiveDraw').select(`.dataGroup${i}`).selectAll('circle');
       const nodes = group.nodes();
@@ -112,13 +111,13 @@ export class IccInteractiveDraw<T> {
     });
   }
 
-  private updateAllCircles() {
+  private updateAllCircles(): void {
     this.svg.select('.interactiveDraw').selectAll('g').selectAll('.circle')
       .attr('cx', (d: any) => (d && d.data) ? this.scale.x(this.options.x(d.data)) : this.scale.x(this.options.x(d)))
       .attr('cy', (d: any) => (d && d.data) ? this.scale.y(d[1]) : this.scale.y(this.options.y(d)));
   }
 
-  private updateGuideLine(e, mouseover: boolean) {
+  private updateGuideLine(e, mouseover: boolean): void {
     const x = e.offsetX - this.options.margin.left + 2;
     this.svg.select('.interactiveDraw')
       .select('.guideLine')
@@ -138,7 +137,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  getLinearData(data, i, idx) {
+  getLinearData(data, i, idx): {} {
     const r = {};
     for (const [k, v] of Object.entries(data)) {
       r[k] = !Array.isArray(data[k]) ? v : data[k].filter((t, i) => i === idx);
@@ -146,7 +145,7 @@ export class IccInteractiveDraw<T> {
     return r;
   }
 
-  getStackedData(data, i, idx) {
+  getStackedData(data, i, idx): {} {
     const r = {
       key: data.key,
       isStacked: true,
@@ -156,7 +155,7 @@ export class IccInteractiveDraw<T> {
     return r;
   }
 
-  private getBisectData(idx) {
+  private getBisectData(idx): any[] {
     let ndata = [];
     if (idx === 0) {
       ndata = this.data.filter((d: any) => !d.disabled).map((d, i) => this.getLinearData(d, i, idx));
@@ -181,7 +180,7 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private updateDataCircle(idx, x, mouseover: boolean) {
+  private updateDataCircle(idx, x, mouseover: boolean): void {
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       const data: any = this.getBisectData(idx);
       this.svg.select('.interactiveDraw').selectAll('circle')
@@ -206,7 +205,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  public getdrawColor(d, i) { // TODO get parent defined color?
+  public getdrawColor(d, i): string { // TODO get parent defined color?
     return d && (d.color || this.scale.colors(this.options.drawColor(d, i)));
   }
 }

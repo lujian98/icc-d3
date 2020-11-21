@@ -28,27 +28,27 @@ export class IccLegendDraw {
     this.update();
   }
 
-  updateOptions(options: any) {
+  updateOptions(options: any): void {
     this.options = options;
     this.update();
   }
 
-  update() {
+  update(): void {
     this.height = this.options.legendHeight;
     this.setLegendAlign();
   }
 
-  private getLegendColor(d, i) {
+  private getLegendColor(d, i): string {
     return d.color || this.scale.colors(this.options.drawColor(d, i));
   }
 
-  private setLegendShape(data) {
+  private setLegendShape(data): void {
     this.svg.selectAll('.legend-symbol')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data))
       .style('fill-opacity', (d: any, i) => !!d.disabled ? 0 : 1);
   }
 
-  private drawLegend() {
+  private drawLegend(): void {
     const legendArea = this.svg.select('.legendArea').selectAll('g').data(this.data);
     const legendDraw = legendArea.enter().append('g').attr('class', 'legends');
 
@@ -79,7 +79,7 @@ export class IccLegendDraw {
       .on('mouseout', (e, d) => this.scale.dispatch.call('legendMouseout', this, d));
   }
 
-  private setLegendAlign() {
+  private setLegendAlign(): void {
     const availableWidth = this.options.drawWidth - this.margin.left - this.margin.right;
     const versPadding = 20; // classic only for now
     if (this.align) {
@@ -96,7 +96,7 @@ export class IccLegendDraw {
         legendWidth += seriesWidths[seriesPerRow++];
       }
       if (seriesPerRow === 0) {
-        seriesPerRow = 1; //minimum of one series per row
+        seriesPerRow = 1; // minimum of one series per row
       }
       while (legendWidth > availableWidth && seriesPerRow > 1) {
         columnWidths = [];

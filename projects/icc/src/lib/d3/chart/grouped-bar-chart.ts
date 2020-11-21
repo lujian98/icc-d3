@@ -3,19 +3,19 @@ import { IccGroupedData } from '../data/grouped-data';
 
 export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
 
-  drawChart(data: any[]) {
+  drawChart(data: any[]): void {
     const grouped = new IccGroupedData(this.options);
     const groupeddata = grouped.getGroupedData(data, true);
     super.drawChart(groupeddata);
   }
 
-  drawContents(drawName, scaleX, scaleY, xGroup) {
+  drawContents(drawName, scaleX, scaleY, xGroup): void {
     const groupName = drawName.replace('.', '');
     this.svg.select(drawName).selectAll('g').data(this.data).join('g').attr('class', `${groupName}Group`);
     this.redrawContent(drawName, scaleX, scaleY, xGroup);
   }
 
-  redrawContent(drawName, scaleX, scaleY, xGroup) {
+  redrawContent(drawName, scaleX, scaleY, xGroup): void {
     if (drawName === `.${this.chartType}` && scaleX.bandwidth) { // only support band scale
       xGroup.rangeRound([0, scaleX.bandwidth()]);
     }
@@ -40,7 +40,7 @@ export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
     }
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.y(d) === this.options.y(data)) || this.options.y0(data)))

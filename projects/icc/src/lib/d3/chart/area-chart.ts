@@ -3,7 +3,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 
 export class IccAreaChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .append('path')
       .attr('stroke-width', 1.0)
@@ -17,7 +17,7 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const drawArea = d3Shape.area()
       .curve(d3Shape.curveLinear)
       .defined((d, i) => !isNaN(this.options.y(d)) && this.options.y(d) !== null)
@@ -31,7 +31,7 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
       .attr('d', drawContent);
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.5);

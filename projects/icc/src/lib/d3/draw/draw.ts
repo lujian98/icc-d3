@@ -15,7 +15,7 @@ export class IccDraw {
 
   width: number;
   height: number;
-  getOptions() {
+  getOptions(): void {
     return this.options;
   }
 
@@ -29,7 +29,7 @@ export class IccDraw {
     this.update();
   }
 
-  public clearElement() {
+  public clearElement(): void {
     // !!!!Caution!!!
     // Make sure not to do;
     //     d3.select('svg').remove();
@@ -38,12 +38,12 @@ export class IccDraw {
     d3.select(this.elementRef.nativeElement).select('g').remove();
   }
 
-  update() {
+  update(): void {
     this.setDrawDimension();
     this.updateDrawDimension();
   }
 
-  private setDrawDimension() {
+  private setDrawDimension(): void {
     this.setZoomOptions();
     const margin = this.options.margin;
     this.width = this.elementRef.nativeElement.clientWidth;
@@ -58,7 +58,7 @@ export class IccDraw {
     this.options = { ...this.options, ...drawDimension };
   }
 
-  private setZoomOptions() {
+  private setZoomOptions(): void {
     const zoom = this.options.zoom;
     zoom.horizontalOff = !zoom.enabled ? true : zoom.horizontalOff;
     zoom.horizontalBrushShow = !zoom.enabled || zoom.horizontalOff ? false : zoom.horizontalBrushShow;
@@ -66,7 +66,7 @@ export class IccDraw {
     zoom.verticalBrushShow = !zoom.enabled || zoom.verticalOff ? false : zoom.verticalBrushShow;
   }
 
-  private initSvg() {
+  private initSvg(): void {
     const drawID = Math.floor(Math.random() * 100000);
     this.svg = d3.select(this.elementRef.nativeElement).select('svg').append('g');
     const xAxisDraw = this.svg.append('g').attr('class', 'xAxisDraw');
@@ -89,7 +89,7 @@ export class IccDraw {
     drawArea.append('g').attr('class', 'interactiveDraw').attr('clip-path', `url(#clip${drawID})`);
   }
 
-  updateDrawDimension() {
+  updateDrawDimension(): void {
     const legendH = this.options.legendHeight - 10;
     const dtop = this.options.margin.top + legendH;
     this.options.drawHeight -= legendH;
@@ -117,7 +117,7 @@ export class IccDraw {
     brushDraw.select('.contextBrushY').attr('transform', `translate(${yBrushPos}, 0)`);
   }
 
-  drawLegend(scale: any, data: any[]) {
+  drawLegend(scale: any, data: any[]): void {
     const drawLegend = new IccLegendDraw(this.svg, scale, data, this.options);
     const legendHeight = drawLegend.height;
     if (legendHeight - 10 !== this.options.legendHeight) {

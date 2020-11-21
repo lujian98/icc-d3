@@ -48,26 +48,26 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   constructor(
     protected elementRef: ElementRef,
-    private drawServie: IccDrawServie,
+    private drawServie: IccDrawServie<T>,
     private popoverService: IccPopoverService
   ) {
-    // this.popoverService.content = TooltipDemoComponent;
-    // this.popoverService.context = {
-    //  skills: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    // };
+    this.popoverService.content = TooltipDemoComponent;
+    this.popoverService.context = {
+      skills: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    };
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isWindowReszie$.pipe(takeWhile(() => this.alive), debounceTime(100))
       .subscribe(() => this.resizeChart(this.data));
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.isViewReady = true;
     this.updateChart(this.data);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.data) {
       this.data = this.cloneData(this.data);
       this.updateChart(this.data);
@@ -76,7 +76,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   cloneData = (data: any[]) => data && data.map((d) => Object.assign({}, d));
 
-  public updateChart(data) {
+  public updateChart(data): void {
     if (this.isViewReady && this.data) {
       if (!this.svg) {
         this.createChart(data);
@@ -93,7 +93,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     }
   }
 
-  public resizeChart(data: any[]) {
+  public resizeChart(data: any[]): void {
     this.draw.update();
     this.draw.drawLegend(this.scale, data);
     this.options = this.draw.getOptions();
@@ -108,7 +108,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.interactive.updateOptions(this.options);
   }
 
-  public createChart(data: any[]) {
+  public createChart(data: any[]): void {
     // console.log(' input data =', data)
     this.chartTypes = this.getChartTypes(this.data);
     this.scale = new IccScaleDraw();
@@ -133,7 +133,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.interactive = new IccInteractiveDraw(this.svg, this.scale, data, this.options, this.draws);
   }
 
-  drawChart(data: T[]) {
+  drawChart(data: T[]): void {
     this.draws.forEach((draw: IccAbstractDraw<T>) => {
       const drawData = data.filter((d: any) => !d.disabled &&
         (d.chartType === draw.chartType || (this.options.chartType === draw.chartType && !d.chartType)));
@@ -141,7 +141,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     });
   }
 
-  setDrawDomain(data: T[]) {
+  setDrawDomain(data: T[]): void {
     this.scale.setDrawDomain(data);
     this.svg.select('.axis--x').call(this.scale.xAxis);
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);
@@ -150,7 +150,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 
-  setDispatch(data: T[]) {
+  setDispatch(data: T[]): void {
     this.scale.dispatch = d3Dispatch.dispatch(
       'drawMouseover', 'drawMouseout', 'drawZoom',
       'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
@@ -173,27 +173,27 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     });
     this.scale.dispatch.on('drawMouseover', (p) => {
       // this.legendMouseover(d, true);
-      // this.popoverService.openPopover(p.event);
-      console.log('over e =', p)
+      this.popoverService.openPopover(p.event);
+      // console.log('over e =', p);
     });
 
     this.scale.dispatch.on('drawMouseout', (p) => {
       // this.legendMouseover(d, true);
-      // this.popoverService.closePopover();
-      console.log('out e =', p)
+      this.popoverService.closePopover();
+      // console.log('out e =', p);
     });
 
   }
 
-  legendMouseover(data: T[], mouseover: boolean) {
+  legendMouseover(data: T[], mouseover: boolean): void {
     this.draws.forEach((draw: IccAbstractDraw<T>) => draw.legendMouseover(data, mouseover));
   }
 
-  redraw() {
+  redraw(): void {
     this.draws.forEach((draw: IccAbstractDraw<T>) => draw.redraw());
   }
 
-  private getChartTypes(data: T[]) {
+  private getChartTypes(data: T[]): any[] {
     for (const [key, value] of Object.entries(this.options)) {
       if (key === 'zoom') {
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
@@ -209,13 +209,13 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     return chartTypes;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.alive = false;
     this.isWindowReszie$.complete();
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: MouseEvent) {
+  onResize(event: MouseEvent): void {
     this.isWindowReszie$.next(true);
   }
 }

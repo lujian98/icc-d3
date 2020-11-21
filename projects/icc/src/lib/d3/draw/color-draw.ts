@@ -11,11 +11,11 @@ export class IccColorDraw {
     this.setDomain(this.data);
   }
 
-  public setColors(colors) {
+  public setColors(colors): void {
     this.scale.colors = d3Scale.scaleOrdinal(colors);
   }
 
-  public setDomain(data: any[]) {
+  public setDomain(data: any[]): void {
     let keys = data.map((d) => this.options.drawColor(d));
 
     if (this.options.chartType === 'barChart') { // TODO all array data to get unique keys

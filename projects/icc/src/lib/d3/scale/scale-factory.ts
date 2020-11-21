@@ -15,7 +15,7 @@ export class IccScaleFactory {
     this.setComponentRef();
   }
 
-  setComponentRef() {
+  setComponentRef(): void {
     let component = this.componentMapper[this.scaleType];
     if (!component) {
       component = this.componentMapper['linear'];
@@ -23,19 +23,19 @@ export class IccScaleFactory {
     this.componentRef = new component(this.options);
   }
 
-  getScale(range: any[], reverse = false) {
+  getScale(range: any[], reverse = false): any {
     return this.componentRef.getScale(range, reverse);
   }
 
-  updateRange(scale: any, range: [], reverse = false) {
+  updateRange(scale: any, range: [], reverse = false): void {
     this.componentRef.updateRange(scale, range, reverse);
   }
 
-  setXDomain(scale: any, data: any[], type = null) {
+  setXDomain(scale: any, data: any[], type = null): void {
     this.componentRef.setXDomain(scale, data, type);
   }
 
-  setYDomain(scale: any, data: any[], type = null) {
+  setYDomain(scale: any, data: any[], type = null): void {
     this.componentRef.setYDomain(scale, data, type);
   }
 }

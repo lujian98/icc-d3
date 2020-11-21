@@ -3,7 +3,7 @@ import { IccDrawServie } from 'icc';
 import { AppHorizontalBarChart } from './horizontal-bar-chart';
 
 @Injectable()
-export class AppDrawServie extends IccDrawServie {
+export class AppDrawServie<T> extends IccDrawServie<T> {
   constructor() {
     super();
     this.componentMapper['horizontalBarChart'] = AppHorizontalBarChart;

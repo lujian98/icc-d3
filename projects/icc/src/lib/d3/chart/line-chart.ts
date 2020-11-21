@@ -3,7 +3,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 
 export class IccLineChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY) {
+  drawContents(drawName, scaleX, scaleY): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .append('path').attr('class', 'line draw');
 
@@ -15,7 +15,7 @@ export class IccLineChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY) {
+  redrawContent(drawName, scaleX, scaleY): void {
     const drawLine = d3Shape.line()
       // .curve(d3Shape.curveBasis)
       .x((d: any) => scaleX(this.options.x(d)))
@@ -26,7 +26,7 @@ export class IccLineChart<T> extends IccAbstractDraw<T> {
       .attr('d', drawContent);
   }
 
-  legendMouseover(data, mouseover: boolean) {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data))
       .attr('stroke-width', (d) => mouseover ? 2.0 : 1.0);

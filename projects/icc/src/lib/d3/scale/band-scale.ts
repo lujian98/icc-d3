@@ -3,26 +3,26 @@ import { IccAbstractScale } from './abstract-scale';
 
 export class IccBandScale extends IccAbstractScale {
 
-  getScale(range: any, reverse = false) {
+  getScale(range: any, reverse = false): any {
     if (reverse) {
       range.reverse();
     }
     return d3Scale.scaleBand().rangeRound(range).paddingInner(0.1);
   }
 
-  updateRange(scale: any, range: [], reverse: boolean) {
+  updateRange(scale: any, range: [], reverse: boolean): void {
     if (reverse) {
       range.reverse();
     }
     scale.rangeRound(range);
   }
 
-  setXDomain(scale: any, data: any[], type = null) {
+  setXDomain(scale: any, data: any[], type = null): void {
     const xdomain = this.options.y0(data[0]).map((d) => this.options.x(d));
     scale.domain(xdomain);
   }
 
-  setYDomain(scale: any, data: any[], type = null) {
+  setYDomain(scale: any, data: any[], type = null): void {
     const ydomain = this.options.y0(data[0]).map((d) => this.options.y(d));
     scale.domain(ydomain);
   }
