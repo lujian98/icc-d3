@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 import { STATISTICS } from '../shared';
 
 @Component({
@@ -16,7 +17,7 @@ import { STATISTICS } from '../shared';
     */
 export class AppBarChartDemoComponent implements OnInit {
   data: any;
-  options = {
+  options: IccD3Options = {
     chartType: 'barChart',
     xScaleType: 'band',
     x0: (d) => d.label,
@@ -26,7 +27,7 @@ export class AppBarChartDemoComponent implements OnInit {
     duration: 2000
   };
   data2: any;
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'band',
     x0: (d) => d.label,
@@ -35,7 +36,7 @@ export class AppBarChartDemoComponent implements OnInit {
     y: (d) => d.frequency,
   };
 
-  options3 = {
+  options3: IccD3Options = {
     chartType: 'barChart',
     xScaleType: 'band',
     x0: (d) => d.key,

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-line-chart-demo',
@@ -26,7 +27,7 @@ import { Component, OnInit } from '@angular/core';
   */
 export class AppLineChartDemoComponent implements OnInit {
   data: any;
-  options1 = {
+  options1: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'linear',
     useInteractiveGuideline: true,
@@ -41,7 +42,7 @@ export class AppLineChartDemoComponent implements OnInit {
       verticalBrushShow: false
     }
   };
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'linear',
     x0: (d) => d.key,
@@ -56,7 +57,7 @@ export class AppLineChartDemoComponent implements OnInit {
     }
   };
 
-  options3 = {
+  options3: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'linear',
     useInteractiveGuideline: true,
@@ -72,7 +73,7 @@ export class AppLineChartDemoComponent implements OnInit {
     }
   };
 
-  options4 = {
+  options4: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'linear',
     useInteractiveGuideline: true,

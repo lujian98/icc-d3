@@ -1,4 +1,4 @@
-import { IccScale } from '../model/model';
+import { IccScale, IccD3Options } from '../model/model';
 
 export abstract class IccAbstractScale<T> {
   abstract getScale(range: number[], reverse: boolean): IccScale;
@@ -7,7 +7,7 @@ export abstract class IccAbstractScale<T> {
   abstract setYDomain(scale: IccScale, data: T[], type: string): void;
 
   constructor(
-    protected options: any,
+    protected options: IccD3Options,
   ) {
   }
 }

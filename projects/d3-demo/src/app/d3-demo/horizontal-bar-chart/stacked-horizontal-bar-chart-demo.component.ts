@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-stacked-horizontal-bar-chart-demo',
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   `,
 })
 export class AppStackedHorizontalBarDemoComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'stackedHorizontalBarChart',
     xScaleType: 'linear',
     yScaleType: 'band',
@@ -28,7 +29,7 @@ export class AppStackedHorizontalBarDemoComponent implements OnInit {
     y: (d) => d.label
     */
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'stackedBarChart',
     xScaleType: 'band',
     yScaleType: 'linear',

@@ -2,14 +2,14 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Component } from '../d3.component';
-import { IccScaleLinear } from '../model/model';
+import { IccScaleLinear, IccD3Options } from '../model/model';
 
 export class IccInteractiveDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
     private data: T[],
-    private options: any,
+    private options: IccD3Options,
     private draw: IccD3Component<T>,
   ) {
     if (this.options.useInteractiveGuideline) {
@@ -31,7 +31,7 @@ export class IccInteractiveDraw<T> {
     });
   }
 
-  updateOptions(options: any): void {
+  updateOptions(options: IccD3Options): void {
     this.options = options;
     this.update();
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3Array from 'd3-array';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-linear-stacked-bar-chart',
@@ -10,7 +11,7 @@ import * as d3Array from 'd3-array';
   `,
 })
 export class AppLinearStackedBarChartComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'stackedBarChart',
     xScaleType: 'linear',
     margin: { top: 10, right: 50, bottom: 20, left: 50 },
@@ -28,7 +29,7 @@ export class AppLinearStackedBarChartComponent implements OnInit {
     }
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'groupedBarChart',
     xScaleType: 'band',
     margin: { top: 10, right: 50, bottom: 20, left: 50 },

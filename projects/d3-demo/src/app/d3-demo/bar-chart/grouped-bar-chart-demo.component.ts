@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-grouped-bar-chart-demo',
@@ -71,7 +72,7 @@ export class AppGroupedBarChartDemoComponent implements OnInit {
       '65 Years and Over': -1910571
     }
   ];
-  options = {
+  options: IccD3Options = {
     chartType: 'groupedBarChart',
     xScaleType: 'band',
     margin: { top: 10, right: 50, bottom: 20, left: 60 },
@@ -83,7 +84,7 @@ export class AppGroupedBarChartDemoComponent implements OnInit {
     colors: ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'groupedBarChart',
     xScaleType: 'band',
     x0: (d) => d.key,

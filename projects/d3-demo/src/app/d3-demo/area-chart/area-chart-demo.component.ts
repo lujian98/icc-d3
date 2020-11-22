@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SP500 } from '../shared';
 import * as d3TimeFormat from 'd3-time-format';
+import { IccD3Options } from 'icc';
 
 interface Stock {
   date: Date;
@@ -17,7 +18,7 @@ interface Stock {
 })
 export class AppAreaChartDemoComponent implements OnInit {
   data: any;
-  options = {
+  options: IccD3Options = {
     chartType: 'areaChart',
     x0: (d) => d.key,
     x: (d) => d.date,
@@ -25,7 +26,7 @@ export class AppAreaChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'lineChart',
     x0: (d) => d.key,
     x: (d) => d.date,

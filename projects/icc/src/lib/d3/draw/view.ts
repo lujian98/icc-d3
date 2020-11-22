@@ -2,6 +2,7 @@ import { ElementRef } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccLegendDraw } from './legend-draw';
+import { IccD3Options } from '../model/model';
 
 export class IccView {
   private _svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
@@ -16,13 +17,13 @@ export class IccView {
 
   width: number;
   height: number;
-  getOptions(): void {
+  getOptions(): IccD3Options {
     return this.options;
   }
 
   constructor(
     protected elementRef: ElementRef,
-    private options: any,
+    private options: IccD3Options,
     private chartTypes: any[]
   ) {
     this.clearElement();

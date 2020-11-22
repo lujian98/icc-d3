@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-grouped-horizontal-bar-chart-demo',
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   `,
 })
 export class AppGroupedHorizontalBarDemoComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'groupedHorizontalBarChart',
     xScaleType: 'linear',
     yScaleType: 'band',
@@ -20,7 +21,7 @@ export class AppGroupedHorizontalBarDemoComponent implements OnInit {
     drawColor: (d, i) => d.key
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'groupedBarChart',
     yScaleType: 'linear',
     xScaleType: 'band',

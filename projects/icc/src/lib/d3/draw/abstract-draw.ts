@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
-import { IccScale } from '../model/model';
+import { IccScale, IccD3Options } from '../model/model';
 
 export abstract class IccAbstractDraw<T> {
   protected data: T[];
@@ -17,7 +17,7 @@ export abstract class IccAbstractDraw<T> {
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     protected scale: IccScaleDraw<T>,
-    protected options: any,
+    protected options: IccD3Options,
     protected dispatch: d3Dispatch.Dispatch<{}>,
     chartType: string
   ) {

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-horizontal-bar-chart-demo',
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   `,
 })
 export class AppHorizontalBarDemoComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'horizontalBarChart',
     xScaleType: 'linear',
     yScaleType: 'band',
@@ -20,7 +21,7 @@ export class AppHorizontalBarDemoComponent implements OnInit {
     duration: 1000,
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'barChart',
     yScaleType: 'linear',
     xScaleType: 'band',

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TEMPERATURES } from '../shared';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-multi-series-demo',

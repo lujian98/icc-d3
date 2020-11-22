@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-candle-stick-chart-demo',
@@ -10,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppCandleStickChartDemoComponent implements OnInit {
 
-  options = {
+  options: IccD3Options = {
     chartType: 'candleStickBarChart',
     useInteractiveGuideline: true,
     x0: (d) => d.key,
@@ -20,7 +21,7 @@ export class AppCandleStickChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'lineChart',
     useInteractiveGuideline: true,
     x0: (d) => d.key,

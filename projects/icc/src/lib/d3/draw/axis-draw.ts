@@ -1,5 +1,6 @@
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './scale-draw';
+import { IccD3Options } from '../model/model';
 
 export class IccAxisDraw<T> {
   private drawID: number;
@@ -7,7 +8,7 @@ export class IccAxisDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
-    private options: any,
+    private options: IccD3Options,
   ) {
     this.drawID = Math.floor(Math.random() * 100000);
     this.init();
@@ -19,7 +20,7 @@ export class IccAxisDraw<T> {
     this.drawYAxis();
   }
 
-  updateOptions(options: any): void {
+  updateOptions(options: IccD3Options): void {
     this.options = options;
     this.update();
   }

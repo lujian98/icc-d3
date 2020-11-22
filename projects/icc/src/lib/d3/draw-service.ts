@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
-
+import { IccD3Options } from './model/model';
 import { IccScaleDraw } from './draw/scale-draw';
 import { IccAbstractDraw } from './draw/abstract-draw';
 import { IccLineChart } from './chart/line-chart';
@@ -45,7 +45,7 @@ export class IccDrawServie<T> {
   getDraw(
     svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     scale: IccScaleDraw<T>,
-    options: any,
+    options: IccD3Options,
     dispatch: d3Dispatch.Dispatch<{}>,
     chartType: string
   ): IccAbstractDraw<T> {

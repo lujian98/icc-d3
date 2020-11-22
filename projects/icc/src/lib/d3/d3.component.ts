@@ -15,7 +15,7 @@ import { IccZoomDraw } from './draw/zoom-draw';
 import { IccView } from './draw/view';
 import { IccInteractiveDraw } from './draw/interactive-draw';
 
-import { DEFAULT_CHART_OPTIONS } from './model/model';
+import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model/model';
 
 import { IccPopoverService } from '../tooltip/directives/popover/popover.service';
 import { TooltipDemoComponent } from './popover/tooltip-demo.component';
@@ -27,7 +27,7 @@ import { TooltipDemoComponent } from './popover/tooltip-demo.component';
   encapsulation: ViewEncapsulation.None
 })
 export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDestroy {
-  @Input() options: any;
+  @Input() options: IccD3Options;
   @Input() data: T[];
 
   protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;

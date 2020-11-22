@@ -8,7 +8,33 @@ export type IccScaleBand = d3Scale.ScaleBand<string>;
 export type IccScale = IccScaleLinear | IccScaleTime | IccScaleBand;
 export type IccScaleAxis = d3Axis.Axis<d3Axis.AxisDomain>;
 
-export const DEFAULT_CHART_OPTIONS = {
+export interface IccD3Options {
+  chartType?: string;
+  useInteractiveGuideline?: boolean;
+
+  margin?: any;
+  width?: string | number;
+  height?: string | number;
+  brushYWidth?: number;
+  xScaleType?: string;
+  yScaleType?: string;
+  legendHeight?: number;
+  x0?: any;
+  y0?: any;
+  x?: any;
+  y?: any;
+  colors?: string[];
+  drawColor?: any;
+  barColor?: any;
+  duration?: number;
+  zoom?: any;
+
+  drawHeight?: number;
+  drawWidth?: number;
+  drawHeight2?: number;
+}
+
+export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   chartType: 'lineChart',
   useInteractiveGuideline: false,
   margin: { top: 10, right: 10, bottom: 20, left: 40 },

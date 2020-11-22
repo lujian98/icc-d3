@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SAMPLE_DATA, SAMPLE_DATA1 } from '../shared/';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-stacked-bar-chart-demo',
@@ -12,7 +13,7 @@ import { SAMPLE_DATA, SAMPLE_DATA1 } from '../shared/';
 export class AppStackedBarChartDemoComponent implements OnInit {
   data = SAMPLE_DATA;
 
-  options1 = {
+  options1: IccD3Options = {
     chartType: 'stackedBarChart',
     xScaleType: 'band',
     margin: { top: 10, right: 50, bottom: 20, left: 60 },
@@ -24,7 +25,7 @@ export class AppStackedBarChartDemoComponent implements OnInit {
     colors: ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'stackedNormalizedBarChart',
     xScaleType: 'band',
     x0: (d) => d.label,

@@ -3,6 +3,7 @@ import { IccLinearScale } from './linear-scale';
 import { IccTimeScale } from './time-scale';
 import { IccBandScale } from './band-scale';
 import { IccScale } from '../model/model';
+import { IccD3Options } from '../model/model';
 
 export class IccScaleFactory<T> {
 
@@ -14,7 +15,7 @@ export class IccScaleFactory<T> {
 
   componentRef: IccAbstractScale<T>;
 
-  constructor(private scaleType: string, private options: any) {
+  constructor(private scaleType: string, private options: IccD3Options) {
     this.setComponentRef();
   }
 

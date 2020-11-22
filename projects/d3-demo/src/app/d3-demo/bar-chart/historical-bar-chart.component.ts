@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3Array from 'd3-array';
-
+import { IccD3Options } from 'icc';
 @Component({
   selector: 'app-historical-bar-chart',
   styles: [':host { height: 100%; display: flex; flex-direction: column;'],
@@ -10,7 +10,7 @@ import * as d3Array from 'd3-array';
   `,
 })
 export class AppHistoricalBarChartComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     // chartType: 'lineChart',
     chartType: 'barChart',
     xScaleType: 'time',
@@ -24,7 +24,7 @@ export class AppHistoricalBarChartComponent implements OnInit {
     duration: 1000
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'barChart',
     xScaleType: 'linear',
     margin: { top: 10, right: 50, bottom: 20, left: 50 },

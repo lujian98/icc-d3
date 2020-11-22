@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { IccDrawServie } from 'icc';
 import { AppDrawServie } from './draw/draw-service';
+import { IccD3Options } from 'icc';
 
 import { STOCK_PRICE } from '../shared/stock_price';
 import { IccD3Component } from 'icc';
@@ -19,7 +20,7 @@ import { IccD3Component } from 'icc';
   ]
 })
 export class AppStockHistoryDemoComponent<T> implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'horizontalBarChart',
     margin: { top: 10, right: 60, bottom: 20, left: 80 },
     xScaleType: 'linear',

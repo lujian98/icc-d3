@@ -1,6 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
+import { IccD3Options } from '../model/model';
 
 export class IccLegendDraw<T> {
   margin = { top: 5, right: 0, bottom: 5, left: 0 };
@@ -21,8 +22,8 @@ export class IccLegendDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
-    private data: any,
-    private options: any,
+    private data: T[],
+    private options: IccD3Options,
     private dispatch: d3Dispatch.Dispatch<{}>
   ) {
     this.svg.select('.legendDraw').append('g').attr('class', 'legendArea');
@@ -30,7 +31,7 @@ export class IccLegendDraw<T> {
     this.update();
   }
 
-  updateOptions(options: any): void {
+  updateOptions(options: IccD3Options): void {
     this.options = options;
     this.update();
   }

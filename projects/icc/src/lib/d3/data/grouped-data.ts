@@ -1,7 +1,9 @@
+import { IccD3Options } from '../model/model';
+
 export class IccGroupedData<T> {
 
   constructor(
-    private options: any,
+    private options: IccD3Options,
   ) {
   }
 

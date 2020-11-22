@@ -3,7 +3,7 @@ import * as d3Zoom from 'd3-zoom';
 import * as d3Brush from 'd3-brush';
 import { IccD3Component } from '../d3.component';
 import { IccScaleDraw } from './scale-draw';
-import { IccScaleLinear } from '../model/model';
+import { IccScaleLinear, IccD3Options } from '../model/model';
 
 export class IccZoomDraw<T> {
   zoom: any;
@@ -16,7 +16,7 @@ export class IccZoomDraw<T> {
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
     private draw: IccD3Component<T>,
-    private options: any,
+    private options: IccD3Options,
   ) {
     this.init();
   }
@@ -32,7 +32,7 @@ export class IccZoomDraw<T> {
     this.update();
   }
 
-  updateOptions(options: any): void {
+  updateOptions(options: IccD3Options): void {
     this.options = options;
     this.update();
   }

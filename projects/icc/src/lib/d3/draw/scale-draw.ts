@@ -2,7 +2,7 @@ import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccScaleFactory } from './../scale/scale-factory';
-import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis } from '../model/model';
+import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis, IccD3Options } from '../model/model';
 
 export class IccScaleDraw<T> {
 
@@ -33,11 +33,11 @@ export class IccScaleDraw<T> {
   y3Axis: IccScaleAxis;
   y3Group: IccScaleBand;
 
-  private options: any;
+  private options: IccD3Options;
 
   constructor() { }
 
-  buildScales(options: any): void {
+  buildScales(options: IccD3Options): void {
     this.options = options;
     this.setXScale();
     this.setYScale();
@@ -46,7 +46,7 @@ export class IccScaleDraw<T> {
     this.setYAxis();
   }
 
-  update(options: any): void {
+  update(options: IccD3Options): void {
     this.options = options;
     this.updateXScale();
     this.updateYScale();
@@ -181,7 +181,7 @@ export class IccScaleDraw<T> {
     }
   }
 
-  initColor(data: T[], options: any): void {
+  initColor(data: T[], options: IccD3Options): void {
     if (options) {
       this.options = options;
     }

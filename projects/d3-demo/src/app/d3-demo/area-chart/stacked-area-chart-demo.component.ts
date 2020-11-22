@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'app-stacked-area-chart-demo',
@@ -9,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   `,
 })
 export class AppStackedAreaChartDemoComponent implements OnInit {
-  options = {
+  options: IccD3Options = {
     chartType: 'stackedAreaChart',
     useInteractiveGuideline: true,
     x0: (d) => d.key,
@@ -19,7 +20,7 @@ export class AppStackedAreaChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key
   };
 
-  options2 = {
+  options2: IccD3Options = {
     chartType: 'stackedNormalizedAreaChart',
     useInteractiveGuideline: true,
     x0: (d) => d.key,
