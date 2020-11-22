@@ -12,7 +12,7 @@ import { IccAbstractDraw } from './draw/abstract-draw';
 import { IccScaleDraw } from './draw/scale-draw';
 import { IccAxisDraw } from './draw/axis-draw';
 import { IccZoomDraw } from './draw/zoom-draw';
-import { IccDraw } from './draw/draw';
+import { IccView } from './draw/view';
 import { IccInteractiveDraw } from './draw/interactive-draw';
 
 import { DEFAULT_CHART_OPTIONS } from './model/model';
@@ -33,7 +33,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
   chartTypes: string[] = [];
   scale: IccScaleDraw<T>;
-  draw: IccDraw;
+  view: IccView;
   draws: IccAbstractDraw<T>[] = [];
   zoom: IccZoomDraw<T>;
   interactive: IccInteractiveDraw<T>;
@@ -77,7 +77,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       if (!this.svg) {
         this.createChart(data);
       } else {
-        this.draw.drawLegend(this.scale, data);
+        this.view.drawLegend(this.scale, data);
         this.setDispatch(data);
         this.setDrawDomain(data);
         this.drawChart(data);
@@ -89,9 +89,9 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public resizeChart(data: T[]): void {
-    this.draw.update();
-    this.draw.drawLegend(this.scale, data);
-    this.options = this.draw.getOptions();
+    this.view.update();
+    this.view.drawLegend(this.scale, data);
+    this.options = this.view.getOptions();
     this.scale.update(this.options);
     this.drawAxis.updateOptions(this.options);
     this.setDrawDomain(data);
@@ -108,10 +108,10 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
     this.setDispatch(data);
-    this.draw = new IccDraw(this.elementRef, this.options, this.chartTypes);
-    this.draw.drawLegend(this.scale, data);
-    this.svg = this.draw.svg;
-    this.options = this.draw.getOptions();
+    this.view = new IccView(this.elementRef, this.options, this.chartTypes);
+    this.view.drawLegend(this.scale, data);
+    this.svg = this.view.svg;
+    this.options = this.view.getOptions();
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
 

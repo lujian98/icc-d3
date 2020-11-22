@@ -5,7 +5,7 @@ export * from './draw-service';
 export * from './model/model';
 
 export * from './draw/abstract-draw';
-export * from './draw/draw';
+export * from './draw/view';
 export * from './draw/axis-draw';
 export * from './draw/interactive-draw';
 export * from './draw/legend-draw';

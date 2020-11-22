@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 import * as d3 from 'd3-selection';
 import { IccLegendDraw } from './legend-draw';
 
-export class IccDraw {
+export class IccView {
   private _svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
 
   get svg(): d3.Selection<d3.BaseType, {}, HTMLElement, any> {
@@ -34,11 +34,11 @@ export class IccDraw {
   }
 
   update(): void {
-    this.setDrawDimension();
-    this.updateDrawDimension();
+    this.setViewDimension();
+    this.updateViewDimension();
   }
 
-  private setDrawDimension(): void {
+  private setViewDimension(): void {
     this.setZoomOptions();
     const margin = this.options.margin;
     this.width = this.elementRef.nativeElement.clientWidth;
@@ -83,7 +83,7 @@ export class IccDraw {
     drawArea.append('g').attr('class', 'interactiveDraw').attr('clip-path', `url(#clip${drawID})`);
   }
 
-  updateDrawDimension(): void {
+  updateViewDimension(): void {
     const legendH = this.options.legendHeight - 10;
     const dtop = this.options.margin.top + legendH;
     this.options.drawHeight -= legendH;
