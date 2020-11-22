@@ -1,4 +1,5 @@
 import * as d3 from 'd3-selection';
+import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
 
 export class IccLegendDraw<T> {
@@ -21,7 +22,8 @@ export class IccLegendDraw<T> {
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
     private data: any,
-    private options: any
+    private options: any,
+    private dispatch: d3Dispatch.Dispatch<{}>
   ) {
     this.svg.select('.legendDraw').append('g').attr('class', 'legendArea');
     this.drawLegend();
@@ -72,10 +74,10 @@ export class IccLegendDraw<T> {
       .on('click', (e, d: any) => {
         d.disabled = !d.disabled;
         this.setLegendShape(d);
-        this.scale.dispatch.call('legendClick', this, d);
+        this.dispatch.call('legendClick', this, d);
       })
-      .on('mouseover', (e, d) => this.scale.dispatch.call('legendMouseover', this, d))
-      .on('mouseout', (e, d) => this.scale.dispatch.call('legendMouseout', this, d));
+      .on('mouseover', (e, d) => this.dispatch.call('legendMouseover', this, d))
+      .on('mouseout', (e, d) => this.dispatch.call('legendMouseout', this, d));
   }
 
   private setLegendAlign(): void {

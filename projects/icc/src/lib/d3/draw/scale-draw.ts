@@ -33,8 +33,6 @@ export class IccScaleDraw<T> {
   y3Axis: IccScaleAxis;
   y3Group: IccScaleBand;
 
-  dispatch = null;
-
   private options: any;
 
   constructor() { }

@@ -1,6 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Zoom from 'd3-zoom';
 import * as d3Brush from 'd3-brush';
+import { IccD3Component } from '../d3.component';
 import { IccScaleDraw } from './scale-draw';
 import { IccScaleLinear } from '../model/model';
 
@@ -14,7 +15,7 @@ export class IccZoomDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
-    private draw: any,
+    private draw: IccD3Component<T>,
     private options: any,
   ) {
     this.init();
@@ -163,7 +164,7 @@ export class IccZoomDraw<T> {
           }
         }
       }
-      this.scale.dispatch.call('drawZoom', this, event);
+      this.draw.dispatch.call('drawZoom', this, event);
     }
   }
 

@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
-import { IccAbstractDraw } from './abstract-draw';
+import { IccD3Component } from '../d3.component';
 import { IccScaleLinear } from '../model/model';
 
 export class IccInteractiveDraw<T> {
@@ -10,7 +10,7 @@ export class IccInteractiveDraw<T> {
     private scale: IccScaleDraw<T>,
     private data: T[],
     private options: any,
-    private draws: IccAbstractDraw<T>[]
+    private draw: IccD3Component<T>,
   ) {
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.drawArea')
@@ -22,7 +22,7 @@ export class IccInteractiveDraw<T> {
       this.drawAllCircles();
     }
 
-    this.scale.dispatch.on('drawZoom', (e) => {
+    this.draw.dispatch.on('drawZoom', (e) => {
       if (this.options.useInteractiveGuideline) {
         this.updateGuideLine(e.sourceEvent, true);
       } else {
@@ -76,7 +76,7 @@ export class IccInteractiveDraw<T> {
       let data = [];
       this.data.forEach((d, i) => {
         const key = this.options.x0(d);
-        const draw = this.draws.forEach((dw) => {
+        const draw = this.draw.draws.forEach((dw) => {
           const odata = this.svg.select(`.${dw.chartType}`).selectAll('g').data();
           const fdata = odata.filter((od) => key === this.options.x0(od));
           data = [...data, ...fdata];
@@ -164,7 +164,7 @@ export class IccInteractiveDraw<T> {
     } else {
       this.data.forEach((d, i) => {
         const key = this.options.x0(d);
-        const draw = this.draws.filter((dw) => {
+        const draw = this.draw.draws.filter((dw) => {
           const odata = this.svg.select(`.${dw.chartType}`).selectAll('g').data();
           const fdata = odata.filter((od) => key === this.options.x0(od));
           if (fdata.length > 0) {

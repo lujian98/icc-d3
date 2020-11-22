@@ -3,7 +3,7 @@ import { IccDrawServie } from 'icc';
 import { AppDrawServie } from './draw/draw-service';
 
 import { STOCK_PRICE } from '../shared/stock_price';
-import { SunD3Component } from 'icc';
+import { IccD3Component } from 'icc';
 
 @Component({
   selector: 'app-stock-history-demo',
@@ -33,7 +33,7 @@ export class AppStockHistoryDemoComponent<T> implements OnInit {
 
   data: any[];
 
-  @ViewChild(SunD3Component) iccd3: SunD3Component<T>;
+  @ViewChild(IccD3Component) iccd3: IccD3Component<T>;
 
   constructor(
     protected cd: ChangeDetectorRef,

@@ -26,11 +26,12 @@ import { TooltipDemoComponent } from './popover/tooltip-demo.component';
   styleUrls: ['./d3.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDestroy {
+export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   @Input() options: any;
   @Input() data: T[];
 
   protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+  dispatch: d3Dispatch.Dispatch<{}>;
   chartTypes: string[] = [];
   scale: IccScaleDraw<T>;
   view: IccView;
@@ -51,6 +52,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.popoverService.context = {
       skills: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     };
+    this.setDispatch();
   }
 
   ngOnInit(): void {
@@ -77,8 +79,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       if (!this.svg) {
         this.createChart(data);
       } else {
-        this.view.drawLegend(this.scale, data);
-        this.setDispatch(data);
+        this.view.drawLegend(this.scale, data, this.dispatch);
         this.setDrawDomain(data);
         this.drawChart(data);
         if (this.options.zoom.enabled) {
@@ -90,7 +91,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   public resizeChart(data: T[]): void {
     this.view.update();
-    this.view.drawLegend(this.scale, data);
+    this.view.drawLegend(this.scale, data, this.dispatch);
     this.options = this.view.getOptions();
     this.scale.update(this.options);
     this.drawAxis.updateOptions(this.options);
@@ -107,16 +108,15 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.chartTypes = this.getChartTypes(data);
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
-    this.setDispatch(data);
     this.view = new IccView(this.elementRef, this.options, this.chartTypes);
-    this.view.drawLegend(this.scale, data);
+    this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;
     this.options = this.view.getOptions();
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
 
     this.chartTypes.forEach((type) => {
-      const draw = this.drawServie.getDraw(this.svg, this.scale, this.options, type);
+      const draw = this.drawServie.getDraw(this.svg, this.scale, this.options, this.dispatch, type);
       this.draws.push(draw);
     });
     this.setDrawDomain(data);
@@ -124,7 +124,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     if (this.options.zoom.enabled) {
       this.zoom = new IccZoomDraw(this.svg, this.scale, this, this.options);
     }
-    this.interactive = new IccInteractiveDraw(this.svg, this.scale, data, this.options, this.draws);
+    this.interactive = new IccInteractiveDraw(this.svg, this.scale, data, this.options, this);
   }
 
   drawChart(data: T[]): void {
@@ -135,6 +135,17 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     });
   }
 
+  stateChangeDraw(): void {
+    this.setDrawDomain(this.data); // TODO option to turn on/off set dromain
+    if (this.options.zoom.enabled) {
+      this.zoom.setZoomRange();
+    }
+    this.drawChart(this.data);
+    if (!this.options.useInteractiveGuideline) {
+      this.interactive.drawAllCircles();
+    }
+  }
+
   setDrawDomain(data: T[]): void {
     this.scale.setDrawDomain(data);
     this.svg.select('.axis--x').call(this.scale.xAxis);
@@ -143,30 +154,23 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 
-  setDispatch(data: T[]): void {
-    this.scale.dispatch = d3Dispatch.dispatch(
+  setDispatch(): void {
+    this.dispatch = d3Dispatch.dispatch(
       'drawMouseover', 'drawMouseout', 'drawZoom',
       'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
-    this.scale.dispatch.on('legendClick', (d) => {
-      this.setDrawDomain(data); // TODO option to turn on/off set dromain
-      if (this.options.zoom.enabled) {
-        this.zoom.setZoomRange();
-      }
-      this.drawChart(data);
-      if (!this.options.useInteractiveGuideline) {
-        this.interactive.drawAllCircles();
-      }
+    this.dispatch.on('legendClick', (d) => {
+      this.stateChangeDraw();
     });
-    this.scale.dispatch.on('legendMouseover', (d) => {
+    this.dispatch.on('legendMouseover', (d) => {
       this.legendMouseover(d, true);
     });
-    this.scale.dispatch.on('legendMouseout', (d) => {
+    this.dispatch.on('legendMouseout', (d) => {
       this.legendMouseover(d, false);
     });
-    this.scale.dispatch.on('drawMouseover', (p) => {
+    this.dispatch.on('drawMouseover', (p) => {
       this.popoverService.openPopover(p.event);
     });
-    this.scale.dispatch.on('drawMouseout', (p) => {
+    this.dispatch.on('drawMouseout', (p) => {
       this.popoverService.closePopover();
     });
   }

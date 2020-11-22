@@ -25,11 +25,11 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       drawContents
         .on('mouseover', (e: MouseEvent, d) => {
           this.drawMouseover(d, true);
-          this.scale.dispatch.call('drawMouseover', this, { event: e, data: d });
+          this.dispatch.call('drawMouseover', this, { event: e, data: d });
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);
-          this.scale.dispatch.call('drawMouseout', this, { event: e, data: d });
+          this.dispatch.call('drawMouseout', this, { event: e, data: d });
         });
     }
     if (this.isAnimation && this.options.duration > 0) {
