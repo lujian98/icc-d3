@@ -41,7 +41,7 @@ export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private getBarWidth(drawName: string, scaleX: IccScale): number {
+  getBarWidth(drawName: string, scaleX: IccScale): number {
     if (this.data.length > 0) {
       const range = scaleX.range();
       const barWidth = (range[1] / this.options.y0(this.data[0]).length) * .45;

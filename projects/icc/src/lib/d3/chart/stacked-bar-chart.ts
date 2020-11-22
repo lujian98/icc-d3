@@ -3,9 +3,9 @@ import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
-  private drawData: any[];
+  drawData: T[];
 
-  drawChart(data: any[]): void {
+  drawChart(data: T[]): void {
     this.drawData = data;
     this.isStacked = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
@@ -49,7 +49,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : null);
   }
 
-  private drawMouseover(data, mouseover: boolean): void {
+  drawMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any, i) => data.data && this.options.x(d.data) === this.options.x(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);

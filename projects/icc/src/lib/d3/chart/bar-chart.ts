@@ -56,7 +56,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private drawMouseover(data, mouseover: boolean): void {
+  drawMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x(d) === this.options.x(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);

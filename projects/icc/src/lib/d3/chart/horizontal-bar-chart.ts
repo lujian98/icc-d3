@@ -42,7 +42,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     }
   }
 
-  public legendMouseover(data, mouseover: boolean): void {
+  legendMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .style('fill-opacity', (d) => mouseover ? null : 0.75);
 
@@ -51,7 +51,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private drawMouseover(data, mouseover: boolean): void {
+  drawMouseover(data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.y(d) === this.options.y(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
