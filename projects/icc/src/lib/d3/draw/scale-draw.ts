@@ -1,36 +1,38 @@
 import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
+import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccScaleFactory } from './../scale/scale-factory';
-import { IccScale, IccScaleBand, IccAxis } from '../model/model';
+import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis } from '../model/model';
 
 export class IccScaleDraw<T> {
 
   xFactory: IccScaleFactory<T>;
   yFactory: IccScaleFactory<T>;
 
+  colors: IccScaleColor;
+
   x: IccScale;
-  xAxis: IccAxis;
+  xAxis: IccScaleAxis;
   xGroup: IccScaleBand;
 
   x2: IccScale;
-  x2Axis: IccAxis;
+  x2Axis: IccScaleAxis;
   x2Group: IccScaleBand;
 
   x3: IccScale;
   x3Group: IccScaleBand;
 
   y: IccScale;
-  yAxis: IccAxis;
+  yAxis: IccScaleAxis;
   yGroup: IccScaleBand;
 
   y2: IccScale;
   y2Group: IccScaleBand;
 
   y3: IccScale;
-  y3Axis: IccAxis;
+  y3Axis: IccScaleAxis;
   y3Group: IccScaleBand;
 
-  colors = null;
   dispatch = null;
 
   private options: any;
@@ -179,6 +181,28 @@ export class IccScaleDraw<T> {
       }
       return Math.max(1, Math.floor(scaleBar * barWidth));
     }
+  }
+
+  initColor(data: T[], options: any): void {
+    if (options) {
+      this.options = options;
+    }
+    this.setColors(this.options.colors || d3ScaleChromatic.schemeCategory10);
+    this.setColorDomain(data);
+  }
+
+  public setColors(colors): void {
+    this.colors = d3Scale.scaleOrdinal(colors);
+  }
+
+  public setColorDomain(data: T[]): void {
+    let keys = data.map((d) => this.options.drawColor(d));
+
+    if (this.options.chartType === 'barChart') { // TODO all array data to get unique keys
+      const values = this.options.y0(data[0]);
+      keys = values.map((d) => this.options.drawColor(d));
+    }
+    this.colors.domain(keys);
   }
 }
 

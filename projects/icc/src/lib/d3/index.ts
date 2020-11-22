@@ -7,7 +7,6 @@ export * from './model/model';
 export * from './draw/abstract-draw';
 export * from './draw/draw';
 export * from './draw/axis-draw';
-export * from './draw/color-draw';
 export * from './draw/interactive-draw';
 export * from './draw/legend-draw';
 export * from './draw/scale-draw';

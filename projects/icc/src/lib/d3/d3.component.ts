@@ -13,7 +13,6 @@ import { IccScaleDraw } from './draw/scale-draw';
 import { IccAxisDraw } from './draw/axis-draw';
 import { IccZoomDraw } from './draw/zoom-draw';
 import { IccDraw } from './draw/draw';
-import { IccColorDraw } from './draw/color-draw';
 import { IccInteractiveDraw } from './draw/interactive-draw';
 
 import { DEFAULT_CHART_OPTIONS } from './model/model';
@@ -39,7 +38,6 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   zoom: IccZoomDraw<T>;
   interactive: IccInteractiveDraw<T>;
   drawAxis: IccAxisDraw<T>;
-  drawColor: IccColorDraw<T>;
   private alive = true;
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
@@ -75,7 +73,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   cloneData = (data: T[]) => data && data.map((d) => Object.assign({}, d));
 
   public updateChart(data: T[]): void {
-    if (this.isViewReady && this.data) {
+    if (this.isViewReady && data) {
       if (!this.svg) {
         this.createChart(data);
       } else {
@@ -106,9 +104,9 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public createChart(data: T[]): void {
-    this.chartTypes = this.getChartTypes(this.data);
+    this.chartTypes = this.getChartTypes(data);
     this.scale = new IccScaleDraw();
-    this.drawColor = new IccColorDraw(this.scale, data, this.options);
+    this.scale.initColor(data, this.options);
     this.setDispatch(data);
     this.draw = new IccDraw(this.elementRef, this.options, this.chartTypes);
     this.draw.drawLegend(this.scale, data);
