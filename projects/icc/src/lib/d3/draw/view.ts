@@ -47,9 +47,10 @@ export class IccView {
     this.height = this.elementRef.nativeElement.clientHeight;
     const zoom = this.options.zoom;
     const drawDimension = {
-      drawWidth: this.width - margin.left - margin.right - (zoom.verticalBrushShow ? 80 : 0),
-      drawHeight: this.height - margin.top - margin.bottom - (zoom.horizontalBrushShow ? 80 : 0),
-      drawHeight2: 50 // TODO in the options
+      drawWidth: this.width - margin.left - margin.right
+        - (zoom.verticalBrushShow ? this.options.brushYWidth + 30 : 0),
+      drawHeight: this.height - margin.top - margin.bottom
+        - (zoom.horizontalBrushShow ? this.options.drawHeight2 + 30 : 0)
     };
     this.options = { ...this.options, ...drawDimension };
   }

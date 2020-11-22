@@ -114,7 +114,7 @@ export class IccScaleDraw<T> {
       const gmax = Math.max(10, x2Scale.bandwidth());
       this.x2Group.domain(keys).rangeRound([0, gmax]);
 
-      const x3Scale = this.x2 as IccScaleBand;
+      const x3Scale = this.x3 as IccScaleBand;
       const gmax2 = Math.max(10, x3Scale.bandwidth()); // TODO min 10??
       this.x3Group.domain(keys).rangeRound([0, gmax2]);
     }
