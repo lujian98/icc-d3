@@ -1,32 +1,31 @@
-
-import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import { IccScaleFactory } from './../scale/scale-factory';
+import { IccScale, IccScaleBand } from '../model/model';
 
 export class IccScaleDraw {
 
-  x = null;
+  x: IccScale;
   xAxis = null;
-  xGroup = null;
+  xGroup: IccScaleBand;
 
-  x2 = null;
+  x2: IccScale;
   x2Axis = null;
-  x2Group = null;
+  x2Group: IccScaleBand;
 
-  x3 = null;
+  x3: IccScale;
   x3Group = null;
 
-  y = null;
+  y: IccScale;
   yAxis = null;
-  yGroup = null;
+  yGroup: IccScaleBand;
 
-  y2 = null;
-  y2Group = null;
+  y2: IccScale;
+  y2Group: IccScaleBand;
 
-  y3 = null;
+  y3: IccScale;
   y3Axis = null;
-  y3Group = null;
+  y3Group: IccScaleBand;
 
   colors = null;
   dispatch = null;
@@ -54,16 +53,16 @@ export class IccScaleDraw {
   }
 
   updateXScale(): void {
-    this.xFactory.updateRange(this.x,  [0, this.options.drawWidth]);
+    this.xFactory.updateRange(this.x, [0, this.options.drawWidth]);
     this.xFactory.updateRange(this.x2, [0, this.options.drawWidth]);
     this.xFactory.updateRange(this.x3, [0, this.options.brushYWidth]);
   }
 
   updateYScale(): void {
     const reverse = this.options.yScaleType === 'band';
-    this.yFactory.updateRange(this.y,  [this.options.drawHeight,  0], reverse);
+    this.yFactory.updateRange(this.y, [this.options.drawHeight, 0], reverse);
     this.yFactory.updateRange(this.y2, [this.options.drawHeight2, 0], reverse);
-    this.yFactory.updateRange(this.y3, [this.options.drawHeight,  0], reverse);
+    this.yFactory.updateRange(this.y3, [this.options.drawHeight, 0], reverse);
   }
 
   setDrawDomain(data: any[]): void {
@@ -103,44 +102,51 @@ export class IccScaleDraw {
 
   setXDomain(data, type = null): void { // stacked / normalized / null
     this.xFactory.setXDomain(this.x, data, type);
-    this.x2.domain(this.x.domain());
-    this.x3.domain(this.x.domain());
+    this.x2.domain(this.x.domain() as any);
+    this.x3.domain(this.x.domain() as any);
 
     if (this.options.chartType === 'groupedBarChart') {
       const keys = data.map(d => this.options.x0(d));
-      this.xGroup.domain(keys).rangeRound([0, this.x.bandwidth()]);
+      const xScale = this.x as IccScaleBand;
+      this.xGroup.domain(keys).rangeRound([0, xScale.bandwidth()]);
 
-      const gmax = Math.max(10, this.x2.bandwidth());
+      const x2Scale = this.x2 as IccScaleBand;
+      const gmax = Math.max(10, x2Scale.bandwidth());
       this.x2Group.domain(keys).rangeRound([0, gmax]);
 
-      const gmax2 = Math.max(10, this.x3.bandwidth()); // TODO min 10??
+      const x3Scale = this.x2 as IccScaleBand;
+      const gmax2 = Math.max(10, x3Scale.bandwidth()); // TODO min 10??
       this.x3Group.domain(keys).rangeRound([0, gmax2]);
     }
   }
 
   setYDomain(data, type = null): void {
     this.yFactory.setYDomain(this.y, data, type);
-    this.y2.domain(this.y.domain());
-    this.y3.domain(this.y.domain());
+    this.y2.domain(this.y.domain() as any);
+    this.y3.domain(this.y.domain() as any);
 
     if (this.options.chartType === 'groupedHorizontalBarChart') {
       const keys = data.map(d => this.options.x0(d));
-      this.yGroup.domain(keys).rangeRound([0, this.y.bandwidth()]);
-      this.y2Group.domain(keys).rangeRound([0, this.y2.bandwidth()]);
-      this.y3Group.domain(keys).rangeRound([0, this.y3.bandwidth()]);
+      const yScale = this.y as IccScaleBand;
+      const y2Scale = this.y2 as IccScaleBand;
+      const y3Scale = this.y3 as IccScaleBand;
+      this.yGroup.domain(keys).rangeRound([0, yScale.bandwidth()]);
+      this.y2Group.domain(keys).rangeRound([0, y2Scale.bandwidth()]);
+      this.y3Group.domain(keys).rangeRound([0, y3Scale.bandwidth()]);
     }
   }
 
   setXAxis(): void {
-    this.xAxis = d3Axis.axisBottom(this.x);
-    this.x2Axis = d3Axis.axisBottom(this.x2);
+    this.xAxis = d3Axis.axisBottom(this.x as any);
+    this.x2Axis = d3Axis.axisBottom(this.x2 as any);
   }
 
   setYAxis(): void {
-    this.yAxis = d3Axis.axisLeft(this.y);
-    this.y3Axis = d3Axis.axisRight(this.y3);
+    this.yAxis = d3Axis.axisLeft(this.y as any);
+    this.y3Axis = d3Axis.axisRight(this.y3 as any);
   }
 
+  // TODO move this to scale factory
   getXBarWidth(scale, data: any[], isFirst: boolean = false): number {
     if (scale.bandwidth) {
       return Math.max(1, scale.bandwidth());

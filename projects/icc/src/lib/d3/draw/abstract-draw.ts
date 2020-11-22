@@ -1,16 +1,17 @@
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './scale-draw';
+import { IccScale } from '../model/model';
 
 export abstract class IccAbstractDraw<T> {
-  protected data: any[];
-  protected prevData: any[];
+  protected data: T[];
+  protected prevData: T[];
   isStacked = false;
   chartType: string;
   protected isAnimation = false;
 
-  abstract drawContents(drawName, scaleX, scaleY, xGroup, yGroup): void;
-  abstract redrawContent(drawName, scaleX, scaleY, xGroup, yGroup): void;
-  abstract legendMouseover(data, mouseover: boolean): void;
+  abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
+  abstract redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
+  abstract legendMouseover(data: T[], mouseover: boolean): void;
 
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
@@ -21,7 +22,7 @@ export abstract class IccAbstractDraw<T> {
     this.chartType = chartType;
   }
 
-  drawChart(data: any[]): void {
+  drawChart(data: T[]): void {
     this.prevData = this.data;
     this.data = data;
     this.isAnimation = true; // TODO with options

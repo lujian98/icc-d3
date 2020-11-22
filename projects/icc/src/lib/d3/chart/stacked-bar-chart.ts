@@ -1,5 +1,6 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
+import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   private drawData: any[];
@@ -15,7 +16,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     super.drawChart(stackdata);
   }
 
-  drawContents(drawName, scaleX, scaleY): void {
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('class', 'stackedbar series')
       .attr('fill-opacity', 0.75)
@@ -23,7 +24,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY): void {
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d: any) => d).join('rect')
       .attr('class', 'stackedbar draw')

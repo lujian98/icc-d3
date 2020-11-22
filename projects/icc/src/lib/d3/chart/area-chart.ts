@@ -1,9 +1,10 @@
 import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
+import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccAreaChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY): void {
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .append('path')
       .attr('stroke-width', 1.0)
@@ -17,7 +18,7 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY): void {
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawArea = d3Shape.area()
       .curve(d3Shape.curveLinear)
       .defined((d, i) => !isNaN(this.options.y(d)) && this.options.y(d) !== null)

@@ -1,8 +1,9 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
+import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY): void {
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 
@@ -12,7 +13,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY): void {
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'bar draw')

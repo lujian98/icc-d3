@@ -2,6 +2,7 @@
 import { IccLinearScale } from './linear-scale';
 import { IccTimeScale } from './time-scale';
 import { IccBandScale } from './band-scale';
+import { IccScale } from '../model/model';
 
 export class IccScaleFactory {
   componentMapper: {};
@@ -23,19 +24,19 @@ export class IccScaleFactory {
     this.componentRef = new component(this.options);
   }
 
-  getScale(range: any[], reverse = false): any {
+  getScale(range: [], reverse = false): IccScale {
     return this.componentRef.getScale(range, reverse);
   }
 
-  updateRange(scale: any, range: [], reverse = false): void {
+  updateRange(scale: IccScale, range: [], reverse = false): void {
     this.componentRef.updateRange(scale, range, reverse);
   }
 
-  setXDomain(scale: any, data: any[], type = null): void {
+  setXDomain(scale: IccScale, data: [], type = null): void {
     this.componentRef.setXDomain(scale, data, type);
   }
 
-  setYDomain(scale: any, data: any[], type = null): void {
+  setYDomain(scale: IccScale, data: [], type = null): void {
     this.componentRef.setYDomain(scale, data, type);
   }
 }

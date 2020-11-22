@@ -1,13 +1,14 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
+import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
 
-  drawContents(drawName, scaleX, scaleY): void {
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     this.svg.select(drawName).selectAll('g').data(this.data).join('g');
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY): void {
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const barWidth = this.getBarWidth(drawName, scaleX);
 
     this.svg.select(drawName).selectAll('g').selectAll('rect')
@@ -40,13 +41,13 @@ export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  private getBarWidth(drawName, scaleX): number {
+  private getBarWidth(drawName: string, scaleX: IccScale): number {
     if (this.data.length > 0) {
       const range = scaleX.range();
       const barWidth = (range[1] / this.options.y0(this.data[0]).length) * .45;
       let scale = 1;
       if (drawName === `.${this.chartType}`) {
-        const xdomain = scaleX.domain();
+        const xdomain = scaleX.domain() as any;
         scale = (range[1] - range[0]) / (this.scale.x2(xdomain[1]) - this.scale.x2(xdomain[0]));
       }
       return Math.max(1, barWidth * scale);

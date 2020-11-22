@@ -1,5 +1,6 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccGroupedData } from '../data/grouped-data';
+import { IccScaleLinear, IccScaleBand } from '../model/model';
 
 export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
 
@@ -9,13 +10,13 @@ export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
     super.drawChart(groupeddata);
   }
 
-  drawContents(drawName, scaleX, scaleY, xGroup): void {
+  drawContents(drawName: string, scaleX: IccScaleBand, scaleY: IccScaleLinear, xGroup: IccScaleBand): void {
     const groupName = drawName.replace('.', '');
     this.svg.select(drawName).selectAll('g').data(this.data).join('g').attr('class', `${groupName}Group`);
     this.redrawContent(drawName, scaleX, scaleY, xGroup);
   }
 
-  redrawContent(drawName, scaleX, scaleY, xGroup): void {
+  redrawContent(drawName: string, scaleX: IccScaleBand, scaleY: IccScaleLinear, xGroup: IccScaleBand): void {
     if (drawName === `.${this.chartType}` && scaleX.bandwidth) { // only support band scale
       xGroup.rangeRound([0, scaleX.bandwidth()]);
     }

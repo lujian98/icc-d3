@@ -2,6 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccAbstractDraw } from './abstract-draw';
+import { IccScaleLinear } from '../model/model';
 
 export class IccInteractiveDraw<T> {
   constructor(
@@ -126,7 +127,8 @@ export class IccInteractiveDraw<T> {
       .attr('x2', x);
 
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
-      const x0 = this.scale.x.invert(x);
+      const xScale = this.scale.x as IccScaleLinear;
+      const x0 = xScale.invert(x);
       const bisect = d3Array.bisector((d) => this.options.x(d)).right;
       let idx = -1;
       this.data.forEach((d) => {

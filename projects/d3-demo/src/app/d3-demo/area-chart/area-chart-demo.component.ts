@@ -8,7 +8,7 @@ interface Stock {
 }
 
 @Component({
-  selector: 'app-area-chart-demo',
+  selector: 'd3-demo-area-chart-demo',
   styles: [':host { height: 100%; display: flex; flex-direction: column;'],
   template: `
     <icc-d3 [options]="options" [data]="data"></icc-d3>

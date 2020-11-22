@@ -1,6 +1,7 @@
 import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
+import { IccScale, IccScaleLinear } from '../model/model';
 
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
@@ -14,7 +15,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
     super.drawChart(stackdata);
   }
 
-  drawContents(drawName, scaleX, scaleY): void {
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .append('path')
       .attr('class', 'stackedarea draw')
@@ -28,7 +29,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  redrawContent(drawName, scaleX, scaleY): void {
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContent = d3Shape.area()
       .x((d: any) => scaleX(this.options.x(d.data)))
       .y0((d: any) => scaleY(d[0]))

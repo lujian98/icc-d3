@@ -2,6 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Zoom from 'd3-zoom';
 import * as d3Brush from 'd3-brush';
 import { IccScaleDraw } from './scale-draw';
+import { IccScaleLinear } from '../model/model';
 
 export class IccZoomDraw {
   zoom: any;
@@ -175,7 +176,8 @@ export class IccZoomDraw {
 
   private setBrushedYRange(range): void {
     if (this.options.yScaleType === 'linear' || this.options.yScaleType === 'time') {
-      const ydoman = range.map(this.scale.y3.invert, this.scale.y3).reverse();
+      const y3Scale = this.scale.y3 as IccScaleLinear;
+      const ydoman = range.map(y3Scale.invert, this.scale.y3).reverse();
       this.scale.y.domain(ydoman);
     } else if (this.options.yScaleType === 'band') {
       const x0 = this.scale.y3.range();
@@ -209,7 +211,8 @@ export class IccZoomDraw {
   }
 
   private brushXScaleLinear(range): void {
-    this.scale.x.domain(range.map(this.scale.x2.invert, this.scale.x2));
+    const x2Scale = this.scale.x2 as IccScaleLinear;
+    this.scale.x.domain(range.map(x2Scale.invert, this.scale.x2));
   }
 
   private brushXScaleBand(range): void {

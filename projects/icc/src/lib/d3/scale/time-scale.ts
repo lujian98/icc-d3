@@ -1,18 +1,19 @@
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import { IccAbstractScale } from './abstract-scale';
+import { IccScaleTime } from '../model/model';
 
 export class IccTimeScale extends IccAbstractScale {
 
-  getScale(range: any[], reverse = false): any {
+  getScale(range: [], reverse = false): IccScaleTime {
     return d3Scale.scaleTime().range(range);
   }
 
-  updateRange(scale: any, range: [], reverse: boolean): void {
+  updateRange(scale: IccScaleTime, range: [], reverse: boolean): void {
     scale.range(range);
   }
 
-  setXDomain(scale: any, data: any[], type = null): void {
+  setXDomain(scale: IccScaleTime, data: any[], type = null): void {
     const xdata = data.map((v) => v.values.map((d) => this.options.x(d)))[0];
     if (this.options.chartType === 'barChart') { // TODO options with add extra range for bar chart
       const max = d3Array.max(xdata);
@@ -27,7 +28,7 @@ export class IccTimeScale extends IccAbstractScale {
     scale.domain(d3Array.extent(xdata, (d: Date) => d));
   }
 
-  setYDomain(scale: any, data: any[], type = null): void { // TODO
+  setYDomain(scale: IccScaleTime, data: any[], type = null): void { // TODO
   }
 }
 
