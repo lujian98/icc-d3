@@ -3,16 +3,16 @@ import * as d3Array from 'd3-array';
 import { IccAbstractScale } from './abstract-scale';
 import { IccScaleLinear } from '../model/model';
 
-export class IccLinearScale extends IccAbstractScale {
-  getScale(range: [], reverse = false): IccScaleLinear {
+export class IccLinearScale<T> extends IccAbstractScale<T> {
+  getScale(range: number[], reverse = false): IccScaleLinear {
     return d3Scale.scaleLinear().range(range);
   }
 
-  updateRange(scale: IccScaleLinear, range: [], reverse: boolean): void {
+  updateRange(scale: IccScaleLinear, range: number[], reverse: boolean): void {
     scale.range(range);
   }
 
-  setXDomain(scale: IccScaleLinear, data: [], type = null): void {
+  setXDomain(scale: IccScaleLinear, data: [], type: string = null): void {
     let minv; let maxv;
     if (type === 'stacked') {
       minv = d3Array.min(data, (c) => d3Array.min(c, (d) => d[0]));
@@ -31,7 +31,7 @@ export class IccLinearScale extends IccAbstractScale {
     scale.domain([minv, maxv]).nice();
   }
 
-  setYDomain(scale: IccScaleLinear, data: [], type = null): void {
+  setYDomain(scale: IccScaleLinear, data: [], type: string = null): void {
     let minv; let maxv;
     if (type === 'stacked') {
       minv = d3Array.min(data, (c) => d3Array.min(c, (d) => d[0]));

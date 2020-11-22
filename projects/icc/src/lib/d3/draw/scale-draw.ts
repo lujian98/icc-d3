@@ -1,37 +1,37 @@
 import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import { IccScaleFactory } from './../scale/scale-factory';
-import { IccScale, IccScaleBand } from '../model/model';
+import { IccScale, IccScaleBand, IccAxis } from '../model/model';
 
-export class IccScaleDraw {
+export class IccScaleDraw<T> {
+
+  xFactory: IccScaleFactory<T>;
+  yFactory: IccScaleFactory<T>;
 
   x: IccScale;
-  xAxis = null;
+  xAxis: IccAxis;
   xGroup: IccScaleBand;
 
   x2: IccScale;
-  x2Axis = null;
+  x2Axis: IccAxis;
   x2Group: IccScaleBand;
 
   x3: IccScale;
-  x3Group = null;
+  x3Group: IccScaleBand;
 
   y: IccScale;
-  yAxis = null;
+  yAxis: IccAxis;
   yGroup: IccScaleBand;
 
   y2: IccScale;
   y2Group: IccScaleBand;
 
   y3: IccScale;
-  y3Axis = null;
+  y3Axis: IccAxis;
   y3Group: IccScaleBand;
 
   colors = null;
   dispatch = null;
-
-  xFactory: any;
-  yFactory: any;
 
   private options: any;
 
@@ -100,7 +100,7 @@ export class IccScaleDraw {
     }
   }
 
-  setXDomain(data, type = null): void { // stacked / normalized / null
+  setXDomain(data: T[], type = null): void { // stacked / normalized / null
     this.xFactory.setXDomain(this.x, data, type);
     this.x2.domain(this.x.domain() as any);
     this.x3.domain(this.x.domain() as any);
@@ -120,7 +120,7 @@ export class IccScaleDraw {
     }
   }
 
-  setYDomain(data, type = null): void {
+  setYDomain(data: T[], type = null): void {
     this.yFactory.setYDomain(this.y, data, type);
     this.y2.domain(this.y.domain() as any);
     this.y3.domain(this.y.domain() as any);

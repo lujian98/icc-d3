@@ -1,12 +1,12 @@
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './scale-draw';
 
-export class IccAxisDraw {
+export class IccAxisDraw<T> {
   private drawID: number;
 
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    private scale: IccScaleDraw,
+    private scale: IccScaleDraw<T>,
     private options: any,
   ) {
     this.drawID = Math.floor(Math.random() * 100000);

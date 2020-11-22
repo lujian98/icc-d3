@@ -6,7 +6,9 @@ import { AppHorizontalBarChart } from './horizontal-bar-chart';
 export class AppDrawServie<T> extends IccDrawServie<T> {
   constructor() {
     super();
-    this.componentMapper['horizontalBarChart'] = AppHorizontalBarChart;
+    Object.assign(this.componentMapper, {
+      horizontalBarChart: AppHorizontalBarChart
+    });
   }
 }
 

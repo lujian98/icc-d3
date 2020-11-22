@@ -4,7 +4,7 @@ import { IccScaleLinear, IccScaleBand } from '../model/model';
 
 export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
 
-  drawChart(data: any[]): void {
+  drawChart(data: T[]): void {
     const grouped = new IccGroupedData(this.options);
     const groupeddata = grouped.getGroupedData(data, false);
     super.drawChart(groupeddata);

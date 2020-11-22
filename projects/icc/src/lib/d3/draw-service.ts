@@ -18,39 +18,38 @@ import { IccCandleStickBarChart } from './chart/candle-stick-bar-chart';
 
 @Injectable()
 export class IccDrawServie<T> {
-  componentMapper: {};
 
-  constructor() {
-    this.componentMapper = {
-      lineChart: IccLineChart,
-      areaChart: IccAreaChart,
-      stackedAreaChart: IccStackedAreaChart,
-      stackedNormalizedAreaChart: IccStackedAreaChart,
-      stackedStreamAreaChart: IccStackedAreaChart,
+  componentMapper = {
+    lineChart: IccLineChart,
+    areaChart: IccAreaChart,
+    stackedAreaChart: IccStackedAreaChart,
+    stackedNormalizedAreaChart: IccStackedAreaChart,
+    stackedStreamAreaChart: IccStackedAreaChart,
 
-      barChart: IccBarChart,
-      groupedBarChart: IccGroupedBarChart,
-      stackedBarChart: IccStackedBarChart,
-      stackedNormalizedBarChart: IccStackedBarChart,
+    barChart: IccBarChart,
+    groupedBarChart: IccGroupedBarChart,
+    stackedBarChart: IccStackedBarChart,
+    stackedNormalizedBarChart: IccStackedBarChart,
 
-      horizontalBarChart: IccHorizontalBarChart,
-      groupedHorizontalBarChart: IccGroupedHorizontalBarChart,
-      stackedHorizontalBarChart: IccStackedHorizontalBarChart,
-      stackedNormalizedHorizontalBarChart: IccStackedHorizontalBarChart,
+    horizontalBarChart: IccHorizontalBarChart,
+    groupedHorizontalBarChart: IccGroupedHorizontalBarChart,
+    stackedHorizontalBarChart: IccStackedHorizontalBarChart,
+    stackedNormalizedHorizontalBarChart: IccStackedHorizontalBarChart,
 
-      candleStickBarChart: IccCandleStickBarChart,
-    };
-  }
+    candleStickBarChart: IccCandleStickBarChart,
+  };
+
+  constructor() { }
 
   getDraw(
     svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    scale: IccScaleDraw,
+    scale: IccScaleDraw<T>,
     options: any,
     chartType: string
   ): IccAbstractDraw<T> {
     let component = this.componentMapper[chartType];
     if (!component) {
-      component = this.componentMapper['lineChart'];
+      component = this.componentMapper.lineChart;
     }
     const componentRef = new component(svg, scale, options, chartType);
     return componentRef;

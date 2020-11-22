@@ -4,7 +4,7 @@ import * as d3Brush from 'd3-brush';
 import { IccScaleDraw } from './scale-draw';
 import { IccScaleLinear } from '../model/model';
 
-export class IccZoomDraw {
+export class IccZoomDraw<T> {
   zoom: any;
   brush: any;
   brushY: any;
@@ -13,7 +13,7 @@ export class IccZoomDraw {
 
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    private scale: IccScaleDraw,
+    private scale: IccScaleDraw<T>,
     private draw: any,
     private options: any,
   ) {

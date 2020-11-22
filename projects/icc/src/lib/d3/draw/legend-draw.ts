@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './scale-draw';
 
-export class IccLegendDraw {
+export class IccLegendDraw<T> {
   margin = { top: 5, right: 0, bottom: 5, left: 0 };
   private _height = 20;
   rightAlign = true;
@@ -19,7 +19,7 @@ export class IccLegendDraw {
 
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    private scale: IccScaleDraw,
+    private scale: IccScaleDraw<T>,
     private data: any,
     private options: any
   ) {

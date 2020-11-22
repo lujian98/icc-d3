@@ -32,14 +32,14 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   @Input() data: T[];
 
   protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
-  chartTypes = [];
-  scale: IccScaleDraw;
+  chartTypes: string[] = [];
+  scale: IccScaleDraw<T>;
   draw: IccDraw;
   draws: IccAbstractDraw<T>[] = [];
-  zoom: IccZoomDraw;
+  zoom: IccZoomDraw<T>;
   interactive: IccInteractiveDraw<T>;
-  drawAxis: IccAxisDraw;
-  drawColor: IccColorDraw;
+  drawAxis: IccAxisDraw<T>;
+  drawColor: IccColorDraw<T>;
   private alive = true;
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
@@ -72,9 +72,9 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     }
   }
 
-  cloneData = (data: any[]) => data && data.map((d) => Object.assign({}, d));
+  cloneData = (data: T[]) => data && data.map((d) => Object.assign({}, d));
 
-  public updateChart(data): void {
+  public updateChart(data: T[]): void {
     if (this.isViewReady && this.data) {
       if (!this.svg) {
         this.createChart(data);
@@ -90,7 +90,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     }
   }
 
-  public resizeChart(data: any[]): void {
+  public resizeChart(data: T[]): void {
     this.draw.update();
     this.draw.drawLegend(this.scale, data);
     this.options = this.draw.getOptions();
@@ -105,7 +105,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.interactive.updateOptions(this.options);
   }
 
-  public createChart(data: any[]): void {
+  public createChart(data: T[]): void {
     this.chartTypes = this.getChartTypes(this.data);
     this.scale = new IccScaleDraw();
     this.drawColor = new IccColorDraw(this.scale, data, this.options);
@@ -181,7 +181,7 @@ export class SunD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.draws.forEach((draw: IccAbstractDraw<T>) => draw.redraw());
   }
 
-  private getChartTypes(data: T[]): any[] {
+  private getChartTypes(data: T[]): string[] {
     for (const [key, value] of Object.entries(this.options)) {
       if (key === 'zoom') {
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };

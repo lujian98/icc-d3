@@ -15,7 +15,7 @@ export abstract class IccAbstractDraw<T> {
 
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    protected scale: IccScaleDraw,
+    protected scale: IccScaleDraw<T>,
     protected options: any,
     chartType: string
   ) {

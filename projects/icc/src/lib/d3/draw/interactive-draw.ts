@@ -7,7 +7,7 @@ import { IccScaleLinear } from '../model/model';
 export class IccInteractiveDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    private scale: IccScaleDraw,
+    private scale: IccScaleDraw<T>,
     private data: T[],
     private options: any,
     private draws: IccAbstractDraw<T>[]

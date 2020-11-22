@@ -3,9 +3,9 @@ import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccScaleDraw } from './scale-draw';
 
-export class IccColorDraw {
+export class IccColorDraw<T> {
 
-  constructor(private scale: IccScaleDraw, private data: any[], private options: any) {
+  constructor(private scale: IccScaleDraw<T>, private data: any[], private options: any) {
     this.setColors(this.options.colors || d3ScaleChromatic.schemeCategory10);
     this.setDomain(this.data);
   }

@@ -2,13 +2,13 @@ import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
 import { IccScaleDraw } from '../draw/scale-draw';
 
-export class IccStackedData {
+export class IccStackedData<T> {
   offset = 'stackOffsetDiverging';
   normalized = false;
 
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
-    private scale: IccScaleDraw,
+    private scale: IccScaleDraw<T>,
     private options: any,
     private chartType: string
   ) {
@@ -21,7 +21,7 @@ export class IccStackedData {
     }
   }
 
-  public getStackedData(data, isStackedY): any[] {
+  public getStackedData(data: T[], isStackedY): any[] {
     let ndata = [];
     data.forEach((d) => {
       ndata = this.options.y0(d).map((v, i) => {
@@ -60,13 +60,13 @@ export class IccStackedData {
     return stacks(ndata);
   }
 
-  setStackedYDomain(data: any[]): void {
+  setStackedYDomain(data: T[]): void {
     this.scale.setYDomain(data, this.normalized ? 'normalized' : 'stacked');
     this.svg.select('.axis--y').call(this.scale.yAxis);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 
-  setStackedXDomain(data: any[]): void {
+  setStackedXDomain(data: T[]): void {
     this.scale.setXDomain(data, this.normalized ? 'normalized' : 'stacked');
     this.svg.select('.axis--x').call(this.scale.xAxis);
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);

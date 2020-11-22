@@ -1,14 +1,14 @@
-export class IccGroupedData {
+export class IccGroupedData<T> {
 
   constructor(
     private options: any,
   ) {
   }
 
-  getGroupedData(data: any[], isXGrouped: boolean): any[] {
+  getGroupedData(data: T[], isXGrouped: boolean): any[] {
     const options = isXGrouped ? { v: (d: any) => this.options.x(d) } : { v: (d: any) => this.options.y(d) };
     let tdata = [];
-    data.forEach(d => {
+    data.forEach((d) => {
       let sk; let kv;
       for (const [k, v] of Object.entries(d)) {
         if (!Array.isArray(d[k])) {
