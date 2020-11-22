@@ -45,13 +45,14 @@ export class IccPopoverService implements OnDestroy {
           height: 0,
           left: mouseEvent.clientX,
           right: mouseEvent.clientX,
-          top: mouseEvent.clientY,
+          top: mouseEvent.clientY + 5,
           width: 0,
         })
       };
       const origin: any = new ElementRef(fakeElement);
 
       this.isOpened = true;
+      console.log( ' this.popoverPosition =', this.popoverPosition)
       const overlayConfig: IccOverlayConfig = {
         position: this.popoverPosition,
         width: this.width,
