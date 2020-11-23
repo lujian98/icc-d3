@@ -26,7 +26,6 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
   private popoverStrategy: IccBasePopoverStrategy;
   private overlayRef: OverlayRef;
   private isOpened = false;
-  private isCloseable = false;
 
   @Output() iccItemChangedEvent: EventEmitter<any> = new EventEmitter();
 
@@ -35,8 +34,8 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     private elementRef: ElementRef,
   ) { }
 
-  ngOnInit() {
-    if (this.popoverType !== 'disabled') { // afterClosed$
+  ngOnInit(): void {
+    if (this.popoverType !== 'disabled') {
       if (this.popoverType === 'click') {
         this.popoverStrategy = new IccPopoverClickStrategy(document, this.elementRef.nativeElement);
       } else if (this.popoverType === 'contextmenu') {
@@ -50,24 +49,23 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  openPopover(mouseEvent: MouseEvent) { // TODO delay 100ms to open
+  openPopover(mouseEvent: MouseEvent): void {
     if (!this.isOpened) {
       let origin = this.elementRef.nativeElement;
-      // if (this.popoverType === 'click') {
-      const fakeElement = {
-        getBoundingClientRect: (): ClientRect => ({
-          bottom: mouseEvent.clientY,
-          height: 0,
-          left: mouseEvent.clientX + 10,
-          right: mouseEvent.clientX,
-          top: mouseEvent.clientY + 10,
-          width: 0,
-        })
-      };
-      origin = new ElementRef(fakeElement);
-      // }
-
-      this.popoverStrategy.host = mouseEvent.target as HTMLElement;
+      if (this.popoverType === 'hover') { // hover at mouse point
+        this.popoverStrategy.host = mouseEvent.target as HTMLElement;
+        const fakeElement = {
+          getBoundingClientRect: (): ClientRect => ({
+            bottom: mouseEvent.clientY,
+            height: 0,
+            left: mouseEvent.clientX,
+            right: mouseEvent.clientX,
+            top: mouseEvent.clientY,
+            width: 0,
+          })
+        };
+        origin = new ElementRef(fakeElement);
+      }
 
       this.isOpened = true;
       const overlayConfig: IccOverlayConfig = {
@@ -84,7 +82,6 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
         this.content,
         this.context
       );
-      // this.isCloseable = false;
       this.popoverStrategy.isOpened = this.isOpened;
       this.popoverStrategy.overlayRef = this.overlayRef;
       this.popoverStrategy.containerRef = this.overlayService.containerRef;
@@ -103,7 +100,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  closePopover() { // TODO check overlay closeable
+  closePopover(): void {
     if (this.overlayService.isOverlayClosed(this.overlayRef, this.popoverType, this.popoverLevel)) {
       this.isOpened = false;
       this.popoverStrategy.isOpened = this.isOpened;
@@ -112,7 +109,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  private setPortalComponentEvent() {
+  private setPortalComponentEvent(): void {
     if (this.overlayService.overlayComponentRef.componentRef) {
       const portalComponent = this.overlayService.overlayComponentRef.componentRef;
       if (portalComponent.iccItemChangedEvent) {
@@ -124,7 +121,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.overlayService.destroy();
   }
 }

@@ -173,12 +173,10 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.popover.context = {
         skills: [1, 2, 3, 5, 6, 7, 8, 9, 10]
       };
-      console.log(' m hover 111111111111')
+      this.popover.closePopover();
       this.popover.openPopover(p.event);
     });
     this.dispatch.on('drawMouseout', (p) => {
-      // console.log(' m out 2222222222222222222 111111111111')
-      // this.popover.closePopover();
     });
   }
 
