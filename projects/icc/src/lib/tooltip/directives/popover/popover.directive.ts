@@ -20,7 +20,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
   @Input() popoverPosition: string;
   @Input() width: string | number;
   @Input() height: string | number;
-  @Input() popoverType: 'hover' | 'click' | 'contextmenu' | 'disabled' = 'hover';
+  @Input() popoverType: 'hover' | 'click' | 'contextmenu' | 'point' | 'disabled' = 'hover';
   @Input() popoverLevel = 0;
 
   private popoverStrategy: IccBasePopoverStrategy;
@@ -52,7 +52,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
   openPopover(mouseEvent: MouseEvent): void {
     if (!this.isOpened) {
       let origin = this.elementRef.nativeElement;
-      if (this.popoverType === 'hover') { // hover at mouse point
+      if (this.popoverType === 'point') {
         this.popoverStrategy.host = mouseEvent.target as HTMLElement;
         const fakeElement = {
           getBoundingClientRect: (): ClientRect => ({

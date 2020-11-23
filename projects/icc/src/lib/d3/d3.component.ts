@@ -14,16 +14,14 @@ import { IccAxisDraw } from './draw/axis-draw';
 import { IccZoomDraw } from './draw/zoom-draw';
 import { IccView } from './draw/view';
 import { IccInteractiveDraw } from './draw/interactive-draw';
-
 import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model/model';
 
 import { IccPopoverDirective } from '../tooltip/directives/popover/popover.directive';
 import { TooltipDemoComponent } from './popover/tooltip-demo.component';
 
-
 @Component({
   selector: 'icc-d3',
-  template: `<svg width="100%"></svg><span [iccPopover]="tooltip"></span>`,
+  template: `<svg width="100%"></svg><span [iccPopover]="tooltip" popoverType="point"></span>`,
   styleUrls: ['./d3.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -43,7 +41,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   private alive = true;
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
-
   @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
   tooltip = TooltipDemoComponent;
 
@@ -154,8 +151,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   setDispatch(): void {
-    this.dispatch = d3Dispatch.dispatch(
-      'drawMouseover', 'drawMouseout', 'drawZoom',
+    this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout', 'drawZoom',
       'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
     this.dispatch.on('legendClick', (d) => {
       this.legendMouseover(d, !d.disabled);
@@ -163,21 +159,17 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.legendMouseover(d, !d.disabled);
     });
     this.dispatch.on('legendMouseover', (d) => {
-
       this.legendMouseover(d, true);
     });
     this.dispatch.on('legendMouseout', (d) => {
       this.legendMouseover(d, false);
     });
     this.dispatch.on('drawMouseover', (p) => {
-      this.popover.context = {
-        skills: [1, 2, 3, 5, 6, 7, 8, 9, 10]
-      };
+      this.popover.context = { skills: [1, 2, 3, 5, 6, 7, 8, 9, 10] };
       this.popover.closePopover();
       this.popover.openPopover(p.event);
     });
-    this.dispatch.on('drawMouseout', (p) => {
-    });
+    this.dispatch.on('drawMouseout', (p) => { });
   }
 
   legendMouseover(data: T[], mouseover: boolean): void {
