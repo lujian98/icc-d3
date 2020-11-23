@@ -21,7 +21,7 @@ export class IccPopoverService implements OnDestroy {
   popoverPosition: string;
   width: string | number;
   height: string | number;
-  popoverType: 'hover' | 'click' | 'contextmenu' | 'disabled' = 'disabled';
+  popoverType: 'hover' | 'click' | 'contextmenu' | 'disabled' = 'hover';
   popoverLevel = 0;
 
   private popoverStrategy: IccBasePopoverStrategy;
@@ -37,8 +37,11 @@ export class IccPopoverService implements OnDestroy {
   }
 
   // WARNING TODO this only support mouse point popover
-  public openPopover(mouseEvent: MouseEvent): void {
+  public openPopover(mouseEvent: any): void {
     if (!this.isOpened) {
+      let origin = mouseEvent.target;
+      this.popoverStrategy = new IccPopoverHoverStrategy(document, mouseEvent.target);
+      this.popoverStrategy.hide$.subscribe(() => this.closePopover());
       const fakeElement = {
         getBoundingClientRect: (): ClientRect => ({
           bottom: mouseEvent.clientY,
@@ -49,10 +52,10 @@ export class IccPopoverService implements OnDestroy {
           width: 0,
         })
       };
-      const origin: any = new ElementRef(fakeElement);
+      origin = new ElementRef(fakeElement);
 
       this.isOpened = true;
-      console.log( ' this.popoverPosition =', this.popoverPosition)
+      // console.log( ' this.popoverPosition =', this.popoverPosition)
       const overlayConfig: IccOverlayConfig = {
         position: this.popoverPosition,
         width: this.width,
@@ -67,9 +70,9 @@ export class IccPopoverService implements OnDestroy {
         this.content,
         this.context
       );
-      // this.popoverStrategy.isOpened = this.isOpened;
-      // this.popoverStrategy.overlayRef = this.overlayRef;
-      // this.popoverStrategy.containerRef = this.overlayService.containerRef;
+      this.popoverStrategy.isOpened = this.isOpened;
+      this.popoverStrategy.overlayRef = this.overlayRef;
+      this.popoverStrategy.containerRef = this.overlayService.containerRef;
 
       this.overlayService.overlayComponentRef.afterClosed$
         .pipe(takeWhile(() => this.isOpened))
@@ -88,9 +91,9 @@ export class IccPopoverService implements OnDestroy {
   public closePopover(): void { // TODO check overlay closeable
     if (this.overlayService.isOverlayClosed(this.overlayRef, this.popoverType, this.popoverLevel)) {
       this.isOpened = false;
-      // this.popoverStrategy.isOpened = this.isOpened;
-      // this.popoverStrategy.overlayRef = null;
-      // this.popoverStrategy.containerRef = null;
+      this.popoverStrategy.isOpened = this.isOpened;
+      this.popoverStrategy.overlayRef = null;
+      this.popoverStrategy.containerRef = null;
     }
   }
 
