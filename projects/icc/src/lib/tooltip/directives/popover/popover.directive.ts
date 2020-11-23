@@ -26,6 +26,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
   private popoverStrategy: IccBasePopoverStrategy;
   private overlayRef: OverlayRef;
   private isOpened = false;
+  private isCloseable = false;
 
   @Output() iccItemChangedEvent: EventEmitter<any> = new EventEmitter();
 
@@ -49,22 +50,24 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  private openPopover(mouseEvent: MouseEvent) {
+  openPopover(mouseEvent: MouseEvent) { // TODO delay 100ms to open
     if (!this.isOpened) {
       let origin = this.elementRef.nativeElement;
-      if (this.popoverType === 'contextmenu') {
-        const fakeElement = {
-          getBoundingClientRect: (): ClientRect => ({
-            bottom: mouseEvent.clientY,
-            height: 0,
-            left: mouseEvent.clientX,
-            right: mouseEvent.clientX,
-            top: mouseEvent.clientY,
-            width: 0,
-          })
-        };
-        origin = new ElementRef(fakeElement);
-      }
+      // if (this.popoverType === 'click') {
+      const fakeElement = {
+        getBoundingClientRect: (): ClientRect => ({
+          bottom: mouseEvent.clientY,
+          height: 0,
+          left: mouseEvent.clientX + 10,
+          right: mouseEvent.clientX,
+          top: mouseEvent.clientY + 10,
+          width: 0,
+        })
+      };
+      origin = new ElementRef(fakeElement);
+      // }
+
+      this.popoverStrategy.host = mouseEvent.target as HTMLElement;
 
       this.isOpened = true;
       const overlayConfig: IccOverlayConfig = {
@@ -81,6 +84,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
         this.content,
         this.context
       );
+      // this.isCloseable = false;
       this.popoverStrategy.isOpened = this.isOpened;
       this.popoverStrategy.overlayRef = this.overlayRef;
       this.popoverStrategy.containerRef = this.overlayService.containerRef;
@@ -99,7 +103,7 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
     }
   }
 
-  private closePopover() { // TODO check overlay closeable
+  closePopover() { // TODO check overlay closeable
     if (this.overlayService.isOverlayClosed(this.overlayRef, this.popoverType, this.popoverLevel)) {
       this.isOpened = false;
       this.popoverStrategy.isOpened = this.isOpened;

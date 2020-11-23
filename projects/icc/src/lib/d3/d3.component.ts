@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges,
+  AfterViewInit, Component, ViewChild, ElementRef, HostListener, Input, OnChanges,
   OnDestroy, OnInit, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription, of } from 'rxjs';
@@ -17,12 +17,13 @@ import { IccInteractiveDraw } from './draw/interactive-draw';
 
 import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model/model';
 
-import { IccPopoverService } from '../tooltip/directives/popover/popover.service';
+import { IccPopoverDirective } from '../tooltip/directives/popover/popover.directive';
 import { TooltipDemoComponent } from './popover/tooltip-demo.component';
+
 
 @Component({
   selector: 'icc-d3',
-  template: `<svg width="100%"></svg>`,
+  template: `<svg width="100%"></svg><span [iccPopover]="tooltip"></span>`,
   styleUrls: ['./d3.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -43,15 +44,13 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
 
+  @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
+  tooltip = TooltipDemoComponent;
+
   constructor(
     protected elementRef: ElementRef,
     private drawServie: IccDrawServie<T>,
-    private popoverService: IccPopoverService
   ) {
-    this.popoverService.content = TooltipDemoComponent;
-    this.popoverService.context = {
-      skills: [1, 2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    };
     this.setDispatch();
   }
 
@@ -171,13 +170,15 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.legendMouseover(d, false);
     });
     this.dispatch.on('drawMouseover', (p) => {
-      // console.log( ' over xxxx p =', p)
-      // console.log( ' this.elementRef=', this.elementRef)
-      this.popoverService.openPopover(p.event);
+      this.popover.context = {
+        skills: [1, 2, 3, 5, 6, 7, 8, 9, 10]
+      };
+      console.log(' m hover 111111111111')
+      this.popover.openPopover(p.event);
     });
     this.dispatch.on('drawMouseout', (p) => {
-      // console.log( ' mouse out   =', p)
-      this.popoverService.closePopover();
+      // console.log(' m out 2222222222222222222 111111111111')
+      // this.popover.closePopover();
     });
   }
 

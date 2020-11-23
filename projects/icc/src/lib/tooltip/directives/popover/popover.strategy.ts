@@ -20,10 +20,13 @@ export abstract class IccBasePopoverStrategy implements IccPopoverStrategy {
   abstract show$: Observable<Event>;
   abstract hide$: Observable<Event>;
   change$: Observable<any>;
+  host: HTMLElement;
   constructor(
     protected document: Document,
-    protected host: HTMLElement,
-  ) { }
+    private _host: HTMLElement,
+  ) {
+    this.host = _host;
+  }
 
   destroy() {
     this.alive = false;
@@ -113,7 +116,7 @@ export class IccPopoverContextmenuStrategy extends IccBasePopoverStrategy {
   hide$ = this.click$.pipe(
     filter(
       (event) =>
-       !(this.containerRef && this.containerRef.location.nativeElement.contains(event.target))
+        !(this.containerRef && this.containerRef.location.nativeElement.contains(event.target))
     ),
     map((event) => event),
     takeWhile(() => this.alive)

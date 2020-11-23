@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IccPopoverModule } from '../tooltip/directives/popover';
-import { IccPopoverService } from '../tooltip/directives/popover/popover.service';
 import { IccPortalModule } from '../tooltip/components/portal/portal.module';
 
 import { IccDrawServie } from './draw-service';
@@ -27,7 +26,6 @@ import { TooltipDemoComponent } from './popover/tooltip-demo.component';
   ],
   providers: [
     IccDrawServie,
-    IccPopoverService
   ]
 })
 export class IccD3Module { }
