@@ -47,12 +47,12 @@ export class AppStockHistoryDemoComponent<T> implements OnInit {
     setInterval(() => {
       const vdata = ndata[k];
       if (vdata && k <= 100) {
-        vdata.values = vdata.values.filter((v, i) => i < 16);
+        vdata.values = vdata.values.filter((v, i) => i < 12);
         this.data = [vdata];
         this.cd.detectChanges();
         k++;
       }
-    }, 250);
+    }, 550);
   }
 }
 
