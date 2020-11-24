@@ -17,11 +17,11 @@ import { IccInteractiveDraw } from './draw/interactive-draw';
 import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model/model';
 
 import { IccPopoverDirective } from '../tooltip/directives/popover/popover.directive';
-import { TooltipDemoComponent } from './popover/tooltip-demo.component';
+import { IccD3PopoverComponent } from './popover/popover.component';
 
 @Component({
   selector: 'icc-d3',
-  template: `<svg width="100%"></svg><span [iccPopover]="tooltip" popoverType="point"></span>`,
+  templateUrl: './d3.component.html',
   styleUrls: ['./d3.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -42,7 +42,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   private isViewReady = false;
   isWindowReszie$: Subject<{}> = new Subject();
   @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
-  tooltip = TooltipDemoComponent;
+  d3Popover = IccD3PopoverComponent;
 
   constructor(
     protected elementRef: ElementRef,

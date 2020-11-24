@@ -5,7 +5,7 @@ import { IccPortalModule } from '../tooltip/components/portal/portal.module';
 
 import { IccDrawServie } from './draw-service';
 import { IccD3Component } from './d3.component';
-import { TooltipDemoComponent } from './popover/tooltip-demo.component';
+import { IccD3PopoverComponent } from './popover/popover.component';
 
 @NgModule({
   imports: [
@@ -15,14 +15,14 @@ import { TooltipDemoComponent } from './popover/tooltip-demo.component';
   ],
   declarations: [
     IccD3Component,
-    TooltipDemoComponent,
+    IccD3PopoverComponent,
   ],
   exports: [
     IccD3Component,
-    TooltipDemoComponent
+    IccD3PopoverComponent
   ],
   entryComponents: [
-    TooltipDemoComponent
+    IccD3PopoverComponent
   ],
   providers: [
     IccDrawServie,

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { IccOverlayComponentRef } from '../../tooltip/services/overlay/overlay-component-ref';
 
 @Component({
-  templateUrl: './tooltip-demo.component.html',
-  styleUrls: ['./tooltip-demo.component.scss']
+  templateUrl: './popover.component.html',
+  styleUrls: ['./popover.component.scss']
 })
-export class TooltipDemoComponent implements OnInit {
+export class IccD3PopoverComponent implements OnInit {
   skills = [];
   constructor(
     private overlayComponentRef: IccOverlayComponentRef<any>

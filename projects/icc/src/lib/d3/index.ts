@@ -31,4 +31,4 @@ export * from './chart/stacked-area-chart';
 export * from './chart/stacked-bar-chart';
 export * from './chart/stacked-horizontal-bar-chart';
 
-export * from './popover/tooltip-demo.component';
+export * from './popover/popover.component';
