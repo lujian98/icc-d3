@@ -1,8 +1,10 @@
 :host {
   display: block;
-  width: 400px;
-  // background-color: lightgrey;
-  // box-shadow: 0 2px 14px 0 rgba(0, 0, 0, 0.2);
-  // padding: 1rem;
-  // font-size: 14px;
+  background-color: rgba(124, 95, 95, 0.9);
+  .legend-color-guide {
+    width: 12px;
+    height: 12px;
+    vertical-align: middle;
+    border: 1px solid #999;
+  }
 }
