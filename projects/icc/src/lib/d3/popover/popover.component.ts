@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IccOverlayComponentRef } from '../../tooltip/services/overlay/overlay-component-ref';
-
-export interface IccD3Popover {
-  key: string;
-  value: string;
-  series: [];
-}
+import { IccD3Popover } from '../model';
 
 @Component({
   templateUrl: './popover.component.html',

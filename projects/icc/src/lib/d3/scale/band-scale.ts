@@ -1,6 +1,6 @@
 import * as d3Scale from 'd3-scale';
 import { IccAbstractScale } from './abstract-scale';
-import { IccScaleBand } from '../model/model';
+import { IccScaleBand } from '../model';
 
 export class IccBandScale<T> extends IccAbstractScale<T> {
 

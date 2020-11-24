@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccLegendDraw } from './legend-draw';
-import { IccD3Options } from '../model/model';
+import { IccD3Options } from '../model';
 
 export class IccView {
   private _svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;

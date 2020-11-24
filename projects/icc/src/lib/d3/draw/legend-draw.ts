@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
-import { IccD3Options } from '../model/model';
+import { IccD3Options } from '../model';
 
 export class IccLegendDraw<T> {
   margin = { top: 5, right: 0, bottom: 5, left: 0 };

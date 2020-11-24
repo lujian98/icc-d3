@@ -1,6 +1,6 @@
 import * as d3 from 'd3-selection';
 import { IccScaleDraw } from './scale-draw';
-import { IccD3Options } from '../model/model';
+import { IccD3Options } from '../model';
 
 export class IccAxisDraw<T> {
   private drawID: number;

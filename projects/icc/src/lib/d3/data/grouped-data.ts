@@ -1,4 +1,4 @@
-import { IccD3Options } from '../model/model';
+import { IccD3Options } from '../model';
 
 export class IccGroupedData<T> {
 

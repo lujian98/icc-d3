@@ -2,7 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Component } from '../d3.component';
-import { IccScaleLinear, IccD3Options } from '../model/model';
+import { IccScaleLinear, IccD3Options } from '../model';
 
 export class IccInteractiveDraw<T> {
   constructor(

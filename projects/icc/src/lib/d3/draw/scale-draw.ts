@@ -2,7 +2,7 @@ import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccScaleFactory } from './../scale/scale-factory';
-import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis, IccD3Options } from '../model/model';
+import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis, IccD3Options } from '../model';
 
 export class IccScaleDraw<T> {
 

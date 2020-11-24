@@ -1,7 +1,7 @@
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import { IccAbstractScale } from './abstract-scale';
-import { IccScaleTime } from '../model/model';
+import { IccScaleTime } from '../model';
 
 export class IccTimeScale<T> extends IccAbstractScale<T> {
 

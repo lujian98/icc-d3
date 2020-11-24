@@ -1,5 +1,6 @@
+import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScale, IccScaleLinear } from '../model/model';
+import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
 
@@ -13,6 +14,33 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
+  getPopoverData(e, d): IccD3Popover {
+    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
+    const nodes = group.nodes();
+    const data = group.data();
+    const node = d3.select(e.target).node();
+    let i = -1;
+    let j = -1;
+    nodes.forEach((n, k) => {
+      if (j === -1) {
+        const pnodes = d3.select(n).selectAll('rect').nodes();
+        j = pnodes.indexOf(node);
+        if (j > -1) {
+          i = k;
+        }
+      }
+    });
+    const pcolor = this.getBarColor(d, j) || this.getdrawColor(data[i], i);
+    const pd = {
+      key: this.options.x0(data[i]),
+      value: this.options.x0(data[i]),
+      series: [
+        { key: this.options.x(d), value: this.options.y(d), color: pcolor }
+      ]
+    };
+    return pd;
+  }
+
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
@@ -23,9 +51,10 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
 
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e: MouseEvent, d) => {
+        .on('mouseover', (e: any, d) => {
+          const pd = this.getPopoverData(e, d);
           this.drawMouseover(d, true);
-          this.dispatch.call('drawMouseover', this, { event: e, data: d });
+          this.dispatch.call('drawMouseover', this, { event: e, data: { data: pd } });
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);

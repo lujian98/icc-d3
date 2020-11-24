@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Shape from 'd3-shape';
 import { IccScaleDraw } from '../draw/scale-draw';
-import { IccD3Options } from '../model/model';
+import { IccD3Options } from '../model';
 
 export class IccStackedData<T> {
   offset = 'stackOffsetDiverging';

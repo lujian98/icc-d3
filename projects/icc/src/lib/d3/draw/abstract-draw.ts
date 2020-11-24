@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
-import { IccScale, IccD3Options } from '../model/model';
+import { IccScale, IccD3Options } from '../model';
 
 export abstract class IccAbstractDraw<T> {
   protected data: T[];

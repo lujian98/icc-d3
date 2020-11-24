@@ -1,6 +1,6 @@
 import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScale, IccScaleLinear } from '../model/model';
+import { IccScale, IccScaleLinear } from '../model';
 
 export class IccAreaChart<T> extends IccAbstractDraw<T> {
 

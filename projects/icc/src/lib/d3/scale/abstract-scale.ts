@@ -1,4 +1,4 @@
-import { IccScale, IccD3Options } from '../model/model';
+import { IccScale, IccD3Options } from '../model';
 
 export abstract class IccAbstractScale<T> {
   abstract getScale(range: number[], reverse: boolean): IccScale;

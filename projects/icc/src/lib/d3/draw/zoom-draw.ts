@@ -3,7 +3,7 @@ import * as d3Zoom from 'd3-zoom';
 import * as d3Brush from 'd3-brush';
 import { IccD3Component } from '../d3.component';
 import { IccScaleDraw } from './scale-draw';
-import { IccScaleLinear, IccD3Options } from '../model/model';
+import { IccScaleLinear, IccD3Options } from '../model';
 
 export class IccZoomDraw<T> {
   zoom: any;

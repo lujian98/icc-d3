@@ -2,7 +2,7 @@ export * from './d3.module';
 export * from './d3.component';
 export * from './draw-service';
 
-export * from './model/model';
+export * from './model/index';
 
 export * from './draw/abstract-draw';
 export * from './draw/view';

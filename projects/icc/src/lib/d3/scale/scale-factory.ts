@@ -2,8 +2,7 @@ import { IccAbstractScale } from './abstract-scale';
 import { IccLinearScale } from './linear-scale';
 import { IccTimeScale } from './time-scale';
 import { IccBandScale } from './band-scale';
-import { IccScale } from '../model/model';
-import { IccD3Options } from '../model/model';
+import { IccScale, IccD3Options } from '../model';
 
 export class IccScaleFactory<T> {
 
