@@ -193,13 +193,21 @@ export class IccInteractiveDraw<T> {
         val = isStacked ? this.options.x(d.values.data) : this.options.x(yd);
         return {
           key: this.options.x0(d),
-          value: d.isStacked ? d.values[1] : this.options.y(yd),
+          value: d.isStacked ? (d.values[1] - d.values[0]) : this.options.y(yd),
           color: this.getdrawColor(d, idx),
           hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
         };
       });
     if (isStacked) {
       sd.reverse();
+      if (this.options.chartType !== 'stackedNormalizedAreaChart') {
+        sd.push({
+          key: 'TOTAL',
+          value: sd.map((d) => d.value).reduce((a, c) => a + c)
+        });
+      } else {
+        sd.forEach((d) => d.value = `${d.value * 100}%`);
+      }
     }
     return {
       value: val,
