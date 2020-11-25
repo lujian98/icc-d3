@@ -193,6 +193,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     for (const [key, value] of Object.entries(this.options)) {
       if (key === 'zoom') {
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
+      } else if (key === 'popover') {
+        this.options.popover = { ...DEFAULT_CHART_OPTIONS.popover, ...this.options.popover };
       }
     }
     this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };
@@ -202,6 +204,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         chartTypes.push(d.chartType);
       }
     });
+    console.log( ' this.options =', this.options)
     return chartTypes;
   }
 

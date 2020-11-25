@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3Array from 'd3-array';
+import * as d3Format from 'd3-format';
+import * as d3TimeFormat from 'd3-time-format';
 import { IccD3Options } from 'icc';
 @Component({
   selector: 'app-historical-bar-chart',
@@ -21,7 +23,11 @@ export class AppHistoricalBarChartComponent implements OnInit {
     x: (d) => d[0],
     y: (d) => d[1],
     drawColor: (d, i) => d.key,
-    duration: 1000
+    duration: 1000,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d)),
+      valueFormatter: (d) => d3Format.format(',.0f')(d)
+    },
   };
 
   options2: IccD3Options = {

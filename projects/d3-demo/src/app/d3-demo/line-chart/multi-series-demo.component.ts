@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3TimeFormat from 'd3-time-format';
 import { TEMPERATURES } from '../shared';
 import { IccD3Options } from 'icc';
 
@@ -19,7 +20,10 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.date,
     y: (d) => d.temperature,
-    drawColor: (d, i) => d.id
+    drawColor: (d, i) => d.id,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+    },
   };
 
   data2: any;
@@ -30,7 +34,10 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.date,
     y: (d) => d.temperature,
-    drawColor: (d, i) => d.id
+    drawColor: (d, i) => d.id,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+    },
   };
 
   ngOnInit() {

@@ -1,5 +1,6 @@
 import * as d3Scale from 'd3-scale';
 import * as d3Axis from 'd3-axis';
+import * as d3Format from 'd3-format';
 
 export type IccScaleColor = d3Scale.ScaleOrdinal<string, {}>;
 export type IccScaleLinear = d3Scale.ScaleLinear<number, number>;
@@ -26,6 +27,17 @@ export interface IccD3Zoom {
   verticalBrushShow?: boolean;
   // unzoomEventType?: 'dblclick.zoom'
 }
+//         tickFormat: (d) => d3.format(',.2f')(d)
+//       tooltip: {
+//  keyFormatter: (d) => d3.time.format('%x')(new Date(d))
+// }
+
+export interface IccD3PopoverOptions {
+  totalLable?: string;
+  labelFormatter?: Function;
+  keyFormatter?: Function;
+  valueFormatter?: Function;
+}
 
 export interface IccD3Options {
   chartType?: string;
@@ -45,6 +57,8 @@ export interface IccD3Options {
   drawColor?: Function;
   barColor?: Function;
   duration?: number;
+
+  popover?: IccD3PopoverOptions;
   zoom?: IccD3Zoom;
 
   brushYWidth?: number;
@@ -71,6 +85,12 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.y,
   drawColor: (d, i) => d.key,
   duration: 0,
+  popover: {
+    totalLable: 'Total',
+    labelFormatter: (d) => d,
+    keyFormatter: (d) => d,
+    valueFormatter: (d) => d3Format.format(',.2f')(d)
+  },
   zoom: {
     enabled: true,
     horizontalOff: false,

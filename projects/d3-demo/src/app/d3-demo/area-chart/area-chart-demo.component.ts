@@ -20,10 +20,14 @@ export class AppAreaChartDemoComponent implements OnInit {
   data: any;
   options: IccD3Options = {
     chartType: 'areaChart',
+    useInteractiveGuideline: true,
     x0: (d) => d.key,
     x: (d) => d.date,
     y: (d) => d.price,
-    drawColor: (d, i) => d.key
+    drawColor: (d, i) => d.key,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+    },
   };
 
   options2: IccD3Options = {

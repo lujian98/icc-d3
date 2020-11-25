@@ -183,17 +183,23 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private getPopoverData(idx, data): IccD3Popover { // TODO popover scale data format
+  private getPopoverData(idx, data): IccD3Popover {
     let isStacked = false;
     let val = '';
+    let total = 0;
     const sd = data.filter((d) => !d.disabled && this.options.y0(d).length > 0)
       .map((d, i) => {
         const yd = this.options.y0(d)[0];
         isStacked = d.isStacked;
         val = isStacked ? this.options.x(d.values.data) : this.options.x(yd);
+        let svalue = d.isStacked ? (d.values[1] - d.values[0]) : this.options.y(yd);
+        total += +svalue;
+        if (this.options.chartType === 'stackedNormalizedAreaChart') {
+          svalue = svalue * 100;
+        }
         return {
-          key: this.options.x0(d),
-          value: d.isStacked ? (d.values[1] - d.values[0]) : this.options.y(yd),
+          key: this.options.popover.keyFormatter(this.options.x0(d)),
+          value: this.options.popover.valueFormatter(svalue),
           color: this.getdrawColor(d, idx),
           hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
         };
@@ -202,15 +208,15 @@ export class IccInteractiveDraw<T> {
       sd.reverse();
       if (this.options.chartType !== 'stackedNormalizedAreaChart') {
         sd.push({
-          key: 'TOTAL',
-          value: sd.map((d) => d.value).reduce((a, c) => a + c)
+          key: this.options.popover.totalLable,
+          value: this.options.popover.valueFormatter(total) // sd.map((d) => d.value).reduce((a, c) => a + c)
         });
       } else {
-        sd.forEach((d) => d.value = `${d.value * 100}%`);
+        sd.forEach((d) => d.value = `${d.value}%`);
       }
     }
     return {
-      value: val,
+      value: this.options.popover.labelFormatter(val),
       series: sd
     };
   }

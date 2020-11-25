@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3TimeFormat from 'd3-time-format';
 import { IccD3Options } from 'icc';
 
 @Component({
@@ -17,7 +18,10 @@ export class AppStreamAreaChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d[0],
     y: (d) => d[1],
-    drawColor: (d, i) => d.key
+    drawColor: (d, i) => d.key,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+    },
   };
 
   options2: IccD3Options = {
@@ -27,7 +31,10 @@ export class AppStreamAreaChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d[0],
     y: (d) => d[1],
-    drawColor: (d, i) => d.key
+    drawColor: (d, i) => d.key,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+    },
   };
 
   data = [
