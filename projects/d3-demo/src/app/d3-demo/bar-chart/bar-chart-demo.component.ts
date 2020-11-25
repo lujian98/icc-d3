@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3Format from 'd3-format';
 import { IccD3Options } from 'icc';
 import { STATISTICS } from '../shared';
 
@@ -10,11 +11,6 @@ import { STATISTICS } from '../shared';
     <icc-d3 [options]="options3" [data]="data3"></icc-d3>
   `,
 })
-/*
-    <icc-d3 [options]="options" [data]="data"></icc-d3>
-    <icc-d3 [options]="options3" [data]="data3"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data2"></icc-d3>
-    */
 export class AppBarChartDemoComponent implements OnInit {
   data: any;
   options: IccD3Options = {
@@ -24,7 +20,10 @@ export class AppBarChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.letter,
     y: (d) => d.frequency,
-    duration: 2000
+    duration: 2000,
+    popover: {
+      valueFormatter: (d) => d3Format.format(',.3f')(d)
+    },
   };
   data2: any;
   options2: IccD3Options = {

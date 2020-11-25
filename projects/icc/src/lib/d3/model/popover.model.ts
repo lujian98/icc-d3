@@ -1,6 +1,6 @@
 
 export interface IccD3PopoverSerie {
-  key: string;
+  // key label: need this ??? key: string;
   value: string;
   color: string;
   hovered?: boolean;
@@ -11,3 +11,11 @@ export interface IccD3Popover {
   value?: string;
   series: IccD3PopoverSerie[];
 }
+
+export interface IccD3PopoverOptions {
+  totalLable?: string;
+  labelFormatter?: Function;
+  keyFormatter?: Function;
+  valueFormatter?: Function;
+}
+

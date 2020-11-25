@@ -1,13 +1,6 @@
-import * as d3Scale from 'd3-scale';
-import * as d3Axis from 'd3-axis';
 import * as d3Format from 'd3-format';
-
-export type IccScaleColor = d3Scale.ScaleOrdinal<string, {}>;
-export type IccScaleLinear = d3Scale.ScaleLinear<number, number>;
-export type IccScaleTime = d3Scale.ScaleTime<number, number>;
-export type IccScaleBand = d3Scale.ScaleBand<string>;
-export type IccScale = IccScaleLinear | IccScaleTime | IccScaleBand;
-export type IccScaleAxis = d3Axis.Axis<d3Axis.AxisDomain>;
+import { IccD3PopoverOptions } from './popover.model';
+import { IccD3ZoomOptions } from './zoom.model';
 
 export interface IccMargin {
   top: number;
@@ -16,35 +9,12 @@ export interface IccMargin {
   left: number;
 }
 
-export interface IccD3Zoom {
-  enabled?: boolean;
-  // scaleExtent?: [1, 10],
-  // useFixedDomain?: boolean;
-  // useNiceScale?: boolean;
-  horizontalOff?: boolean;
-  horizontalBrushShow?: boolean;
-  verticalOff?: boolean;
-  verticalBrushShow?: boolean;
-  // unzoomEventType?: 'dblclick.zoom'
-}
-//         tickFormat: (d) => d3.format(',.2f')(d)
-//       tooltip: {
-//  keyFormatter: (d) => d3.time.format('%x')(new Date(d))
-// }
-
-export interface IccD3PopoverOptions {
-  totalLable?: string;
-  labelFormatter?: Function;
-  keyFormatter?: Function;
-  valueFormatter?: Function;
-}
-
 export interface IccD3Options {
   chartType?: string;
   useInteractiveGuideline?: boolean;
   margin?: IccMargin;
   width?: string | number;
-  height?: string | number; // TODO not used yet
+  // height?: string | number; // TODO not used yet
   xScaleType?: string;
   yScaleType?: string;
 
@@ -59,7 +29,7 @@ export interface IccD3Options {
   duration?: number;
 
   popover?: IccD3PopoverOptions;
-  zoom?: IccD3Zoom;
+  zoom?: IccD3ZoomOptions;
 
   brushYWidth?: number;
   legendHeight?: number;

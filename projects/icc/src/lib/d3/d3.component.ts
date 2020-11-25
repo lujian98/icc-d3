@@ -204,7 +204,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         chartTypes.push(d.chartType);
       }
     });
-    console.log( ' this.options =', this.options)
+    // console.log( ' this.options =', this.options)
     return chartTypes;
   }
 

@@ -32,10 +32,13 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     });
     const pcolor = this.getBarColor(d, j) || this.getdrawColor(data[i], i);
     const pd = {
-      key: this.options.x0(data[i]),
-      value: this.options.x0(data[i]),
+      value: this.options.popover.labelFormatter(this.options.x0(data[i])),
       series: [
-        { key: this.options.x(d), value: this.options.y(d), color: pcolor }
+        {
+          key: this.options.popover.keyFormatter(this.options.x(d)),
+          value: this.options.popover.valueFormatter(this.options.y(d)),
+          color: pcolor
+        }
       ]
     };
     return pd;

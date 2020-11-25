@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3TimeFormat from 'd3-time-format';
 import { IccD3Options } from 'icc';
 
 @Component({
@@ -18,7 +19,10 @@ export class AppCandleStickChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.date,
     y: (d) => d.close,
-    drawColor: (d, i) => d.key
+    drawColor: (d, i) => d.key,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+    }
   };
 
   options2: IccD3Options = {
@@ -28,7 +32,10 @@ export class AppCandleStickChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.date,
     y: (d) => d.close,
-    drawColor: (d, i) => d.key
+    drawColor: (d, i) => d.key,
+    popover: {
+      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+    }
   };
 
   data = [{
