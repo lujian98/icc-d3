@@ -36,12 +36,12 @@ export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
 
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e, d) => this.legendMouseover(d, true))
-        .on('mouseout', (e, d) => this.legendMouseover(d, false));
+        .on('mouseover', (e, d) => this.legendMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.legendMouseover(e, d, false));
     }
   }
 
-  legendMouseover(data, mouseover: boolean): void {
+  legendMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.y(d) === this.options.y(data)) || this.options.y0(data)))

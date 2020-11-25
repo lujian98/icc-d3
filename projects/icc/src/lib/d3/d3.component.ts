@@ -43,6 +43,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   isWindowReszie$: Subject<{}> = new Subject();
   @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
   d3Popover = IccD3PopoverComponent;
+  currentOverIndex = -1;
 
   constructor(
     protected elementRef: ElementRef,
@@ -165,15 +166,22 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.legendMouseover(d, false);
     });
     this.dispatch.on('drawMouseover', (p) => {
-      this.popover.context = { data: p.data };
-      this.popover.closePopover();
-      this.popover.openPopover(p.event);
+      if (p.data) {
+        p.data.series.forEach((d, i) => {
+          d.hoved = i === this.currentOverIndex;
+        });
+        this.popover.context = { data: p.data };
+        this.popover.closePopover();
+        this.popover.openPopover(p.event);
+      } else {
+        this.currentOverIndex = this.data.filter((d: any) => !d.disabled).indexOf(p.indexData);
+      }
     });
     this.dispatch.on('drawMouseout', (p) => { });
   }
 
   legendMouseover(data: T[], mouseover: boolean): void {
-    this.draws.forEach((draw: IccAbstractDraw<T>) => draw.legendMouseover(data, mouseover));
+    this.draws.forEach((draw: IccAbstractDraw<T>) => draw.legendMouseover(null, data, mouseover));
   }
 
   redraw(): void {

@@ -4,12 +4,12 @@
   </thead>
   <tbody>
     <ng-container *ngFor="let item of data.series;">
-      <tr>
-        <td>
+      <tr [ngClass]="item.hoved? 'highlight': ''">
+        <td [ngStyle]="{'border-bottom-color': item.color, 'border-top-color': item.color}">
           <div class="legend-color-guide" [ngStyle]="{'background-color': item.color}"></div>
         </td>
-        <td>{{item.key}}</td>
-        <td>{{item.value}}</td>
+        <td [ngStyle]="{'border-bottom-color': item.color, 'border-top-color': item.color}">{{item.key}}</td>
+        <td [ngStyle]="{'border-bottom-color': item.color, 'border-top-color': item.color}">{{item.value}}</td>
       </tr>
     </ng-container>
   </tbody>

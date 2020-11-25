@@ -23,8 +23,8 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e, d) => this.legendMouseover(d, true))
-        .on('mouseout', (e, d) => this.legendMouseover(d, false));
+        .on('mouseover', (e, d) => this.legendMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.legendMouseover(e, d, false));
     }
     this.redrawContent(drawName, scaleX, scaleY);
   }
@@ -39,7 +39,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
       .attr('d', drawContent);
   }
 
-  legendMouseover(data, mouseover: boolean): void {
+  legendMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => d.key === this.options.x0(data)) // key is from stacked data
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.5);

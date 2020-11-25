@@ -12,7 +12,7 @@ export abstract class IccAbstractDraw<T> {
 
   abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
   abstract redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
-  abstract legendMouseover(data: T[], mouseover: boolean): void;
+  abstract legendMouseover(e, data: T[], mouseover: boolean): void;
 
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,

@@ -12,8 +12,8 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
       .attr('fill-opacity', 0.5);
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e, d) => this.legendMouseover(d, true))
-        .on('mouseout', (e, d) => this.legendMouseover(d, false));
+        .on('mouseover', (e, d) => this.legendMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.legendMouseover(e, d, false));
     }
     this.redrawContent(drawName, scaleX, scaleY);
   }
@@ -32,7 +32,10 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
       .attr('d', drawContent);
   }
 
-  legendMouseover(data, mouseover: boolean): void {
+  legendMouseover(e, data, mouseover: boolean): void {
+    if (e) {
+      this.dispatch.call('drawMouseover', this, { event: e, indexData: mouseover ? data : null });
+    }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.5);

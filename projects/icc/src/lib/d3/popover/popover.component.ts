@@ -7,7 +7,7 @@ import { IccD3Popover } from '../model';
   styleUrls: ['./popover.component.scss']
 })
 export class IccD3PopoverComponent implements OnInit {
-  data: IccD3Popover;
+  data: IccD3Popover; // TODO hover border color
 
   constructor(
     private overlayComponentRef: IccOverlayComponentRef<any>

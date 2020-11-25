@@ -1,2 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/cdk/overlay-prebuilt.css';
+
+/* // Set box-sizing globally to handle padding and border widths */
+*,
+*:after, *:before {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+body {
+  margin: 0px;
+  height: 100%;
+}
+

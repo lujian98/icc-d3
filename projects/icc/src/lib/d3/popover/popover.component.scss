@@ -7,4 +7,12 @@
     vertical-align: middle;
     border: 1px solid #999;
   }
+
+  table tr.highlight td {
+    // padding: 0px 9px 1px 0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-width: 1px;
+  }
 }

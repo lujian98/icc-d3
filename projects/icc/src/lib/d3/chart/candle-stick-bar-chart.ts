@@ -34,7 +34,7 @@ export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
       .attr('stroke', (d: any) => (d.open === d.close) ? 'white' : (d.open > d.close) ? 'red' : 'green');
   }
 
-  legendMouseover(data, mouseover: boolean): void {
+  legendMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.y(d) === this.options.y(data)) || this.options.y0(data)))

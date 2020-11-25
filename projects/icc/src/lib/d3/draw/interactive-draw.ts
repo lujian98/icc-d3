@@ -126,6 +126,7 @@ export class IccInteractiveDraw<T> {
       .attr('x1', x)
       .attr('x2', x);
 
+    // TODO get bisect idy only for stacked data?
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       const xScale = this.scale.x as IccScaleLinear;
       const x0 = xScale.invert(x);
@@ -181,18 +182,25 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private getPopoverData(idx, data): IccD3Popover {
+  private getPopoverData(idx, data): IccD3Popover { // TODO popover scale data format
+    let isStacked = false;
+    let val = '';
     const sd = data.filter((d) => !d.disabled)
       .map((d) => {
         const yd = this.options.y0(d)[0];
+        isStacked = d.isStacked;
+        val = isStacked ? this.options.x(d.values.data) : this.options.x(yd);
         return {
           key: this.options.x0(d),
           value: d.isStacked ? d.values[1] : this.options.y(yd),
           color: this.getdrawColor(d, idx)
         };
       });
+    if (isStacked) {
+      sd.reverse();
+    }
     return {
-      value: idx,
+      value: val,
       series: sd
     };
   }
