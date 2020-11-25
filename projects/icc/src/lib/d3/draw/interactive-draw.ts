@@ -149,10 +149,11 @@ export class IccInteractiveDraw<T> {
   }
 
   getStackedData(data, i, idx): {} {
+    // console.log( ' i =', i, ' data =', data)
     const r = {
       key: data.key,
       isStacked: true,
-      index: i,
+      index: data.index,
       values: data[idx]
     };
     return r;
@@ -185,7 +186,7 @@ export class IccInteractiveDraw<T> {
   private getPopoverData(idx, data): IccD3Popover { // TODO popover scale data format
     let isStacked = false;
     let val = '';
-    const sd = data.filter((d) => !d.disabled)
+    const sd = data.filter((d) => !d.disabled && this.options.y0(d).length > 0)
       .map((d, i) => {
         const yd = this.options.y0(d)[0];
         isStacked = d.isStacked;
@@ -194,7 +195,7 @@ export class IccInteractiveDraw<T> {
           key: this.options.x0(d),
           value: d.isStacked ? d.values[1] : this.options.y(yd),
           color: this.getdrawColor(d, idx),
-          hovered: i === this.draw.currentOverIndex
+          hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
         };
       });
     if (isStacked) {
