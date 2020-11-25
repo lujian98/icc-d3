@@ -167,14 +167,15 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     });
     this.dispatch.on('drawMouseover', (p) => {
       if (p.data) {
-        p.data.series.forEach((d, i) => {
-          d.hoved = i === this.currentOverIndex;
-        });
         this.popover.context = { data: p.data };
         this.popover.closePopover();
         this.popover.openPopover(p.event);
       } else {
-        this.currentOverIndex = this.data.filter((d: any) => !d.disabled).indexOf(p.indexData);
+        if (p.indexData && (p.indexData.index || p.indexData.index === 0)) { // stacked data;
+          this.currentOverIndex = p.indexData.index;
+        } else {
+          this.currentOverIndex = this.data.filter((d: any) => !d.disabled).indexOf(p.indexData);
+        }
       }
     });
     this.dispatch.on('drawMouseout', (p) => { });

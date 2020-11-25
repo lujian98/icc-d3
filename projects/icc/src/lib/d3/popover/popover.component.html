@@ -4,7 +4,7 @@
   </thead>
   <tbody>
     <ng-container *ngFor="let item of data.series;">
-      <tr [ngClass]="item.hoved? 'highlight': ''">
+      <tr [ngClass]="item.hovered? 'highlight': ''">
         <td [ngStyle]="{'border-bottom-color': item.color, 'border-top-color': item.color}">
           <div class="legend-color-guide" [ngStyle]="{'background-color': item.color}"></div>
         </td>

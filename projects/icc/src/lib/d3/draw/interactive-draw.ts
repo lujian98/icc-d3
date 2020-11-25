@@ -186,14 +186,15 @@ export class IccInteractiveDraw<T> {
     let isStacked = false;
     let val = '';
     const sd = data.filter((d) => !d.disabled)
-      .map((d) => {
+      .map((d, i) => {
         const yd = this.options.y0(d)[0];
         isStacked = d.isStacked;
         val = isStacked ? this.options.x(d.values.data) : this.options.x(yd);
         return {
           key: this.options.x0(d),
           value: d.isStacked ? d.values[1] : this.options.y(yd),
-          color: this.getdrawColor(d, idx)
+          color: this.getdrawColor(d, idx),
+          hovered: i === this.draw.currentOverIndex
         };
       });
     if (isStacked) {
