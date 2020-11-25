@@ -7,6 +7,6 @@ export interface IccD3PopoverSerie {
 
 export interface IccD3Popover {
   key?: string;
-  value: string;
+  value?: string;
   series: IccD3PopoverSerie[];
 }

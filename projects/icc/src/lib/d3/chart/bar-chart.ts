@@ -54,7 +54,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
         .on('mouseover', (e: any, d) => {
           const pd = this.getPopoverData(e, d);
           this.drawMouseover(d, true);
-          this.dispatch.call('drawMouseover', this, { event: e, data: { data: pd } });
+          this.dispatch.call('drawMouseover', this, { event: e, data: pd });
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);

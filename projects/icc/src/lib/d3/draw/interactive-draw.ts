@@ -2,7 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Component } from '../d3.component';
-import { IccScaleLinear, IccD3Options } from '../model';
+import { IccScaleLinear, IccD3Options, IccD3Popover } from '../model';
 
 export class IccInteractiveDraw<T> {
   constructor(
@@ -38,7 +38,7 @@ export class IccInteractiveDraw<T> {
 
   update(): void {
     if (this.options.useInteractiveGuideline) {
-      this.updateGuideline();
+      this.setGuideline();
     }
   }
 
@@ -67,7 +67,7 @@ export class IccInteractiveDraw<T> {
       .style('opacity', 0);
   }
 
-  private updateGuideline(): void {
+  private setGuideline(): void {
     this.svg.select('.interactiveDraw').select('.guideLine').attr('y2', this.options.drawHeight);
   }
 
@@ -135,7 +135,7 @@ export class IccInteractiveDraw<T> {
         const values = this.options.y0(d);
         idx = bisect(values, x0);
       });
-      this.updateDataCircle(idx, x, mouseover);
+      this.updateDataCircle(idx, x, mouseover, e);
     }
   }
 
@@ -181,7 +181,23 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private updateDataCircle(idx, x, mouseover: boolean): void {
+  private getPopoverData(idx, data): IccD3Popover {
+    const sd = data.filter((d) => !d.disabled)
+      .map((d) => {
+        const yd = this.options.y0(d)[0];
+        return {
+          key: this.options.x0(d),
+          value: d.isStacked ? d.values[1] : this.options.y(yd),
+          color: this.getdrawColor(d, idx)
+        };
+      });
+    return {
+      value: idx,
+      series: sd
+    };
+  }
+
+  private updateDataCircle(idx, x, mouseover: boolean, e): void {
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       const data: any = this.getBisectData(idx);
       this.svg.select('.interactiveDraw').selectAll('circle')
@@ -202,6 +218,10 @@ export class IccInteractiveDraw<T> {
             }
           }
         });
+      if (mouseover) {
+        const pd = this.getPopoverData(idx, data);
+        this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
+      }
     }
   }
 

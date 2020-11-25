@@ -58,9 +58,9 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
           getBoundingClientRect: (): ClientRect => ({
             bottom: mouseEvent.clientY,
             height: 0,
-            left: mouseEvent.clientX,
+            left: mouseEvent.clientX + 20,
             right: mouseEvent.clientX,
-            top: mouseEvent.clientY,
+            top: mouseEvent.clientY + 20,
             width: 0,
           })
         };
