@@ -32,10 +32,10 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     });
     const pcolor = this.getBarColor(d, j) || this.getdrawColor(data[i], i);
     const pd = {
-      value: this.options.popover.labelFormatter(this.options.x0(data[i])),
+      value: this.options.popover.keyFormatter(this.options.x0(data[i])),
       series: [
         {
-          key: this.options.popover.keyFormatter(this.options.x(d)),
+          key: this.options.popover.labelFormatter(this.options.x(d)),
           value: this.options.popover.valueFormatter(this.options.y(d)),
           color: pcolor
         }
@@ -55,9 +55,11 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     if (drawName === `.${this.chartType}`) {
       drawContents
         .on('mouseover', (e: any, d) => {
-          const pd = this.getPopoverData(e, d);
           this.drawMouseover(d, true);
-          this.dispatch.call('drawMouseover', this, { event: e, data: pd });
+          if (!this.options.useInteractiveGuideline) {
+            const pd = this.getPopoverData(e, d);
+            this.dispatch.call('drawMouseover', this, { event: e, data: pd });
+          }
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);

@@ -25,6 +25,7 @@ export class AppHorizontalBarDemoComponent implements OnInit {
     chartType: 'barChart',
     yScaleType: 'linear',
     xScaleType: 'band',
+    // useInteractiveGuideline: true,
     x0: (d) => d.key,
     y0: (d) => d.values,
     x: (d) => d.label,

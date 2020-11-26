@@ -221,7 +221,7 @@ export class IccInteractiveDraw<T> {
     };
   }
 
-  private updateDataCircle(idx, x, mouseover: boolean, e): void {
+  private updateDataCircle(idx, x, mouseover: boolean, e): void { // TODO band popover ???
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       const data: any = this.getBisectData(idx);
       this.svg.select('.interactiveDraw').selectAll('circle')
