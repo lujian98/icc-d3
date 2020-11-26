@@ -93,25 +93,13 @@ export class IccInteractiveDraw<T> {
   }
 
   private updateGuideLineCircle(data, x, mouseover: boolean): void {
-    if (this.options.yScaleType !== 'band') { // this.options.xScaleType !== 'band' &&
+    if (this.options.yScaleType !== 'band') {
       this.svg.select('.interactiveDraw').selectAll('circle')
         .style('opacity', (d, i) => !mouseover || data[i].disabled ? 0 : 1)
-        .style('stroke', (d, i) => this.getdrawColor(data[i], i))
-        .attr('fill', (d, i) => this.getdrawColor(data[i], i))
+        .style('stroke', (d, i) => data[i].color)
+        .attr('fill', (d, i) => data[i].color)
         .attr('cx', x)
-        .attr('cy', (d, i) => {
-          if (data[i]) {
-            if (data[i].isStacked) {
-              const values = data[i].values;
-              return this.scale.y(values[1]);
-            } else {
-              const value = this.options.y0(data[i])[0];
-              if (value) {
-                return this.scale.y(this.options.y(value)) + 0;
-              }
-            }
-          }
-        });
+        .attr('cy', (d, i) => data[i].cy);
     }
   }
 
@@ -129,7 +117,7 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private getPopoverData(idx, data): IccD3Popover {
+  private getPopoverData(idx, data): IccD3Popover { // TODO move to each draw
     let isStacked = false;
     let val = '';
     let total = 0;

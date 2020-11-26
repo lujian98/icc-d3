@@ -10,8 +10,11 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
       key: data.key,
       isStacked: true,
       index: data.index,
-      values: data[idx]
+      values: data[idx],
+      cy: this.scale.y(data[idx][1]),
+      color: null
     };
+    r.color = this.getStackeddrawColor(r, 0);
     return r;
   }
 

@@ -5,6 +5,19 @@ import { IccScale, IccScaleLinear } from '../model';
 export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   drawData: T[];
 
+  getDrawData(idx, data): {} { // TODO this is same
+    const r = {
+      key: data.key,
+      isStacked: true,
+      index: data.index,
+      values: data[idx],
+      cy: this.scale.y(data[idx][1]),
+      color: null
+    };
+    r.color = this.getStackeddrawColor(r, 0);
+    return r;
+  }
+
   drawChart(data: T[]): void {
     this.drawData = data;
     this.isStacked = true;
