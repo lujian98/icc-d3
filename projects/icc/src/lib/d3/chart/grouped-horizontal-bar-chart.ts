@@ -11,6 +11,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   }
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScaleBand, xGroup: IccScaleBand, yGroup: IccScaleBand): void {
+    this.options.useInteractiveGuideline = false;
     const groupName = drawName.replace('.', '');
     this.svg.select(drawName).selectAll('g').data(this.data).join('g').attr('class', `${groupName}Group`);
     this.redrawContent(drawName, scaleX, scaleY, xGroup, yGroup);

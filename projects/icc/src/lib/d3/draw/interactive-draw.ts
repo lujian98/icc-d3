@@ -126,16 +126,20 @@ export class IccInteractiveDraw<T> {
       .attr('x1', x)
       .attr('x2', x);
 
-    // TODO get bisect idy only for stacked data?
-    if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
-      const xScale = this.scale.x as IccScaleLinear;
-      const x0 = xScale.invert(x);
-      const bisect = d3Array.bisector((d) => this.options.x(d)).right;
+    // TODO get bisect idy only for stacked data? // this.options.xScaleType !== 'band' &&
+    if (this.options.yScaleType !== 'band') {
       let idx = -1;
-      this.data.forEach((d) => {
-        const values = this.options.y0(d);
-        idx = bisect(values, x0);
-      });
+      if (this.options.xScaleType !== 'band') {
+        const xScale = this.scale.x as IccScaleLinear;
+        const bisect = d3Array.bisector((d) => this.options.x(d)).right;
+        const x0 = xScale.invert(x);
+        this.data.forEach((d) => {
+          const values = this.options.y0(d);
+          idx = bisect(values, x0);
+        });
+      } else { // TODO
+        idx = 2;
+      }
       this.updateDataCircle(idx, x, mouseover, e);
     }
   }
@@ -198,7 +202,7 @@ export class IccInteractiveDraw<T> {
           svalue = svalue * 100;
         }
         return {
-          key: this.options.popover.keyFormatter(this.options.x0(d)),
+          key: this.options.popover.serieFormatter(this.options.x0(d)),
           value: this.options.popover.valueFormatter(svalue),
           color: this.getdrawColor(d, idx),
           hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
@@ -216,13 +220,13 @@ export class IccInteractiveDraw<T> {
       }
     }
     return {
-      value: this.options.popover.labelFormatter(val),
+      value: this.options.popover.axisFormatter(val),
       series: sd
     };
   }
 
   private updateDataCircle(idx, x, mouseover: boolean, e): void { // TODO band popover ???
-    if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
+    if (this.options.yScaleType !== 'band') { // this.options.xScaleType !== 'band' &&
       const data: any = this.getBisectData(idx);
       this.svg.select('.interactiveDraw').selectAll('circle')
         .style('opacity', (d, i) => !mouseover || data[i].disabled ? 0 : 1)

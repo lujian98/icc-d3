@@ -26,7 +26,7 @@ export class AppAreaChartDemoComponent implements OnInit {
     y: (d) => d.price,
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     },
   };
 

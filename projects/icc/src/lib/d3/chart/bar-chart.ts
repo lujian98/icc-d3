@@ -5,6 +5,7 @@ import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 export class IccBarChart<T> extends IccAbstractDraw<T> {
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
+    this.options.useInteractiveGuideline = false;
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 
@@ -32,10 +33,10 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     });
     const pcolor = this.getBarColor(d, j) || this.getdrawColor(data[i], i);
     const pd = {
-      value: this.options.popover.keyFormatter(this.options.x0(data[i])),
+      value: this.options.popover.axisFormatter(this.options.x(d)),
       series: [
         {
-          key: this.options.popover.labelFormatter(this.options.x(d)),
+          key: this.options.popover.serieFormatter(this.options.x0(data[i])),
           value: this.options.popover.valueFormatter(this.options.y(d)),
           color: pcolor
         }

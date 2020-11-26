@@ -57,8 +57,8 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   duration: 0,
   popover: {
     totalLable: 'Total',
-    labelFormatter: (d) => d,
-    keyFormatter: (d) => d,
+    axisFormatter: (d) => d,
+    serieFormatter: (d) => d,
     valueFormatter: (d) => d3Format.format(',.2f')(d)
   },
   zoom: {

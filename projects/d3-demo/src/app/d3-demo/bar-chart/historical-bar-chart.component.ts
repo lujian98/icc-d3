@@ -25,7 +25,7 @@ export class AppHistoricalBarChartComponent implements OnInit {
     drawColor: (d, i) => d.key,
     duration: 1000,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d)),
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d)),
       valueFormatter: (d) => d3Format.format(',.0f')(d)
     },
   };

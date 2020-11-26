@@ -21,7 +21,7 @@ export class AppCandleStickChartDemoComponent implements OnInit {
     y: (d) => d.close,
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     }
   };
 
@@ -34,7 +34,7 @@ export class AppCandleStickChartDemoComponent implements OnInit {
     y: (d) => d.close,
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     }
   };
 

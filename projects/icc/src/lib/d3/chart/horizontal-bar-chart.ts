@@ -4,6 +4,7 @@ import { IccScale, IccScaleLinear } from '../model';
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScale): void {
+    this.options.useInteractiveGuideline = false;
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 

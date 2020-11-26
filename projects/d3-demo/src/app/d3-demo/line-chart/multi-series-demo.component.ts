@@ -22,7 +22,7 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     y: (d) => d.temperature,
     drawColor: (d, i) => d.id,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     },
   };
 
@@ -36,7 +36,7 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     y: (d) => d.temperature,
     drawColor: (d, i) => d.id,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     },
   };
 

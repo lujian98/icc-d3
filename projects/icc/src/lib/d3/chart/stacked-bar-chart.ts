@@ -17,6 +17,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
+    this.options.useInteractiveGuideline = false;
     this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('class', 'stackedbar series')
       .attr('fill-opacity', 0.75)

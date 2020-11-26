@@ -22,7 +22,7 @@ export class AppBarChartDemoComponent implements OnInit {
     y: (d) => d.frequency,
     duration: 2000,
     popover: {
-      valueFormatter: (d) => d3Format.format(',.3f')(d)
+      serieFormatter: (d) => d3Format.format(',.3f')(d)
     },
   };
   data2: any;

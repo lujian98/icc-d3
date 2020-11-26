@@ -20,7 +20,7 @@ export class AppStreamAreaChartDemoComponent implements OnInit {
     y: (d) => d[1],
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
     },
   };
 
@@ -33,7 +33,7 @@ export class AppStreamAreaChartDemoComponent implements OnInit {
     y: (d) => d[1],
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
     },
   };
 

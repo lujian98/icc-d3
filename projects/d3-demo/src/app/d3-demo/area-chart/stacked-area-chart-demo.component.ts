@@ -21,7 +21,7 @@ export class AppStackedAreaChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key,
     popover: {
       totalLable: 'TOTAL',
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
     },
   };
 
@@ -34,7 +34,7 @@ export class AppStackedAreaChartDemoComponent implements OnInit {
     y: (d) => d[1],
     drawColor: (d, i) => d.key,
     popover: {
-      labelFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
+      axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
     },
   };
 
