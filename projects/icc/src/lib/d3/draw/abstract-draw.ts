@@ -38,6 +38,33 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
+  getDataByIdx(idx, data): {} {
+    const chartType = data.chartType || this.options.chartType;
+    if (chartType === this.chartType) {
+      if (idx === 0) {
+        return this.getLinearData(idx, data);
+      } else {
+        const key = this.options.x0(data);
+        const ndata = this.data.filter((d) => key === this.options.x0(d));
+        if (ndata.length > 0) {
+          return this.getDrawData(idx, ndata[0]);
+        }
+      }
+    }
+  }
+
+  getDrawData(idx, data): {} {
+    return this.getLinearData(idx, data);
+  }
+
+  getLinearData(idx, data): {} {
+    const r = {};
+    for (const [k, v] of Object.entries(data)) {
+      r[k] = !Array.isArray(data[k]) ? v : data[k].filter((t, i) => i === idx);
+    }
+    return r;
+  }
+
   redraw(): void {
     this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
   }

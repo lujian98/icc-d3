@@ -5,6 +5,16 @@ import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
+  getDrawData(idx, data): {} {
+    const r = {
+      key: data.key,
+      isStacked: true,
+      index: data.index,
+      values: data[idx]
+    };
+    return r;
+  }
+
   drawChart(data: any[]): void {
     this.isStacked = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);

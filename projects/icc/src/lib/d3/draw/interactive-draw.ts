@@ -34,7 +34,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private init(): void {
+  private init(): void { // TODO data change
     const data = this.getBisectData(0);
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').append('line')
@@ -62,7 +62,6 @@ export class IccInteractiveDraw<T> {
   private updateInteractive(e, mouseover: boolean): void {
     const x = e.offsetX - this.options.margin.left + 2;
     // TODO get bisect idy only for stacked data? // this.options.xScaleType !== 'band' &&
-
     let idx = -1;
     let data: any[];
     if (this.options.yScaleType !== 'band') {
@@ -119,46 +118,17 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  getLinearData(data, i, idx): {} {
-    const r = {};
-    for (const [k, v] of Object.entries(data)) {
-      r[k] = !Array.isArray(data[k]) ? v : data[k].filter((t, i) => i === idx);
-    }
-    return r;
-  }
-
-  getStackedData(data, i, idx): {} {
-    // console.log( ' i =', i, ' data =', data)
-    const r = {
-      key: data.key,
-      isStacked: true,
-      index: data.index,
-      values: data[idx]
-    };
-    return r;
-  }
-
   private getBisectData(idx): any[] {
-    let ndata = [];
-    if (idx === 0) {
-      ndata = this.data.filter((d: any) => !d.disabled).map((d, i) => this.getLinearData(d, i, idx));
-    } else {
-      this.data.forEach((d: any, i) => {
-        const key = this.options.x0(d);
-        const draw = this.draw.draws.filter((dw) => {
-          const odata = this.svg.select(`.${dw.chartType}`).selectAll('g').data();
-          const fdata = odata.filter((od) => key === this.options.x0(od) && dw.chartType === d.chartType);
-          if (fdata.length > 0) {
-            const data = dw.isStacked ? this.getStackedData(fdata[0], i, idx) : this.getLinearData(fdata[0], i, idx);
-            ndata.push(data);
-            return true; // TODO
-          }
-        });
-        if (draw.length === 0) {
-          ndata.push(this.getLinearData(d, i, idx));
+    const ndata = [];
+    this.data.filter((d: any) => !d.disabled).forEach((d: any, i) => {
+      this.draw.draws.forEach((draw) => {
+        const drawdata = draw.getDataByIdx(idx, d);
+        if (drawdata) {
+          ndata.push(drawdata);
         }
       });
-    }
+    });
+    // console.log(' ndata =', ndata);
     return ndata;
   }
 
