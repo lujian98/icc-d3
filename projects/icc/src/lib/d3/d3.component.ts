@@ -138,9 +138,9 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.zoom.setZoomRange();
     }
     this.drawChart(this.data);
-    if (!this.options.useInteractiveGuideline) {
-      this.interactive.drawAllCircles();
-    }
+    // if (!this.options.useInteractiveGuideline) {
+    //  this.interactive.drawAllCircles();
+    // }
   }
 
   setDrawDomain(data: T[]): void {

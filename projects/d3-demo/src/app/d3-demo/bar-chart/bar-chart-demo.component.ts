@@ -20,7 +20,7 @@ export class AppBarChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.letter,
     y: (d) => d.frequency,
-    useInteractiveGuideline: true,
+    // useInteractiveGuideline: true,
     duration: 2000,
     popover: {
       valueFormatter: (d) => d3Format.format(',.3f')(d)
@@ -35,7 +35,7 @@ export class AppBarChartDemoComponent implements OnInit {
     x: (d) => d.label,
     y: (d) => d.value,
     drawColor: (d, i) => d.label,
-    useInteractiveGuideline: true,
+    // useInteractiveGuideline: true,
     duration: 2000
   };
 
