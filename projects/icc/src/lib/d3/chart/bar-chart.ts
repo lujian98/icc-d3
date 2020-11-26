@@ -5,7 +5,6 @@ import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 export class IccBarChart<T> extends IccAbstractDraw<T> {
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    this.options.useInteractiveGuideline = false;
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('fill', (d, i) => this.getdrawColor(d, i));
 
@@ -15,7 +14,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
-  getPopoverData(e, d): IccD3Popover {
+  getPopoverData(e, d): number {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');
     const nodes = group.nodes();
     const data = group.data();
@@ -42,7 +41,8 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
         }
       ]
     };
-    return pd;
+    return j;
+    // return pd;
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -57,14 +57,12 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       drawContents
         .on('mouseover', (e: any, d) => {
           this.drawMouseover(d, true);
-          if (!this.options.useInteractiveGuideline) {
-            const pd = this.getPopoverData(e, d);
-            this.dispatch.call('drawMouseover', this, { event: e, data: pd });
-          }
+          const idx = this.getPopoverData(e, d);
+          this.dispatch.call('drawMouseover', this, { event: e, index: idx });
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);
-          this.dispatch.call('drawMouseout', this, { event: e, data: d });
+          this.dispatch.call('drawMouseout', this, { event: e, index: -1 });
         });
     }
     if (this.isAnimation && this.options.duration > 0) {

@@ -173,12 +173,18 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       } else {
         if (p.indexData && (p.indexData.index || p.indexData.index === 0)) { // stacked data;
           this.currentOverIndex = p.indexData.index;
+        } else if (p.index || p.index === 0) {
+          this.currentOverIndex = p.index;
         } else {
           this.currentOverIndex = this.data.filter((d: any) => !d.disabled).indexOf(p.indexData);
         }
       }
     });
-    this.dispatch.on('drawMouseout', (p) => { });
+    this.dispatch.on('drawMouseout', (p) => {
+      if (p.index || p.index === 0) {
+        this.currentOverIndex = p.index;
+      }
+    });
   }
 
   legendMouseover(data: T[], mouseover: boolean): void {

@@ -20,19 +20,11 @@ export class AppBarChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.letter,
     y: (d) => d.frequency,
+    useInteractiveGuideline: true,
     duration: 2000,
     popover: {
-      serieFormatter: (d) => d3Format.format(',.3f')(d)
+      valueFormatter: (d) => d3Format.format(',.3f')(d)
     },
-  };
-  data2: any;
-  options2: IccD3Options = {
-    chartType: 'lineChart',
-    xScaleType: 'band',
-    x0: (d) => d.label,
-    y0: (d) => d.values,
-    x: (d) => d.letter,
-    y: (d) => d.frequency,
   };
 
   options3: IccD3Options = {
@@ -43,6 +35,7 @@ export class AppBarChartDemoComponent implements OnInit {
     x: (d) => d.label,
     y: (d) => d.value,
     drawColor: (d, i) => d.label,
+    useInteractiveGuideline: true,
     duration: 2000
   };
 
@@ -104,13 +97,8 @@ export class AppBarChartDemoComponent implements OnInit {
     }];
     this.data = data;
 
-    console.log(' data =', data);
+    console.log(' xxxx data =', this.data);
 
-    const data2 = [{
-      label: 'Frequency',
-      values: STATISTICS
-    }];
-    this.data2 = data2;
   }
 }
 

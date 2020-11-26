@@ -138,7 +138,7 @@ export class IccInteractiveDraw<T> {
           idx = bisect(values, x0);
         });
       } else { // TODO
-        idx = 2;
+        idx = this.draw.currentOverIndex;
       }
       this.updateDataCircle(idx, x, mouseover, e);
     }
@@ -168,15 +168,15 @@ export class IccInteractiveDraw<T> {
     if (idx === 0) {
       ndata = this.data.filter((d: any) => !d.disabled).map((d, i) => this.getLinearData(d, i, idx));
     } else {
-      this.data.forEach((d, i) => {
+      this.data.forEach((d: any, i) => {
         const key = this.options.x0(d);
         const draw = this.draw.draws.filter((dw) => {
           const odata = this.svg.select(`.${dw.chartType}`).selectAll('g').data();
-          const fdata = odata.filter((od) => key === this.options.x0(od));
+          const fdata = odata.filter((od) => key === this.options.x0(od) && dw.chartType === d.chartType);
           if (fdata.length > 0) {
             const data = dw.isStacked ? this.getStackedData(fdata[0], i, idx) : this.getLinearData(fdata[0], i, idx);
             ndata.push(data);
-            return true;
+            return true; // TODO
           }
         });
         if (draw.length === 0) {
@@ -246,7 +246,7 @@ export class IccInteractiveDraw<T> {
             }
           }
         });
-      if (mouseover) {
+      if (mouseover && idx > -1) {
         const pd = this.getPopoverData(idx, data);
         this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
       }
