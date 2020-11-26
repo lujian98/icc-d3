@@ -8,7 +8,6 @@ export class IccInteractiveDraw<T> {
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
-    private data: T[],
     private options: IccD3Options,
     private draw: IccD3Component<T>,
   ) {
@@ -29,13 +28,23 @@ export class IccInteractiveDraw<T> {
   }
 
   update(): void {
+    const data = this.getBisectData(0);
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').select('.guideLine').attr('y2', this.options.drawHeight);
+      this.svg.select('.interactiveDraw').selectAll('g')
+        .data(() => data.filter((d: any) => !d.disabled))
+        .join('g')
+        .selectAll('circle')
+        .data((d) => this.options.y0(d))
+        .join('circle')
+        .attr('class', 'guideline, circle')
+        .style('stroke-width', 2)
+        .attr('r', 5)
+        .style('opacity', 0);
     }
   }
 
-  private init(): void { // TODO data change
-    const data = this.getBisectData(0);
+  private init(): void {
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').append('line')
         .attr('class', 'guideLine')
@@ -45,17 +54,6 @@ export class IccInteractiveDraw<T> {
         .attr('x1', 0)
         .attr('x2', 0)
         .attr('y1', 0);
-      this.svg.select('.interactiveDraw').selectAll('g')
-        .data(() => data.filter((d: any) => !d.disabled))
-        .enter().append('g')
-        .selectAll('circle')
-        .data((d) => this.options.y0(d))
-        .enter().append('g')
-        .append('circle')
-        .attr('class', 'guideline, circle')
-        .style('stroke-width', 2)
-        .attr('r', 5)
-        .style('opacity', 0);
     }
   }
 
@@ -69,7 +67,7 @@ export class IccInteractiveDraw<T> {
         const xScale = this.scale.x as IccScaleLinear;
         const bisect = d3Array.bisector((d) => this.options.x(d)).right;
         const x0 = xScale.invert(x);
-        this.data.forEach((d) => {
+        this.draw.data.forEach((d) => {
           const values = this.options.y0(d);
           idx = bisect(values, x0);
         });
@@ -78,7 +76,6 @@ export class IccInteractiveDraw<T> {
       }
       data = this.getBisectData(idx);
     }
-
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
@@ -95,7 +92,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private updateGuideLineCircle(data, x, mouseover: boolean): void { // TODO band popover ???
+  private updateGuideLineCircle(data, x, mouseover: boolean): void {
     if (this.options.yScaleType !== 'band') { // this.options.xScaleType !== 'band' &&
       this.svg.select('.interactiveDraw').selectAll('circle')
         .style('opacity', (d, i) => !mouseover || data[i].disabled ? 0 : 1)
@@ -120,7 +117,7 @@ export class IccInteractiveDraw<T> {
 
   private getBisectData(idx): any[] {
     const ndata = [];
-    this.data.filter((d: any) => !d.disabled).forEach((d: any, i) => {
+    this.draw.data.filter((d: any) => !d.disabled).forEach((d: any, i) => {
       this.draw.draws.forEach((draw) => {
         const drawdata = draw.getDataByIdx(idx, d);
         if (drawdata) {

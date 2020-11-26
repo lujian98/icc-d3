@@ -82,6 +82,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         if (this.options.zoom.enabled) {
           this.zoom.setZoomRange();
         }
+        this.interactive.updateOptions(this.options);
       }
     }
   }
@@ -121,7 +122,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     if (this.options.zoom.enabled) {
       this.zoom = new IccZoomDraw(this.svg, this.scale, this, this.options);
     }
-    this.interactive = new IccInteractiveDraw(this.svg, this.scale, data, this.options, this);
+    this.interactive = new IccInteractiveDraw(this.svg, this.scale, this.options, this);
   }
 
   drawChart(data: T[]): void {
@@ -138,6 +139,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.zoom.setZoomRange();
     }
     this.drawChart(this.data);
+    this.interactive.updateOptions(this.options);
   }
 
   setDrawDomain(data: T[]): void {
