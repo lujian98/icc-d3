@@ -3,6 +3,7 @@ import { IccGroupedData } from '../data/grouped-data';
 import { IccScaleLinear, IccScaleBand } from '../model';
 
 export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
+  protected hoveredIndex = -1;
 
   drawChart(data: T[]): void {
     const grouped = new IccGroupedData(this.options);

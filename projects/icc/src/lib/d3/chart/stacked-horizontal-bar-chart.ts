@@ -3,6 +3,7 @@ import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
+  protected hoveredIndex = -1;
   drawData: T[];
 
   drawChart(data: T[]): void {

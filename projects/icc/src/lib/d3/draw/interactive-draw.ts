@@ -2,7 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Component } from '../d3.component';
-import { IccScaleLinear, IccD3Options, IccD3Popover } from '../model';
+import { IccScaleLinear, IccScaleBand, IccD3Options, IccD3Popover } from '../model';
 
 export class IccInteractiveDraw<T> {
   constructor(
@@ -59,7 +59,7 @@ export class IccInteractiveDraw<T> {
 
   private updateInteractive(e, mouseover: boolean): void {
     const x = e.offsetX - this.options.margin.left + 2;
-    // TODO get bisect idy only for stacked data? // this.options.xScaleType !== 'band' &&
+    // TODO get bisect idy only for stacked data? //
     let idx = -1;
     let data: any[];
     if (this.options.yScaleType !== 'band') {
@@ -71,8 +71,9 @@ export class IccInteractiveDraw<T> {
           const values = this.options.y0(d);
           idx = bisect(values, x0);
         });
-      } else { // TODO
-        idx = -1;
+      } else if (this.options.xScaleType === 'band') {
+        const xScale = this.scale.x as IccScaleBand;
+        idx = this.scaleBandInvert(xScale, x);
       }
       data = this.getBisectData(idx);
     }
@@ -86,20 +87,28 @@ export class IccInteractiveDraw<T> {
     if (idx > -1) {
       this.updateGuideLineCircle(data, x, mouseover);
     }
-    if (mouseover) {
+    if (mouseover && idx > -1) {
       const pd = this.getPopoverData(idx, data);
       this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
     }
   }
 
+  scaleBandInvert(scale, x): any {
+    const domain = scale.domain();
+    const paddingOuter = scale(domain[0]);
+    const eachBand = scale.step();
+    const index = Math.floor(((x - paddingOuter) / eachBand));
+    return index < domain.length ? index : -1;
+  }
+
   private updateGuideLineCircle(data, x, mouseover: boolean): void {
     if (this.options.yScaleType !== 'band') {
       this.svg.select('.interactiveDraw').selectAll('circle')
-        .style('opacity', (d, i) => !mouseover || data[i].disabled || !data[i].cy ? 0 : 1)
-        .style('stroke', (d, i) => data[i].color)
-        .attr('fill', (d, i) => data[i].color)
+        .style('opacity', (d, i) => !data[i] || !mouseover || data[i].disabled || !data[i].cy ? 0 : 1)
+        .style('stroke', (d, i) => data[i] && data[i].color)
+        .attr('fill', (d, i) => data[i] && data[i].color)
         .attr('cx', x)
-        .attr('cy', (d, i) => data[i].cy);
+        .attr('cy', (d, i) => data[i] && data[i].cy);
     }
   }
 

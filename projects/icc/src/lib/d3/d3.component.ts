@@ -157,12 +157,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.stateChangeDraw();
       this.legendMouseover(d, !d.disabled);
     });
-    this.dispatch.on('legendMouseover', (d) => {
-      this.legendMouseover(d, true);
-    });
-    this.dispatch.on('legendMouseout', (d) => {
-      this.legendMouseover(d, false);
-    });
+    this.dispatch.on('legendMouseover', (d) => this.legendMouseover(d, true));
+    this.dispatch.on('legendMouseout', (d) => this.legendMouseover(d, false));
     this.dispatch.on('drawMouseover', (p) => {
       this.popover.closePopover();
       if (p.data && p.data.series.length > 0) {

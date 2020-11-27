@@ -34,6 +34,7 @@ export class AppHorizontalBarDemoComponent implements OnInit {
 
   data = [{
     key: 'Series1',
+    // chartType: 'lineChart',
     color: 'blue',
     values: [{
         label: 'Group A',

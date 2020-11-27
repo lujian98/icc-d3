@@ -2,6 +2,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
+  protected hoveredIndex = -1;
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScale): void {
     this.options.useInteractiveGuideline = false;

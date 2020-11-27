@@ -88,6 +88,7 @@ export class AppBarChartDemoComponent implements OnInit {
     const data = [{
       label: 'Frequency',
       chartType: 'barChart',
+      color: 'blue',
       values: STATISTICS
     }, {
       label: 'Frequency',

@@ -3,7 +3,9 @@ import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
+  // protected hoveredIndex = -1; // TODO popover
   drawData: T[];
+  getInteractiveCy = (r: any) => null;
 
   getDrawData(idx, data): {} { // TODO this is same
     const d = data[idx];
@@ -22,10 +24,6 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     }
     r.color = this.getStackeddrawColor(r, 0);
     return r;
-  }
-
-  getInteractiveCy(r: any): number {
-    return null;
   }
 
   drawChart(data: T[]): void {

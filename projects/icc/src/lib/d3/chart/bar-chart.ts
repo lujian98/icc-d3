@@ -3,22 +3,10 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
+  protected hoveredIndex = -1;
+  getInteractiveCy = (r: any) => null;
 
-  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
-      .attr('fill', (d, i) => this.getdrawColor(d, i));
-
-    if (drawName === `.${this.chartType}`) {
-      drawContents.attr('class', 'barChart series').style('fill-opacity', 0.75);
-    }
-    this.redrawContent(drawName, scaleX, scaleY);
-  }
-
-  getInteractiveCy(r: any): number {
-    return null;
-  }
-
-  getPopoverData(e, d): any {
+  setHovered(e, d): any {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');
     const nodes = group.nodes();
     const data = group.data();
@@ -34,18 +22,18 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
         }
       }
     });
-    const pcolor = this.getBarColor(d, j) || this.getdrawColor(data[i], i);
-    const pd = {
-      value: this.options.popover.axisFormatter(this.options.x(d)),
-      series: [
-        {
-          key: this.options.popover.serieFormatter(this.options.x0(data[i])),
-          value: this.options.popover.valueFormatter(this.options.y(d)),
-          color: pcolor
-        }
-      ]
-    };
-    return { idx: i, jdx: j };
+    this.hoveredKey = this.options.x0(data[i]);
+    this.hoveredIndex = j;
+  }
+
+  drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
+    const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
+      .attr('fill', (d, i) => this.getdrawColor(d, i));
+
+    if (drawName === `.${this.chartType}`) {
+      drawContents.attr('class', 'barChart series').style('fill-opacity', 0.75);
+    }
+    this.redrawContent(drawName, scaleX, scaleY);
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -60,17 +48,12 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       drawContents
         .on('mouseover', (e: any, d) => {
           this.drawMouseover(d, true);
-          const index = this.getPopoverData(e, d); // TODO clean up here
-          const data = this.data[index.idx];
-          this.hoveredKey = this.options.x0(data);
-          this.hoveredIndex = index.jdx;
-          this.dispatch.call('drawMouseover', this, { event: e, index: index.jdx });
+          this.setHovered(e, d);
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);
           this.hoveredKey = null;
-          this.hoveredIndex  = -1;
-          this.dispatch.call('drawMouseout', this, { event: e, index: -1 });
+          this.hoveredIndex = -1;
         });
     }
     if (this.isAnimation && this.options.duration > 0) {

@@ -9,7 +9,7 @@ export abstract class IccAbstractDraw<T> {
   isStacked = false;
   chartType: string;
   protected hoveredKey = '';
-  protected hoveredIndex = -1;
+  protected hoveredIndex = -2;
   protected isAnimation = false;
 
   abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
@@ -41,7 +41,7 @@ export abstract class IccAbstractDraw<T> {
   }
 
   getDataByIdx(idx, data): {} {
-    if (this.hoveredIndex !== -1) {
+    if (this.hoveredIndex !== -2) {
       idx = this.hoveredIndex;
     }
     const chartType = data.chartType || this.options.chartType;
@@ -62,9 +62,7 @@ export abstract class IccAbstractDraw<T> {
     return this.getLinearData(idx, data);
   }
 
-  getInteractiveCy(r: any): number {
-    return this.scale.y(this.options.y(r.value[0]));
-  }
+  getInteractiveCy = (r: any) => this.scale.y(this.options.y(r.value[0]));
 
   getLinearData(idx, data): {} {
     const r: any = {};
@@ -77,16 +75,14 @@ export abstract class IccAbstractDraw<T> {
           r.valueX = this.options.x(r.value[0]);
           r.valueY = this.options.y(r.value[0]);
           r.cy = this.getInteractiveCy(r);
+          r.color = r.value[0].color || this.getdrawColor(r, idx);
         }
       }
     }
     r.key = this.options.x0(r);
     r.hovered = this.hoveredKey === r.key;
-    r.color = r.value[0].color || this.getdrawColor(r, idx);
     return r;
   }
-
-
 
   redraw(): void {
     this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);

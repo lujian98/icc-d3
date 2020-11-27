@@ -61,7 +61,6 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
   legendMouseover(e, data, mouseover: boolean): void {
     if (e) {
       this.hoveredKey = mouseover ? data.key : null;
-      // this.dispatch.call('drawMouseover', this, { event: e, indexData: mouseover ? data : null });
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => d.key === this.options.x0(data)) // key is from stacked data
