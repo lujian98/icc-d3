@@ -31,17 +31,17 @@ export class IccInteractiveDraw<T> {
     const data = this.getBisectData(0);
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').select('.guideLine').attr('y2', this.options.drawHeight);
-      this.svg.select('.interactiveDraw').selectAll('g')
-        .data(() => data.filter((d: any) => !d.disabled))
-        .join('g')
-        .selectAll('circle')
-        .data((d) => d.value)
-        .join('circle')
-        .attr('class', 'guideline, circle')
-        .style('stroke-width', 2)
-        .attr('r', 5)
-        .style('opacity', 0);
     }
+    this.svg.select('.interactiveDraw').selectAll('g')
+      .data(() => data.filter((d: any) => !d.disabled))
+      .join('g')
+      .selectAll('circle')
+      .data((d) => d.value)
+      .join('circle')
+      .attr('class', 'guideline, circle')
+      .style('stroke-width', 2)
+      .attr('r', 5)
+      .style('opacity', 0);
   }
 
   private init(): void {
@@ -82,9 +82,9 @@ export class IccInteractiveDraw<T> {
         .style('opacity', mouseover ? 1 : 0)
         .attr('x1', x)
         .attr('x2', x);
-      if (idx > -1) {
-        this.updateGuideLineCircle(data, x, mouseover);
-      }
+    }
+    if (idx > -1) {
+      this.updateGuideLineCircle(data, x, mouseover);
     }
     if (mouseover && idx > -1) {
       const pd = this.getPopoverData(idx, data);
@@ -92,7 +92,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private updateGuideLineCircle(data, x, mouseover: boolean): void {
+  private updateGuideLineCircle(data, x, mouseover: boolean): void { // TODO option circle for bar charts
     if (this.options.yScaleType !== 'band') {
       this.svg.select('.interactiveDraw').selectAll('circle')
         .style('opacity', (d, i) => !mouseover || data[i].disabled ? 0 : 1)
