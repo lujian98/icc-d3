@@ -92,10 +92,10 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private updateGuideLineCircle(data, x, mouseover: boolean): void { // TODO option circle for bar charts
+  private updateGuideLineCircle(data, x, mouseover: boolean): void {
     if (this.options.yScaleType !== 'band') {
       this.svg.select('.interactiveDraw').selectAll('circle')
-        .style('opacity', (d, i) => !mouseover || data[i].disabled ? 0 : 1)
+        .style('opacity', (d, i) => !mouseover || data[i].disabled || !data[i].cy ? 0 : 1)
         .style('stroke', (d, i) => data[i].color)
         .attr('fill', (d, i) => data[i].color)
         .attr('cx', x)

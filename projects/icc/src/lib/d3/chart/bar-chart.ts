@@ -14,6 +14,10 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
+  getInteractiveCy(r: any): number {
+    return null;
+  }
+
   getPopoverData(e, d): number {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');
     const nodes = group.nodes();

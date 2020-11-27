@@ -57,6 +57,10 @@ export abstract class IccAbstractDraw<T> {
     return this.getLinearData(idx, data);
   }
 
+  getInteractiveCy(r: any): number {
+    return this.scale.y(this.options.y(r.value[0]));
+  }
+
   getLinearData(idx, data): {} {
     const r: any = {};
     for (const [k, v] of Object.entries(data)) {
@@ -67,7 +71,7 @@ export abstract class IccAbstractDraw<T> {
         if (r.value.length > 0) {
           r.valueX = this.options.x(r.value[0]);
           r.valueY = this.options.y(r.value[0]);
-          r.cy = this.scale.y(this.options.y(r.value[0]));
+          r.cy = this.getInteractiveCy(r);
         }
       }
     }
