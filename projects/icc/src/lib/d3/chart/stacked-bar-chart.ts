@@ -1,10 +1,12 @@
+import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
-  // protected hoveredIndex = -1; // TODO popover
+  protected hoveredIndex = -1;
   drawData: T[];
+  normalized = false;
   getInteractiveCy = (r: any) => null;
 
   getDrawData(idx, data): {} { // TODO this is same
@@ -12,6 +14,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     const r: any = {
       key: data.key,
       isStacked: true,
+      normalized: this.normalized,
       index: data.index,
       hovered: this.hoveredKey === data.key,
       value: d,
@@ -30,6 +33,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     this.drawData = data;
     this.isStacked = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
+    this.normalized = stacked.normalized;
     const stackdata = data.length > 0 ? stacked.getStackedData(data, true) : [];
     if (data.length > 0) {
       stacked.setStackedYDomain(stackdata);
@@ -39,7 +43,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     this.options.useInteractiveGuideline = false;
-    this.svg.select(drawName).selectAll('g').data(this.data).join('g')
+    const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g')
       .attr('class', 'stackedbar series')
       .attr('fill-opacity', 0.75)
       .attr('fill', (d, i) => this.getStackeddrawColor(d, i));
@@ -54,7 +58,6 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
       .attr('y', d => scaleY(d[1]))
       .attr('height', d => scaleY(d[0]) - scaleY(d[1]))
       .attr('width', this.scale.getXBarWidth(scaleX, this.drawData));
-
     if (drawName === `.${this.chartType}`) {
       drawContents
         .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
@@ -73,12 +76,38 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
 
   drawMouseover(e, data, mouseover: boolean): void {
     if (e) {
-      // console.log( ' mmmmm d =', data) // TODO get correct data key???
-      this.hoveredKey = mouseover ? data.key : null;
+      if (mouseover) {
+        this.setHovered(e, data);
+      } else {
+        this.hoveredKey = null;
+        this.hoveredIndex = -1;
+      }
+
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any, i) => data.data && this.options.x(d.data) === this.options.x(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
+  }
+
+  setHovered(e, d): any {
+    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
+    const nodes = group.nodes();
+    const data: any = group.data();
+    const node = d3.select(e.target).node();
+    let i = -1;
+    let j = -1;
+    nodes.forEach((n, k) => {
+      if (j === -1) {
+        const pnodes = d3.select(n).selectAll('rect').nodes();
+        j = pnodes.indexOf(node);
+        if (j > -1) {
+          i = k;
+        }
+      }
+    });
+    this.hoveredKey = data[i].key; // this only difference
+    this.hoveredIndex = j;
+    // console.log('  this.hoveredIndex = ',  this.hoveredIndex, ' this.hoveredKey  = ', this.hoveredKey )
   }
 }
 

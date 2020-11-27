@@ -5,11 +5,13 @@ import { IccScale, IccScaleLinear } from '../model';
 export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   drawData: T[];
+  normalized = false;
 
   drawChart(data: T[]): void {
     this.drawData = data;
     this.isStacked = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
+    this.normalized = stacked.normalized;
     const stackdata = data.length > 0 ? stacked.getStackedData(data, false) : [];
     if (data.length > 0) {
       stacked.setStackedXDomain(stackdata);

@@ -46,11 +46,11 @@ export abstract class IccAbstractDraw<T> {
     }
     const chartType = data.chartType || this.options.chartType;
     if (idx > -1 && chartType === this.chartType) {
-      if (idx === 0) {
+      if (idx === 0 && !this.isStacked) {
         return this.getLinearData(idx, data);
       } else {
         const key = this.options.x0(data);
-        const ndata = this.data.filter((d) => key === this.options.x0(d));
+        const ndata = this.data.filter((d: any) => key === this.options.x0(d) || (key === d.key));
         if (ndata.length > 0) {
           return this.getDrawData(idx, ndata[0]);
         }
