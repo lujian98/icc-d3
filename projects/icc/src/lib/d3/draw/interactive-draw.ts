@@ -130,15 +130,18 @@ export class IccInteractiveDraw<T> {
     // console.log(' p data =', data);
     let isStacked = false;
     let isNormalized = false;
+    let isGrouped = false;
     let val = '';
     let total = 0;
     const sd = data.filter((d) => !d.disabled && d.value.length > 0)
       .map((d, i) => {
+        // console.log(' d =', d)
         val = d.valueX;
         let svalue = +d.valueY;
         isStacked = d.isStacked;
         isNormalized = d.normalized;
-        if (isStacked) {
+        isGrouped = d.isGrouped;
+        if (isStacked || isGrouped) {
           total += +svalue;
           if (isNormalized) {
             svalue = svalue * 100;
@@ -161,7 +164,13 @@ export class IccInteractiveDraw<T> {
       } else {
         sd.forEach((d) => d.value = `${d.value}%`);
       }
+    } else if (isGrouped) {
+      sd.push({
+        key: this.options.popover.totalLable,
+        value: this.options.popover.valueFormatter(total)
+      });
     }
+
     return {
       value: this.options.popover.axisFormatter(val),
       series: sd

@@ -7,6 +7,7 @@ export abstract class IccAbstractDraw<T> {
   protected data: T[];
   protected prevData: T[];
   isStacked = false;
+  protected isGrouped = false;
   chartType: string;
   protected hoveredKey = '';
   protected hoveredIndex = -2;
@@ -46,7 +47,9 @@ export abstract class IccAbstractDraw<T> {
     }
     const chartType = data.chartType || this.options.chartType;
     if (idx > -1 && chartType === this.chartType) {
-      if (idx === 0 && !this.isStacked) {
+      if (this.isGrouped) {
+        return this.getLinearData(idx, data);
+      } else if (idx === 0 && !this.isStacked) {
         return this.getLinearData(idx, data);
       } else {
         const key = this.options.x0(data);
@@ -81,6 +84,7 @@ export abstract class IccAbstractDraw<T> {
     }
     r.key = this.options.x0(r);
     r.hovered = this.hoveredKey === r.key;
+    r.isGrouped = this.isGrouped;
     return r;
   }
 
