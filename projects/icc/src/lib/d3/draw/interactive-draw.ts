@@ -59,9 +59,12 @@ export class IccInteractiveDraw<T> {
 
   private updateInteractive(e, mouseover: boolean): void {
     const x = e.offsetX - this.options.margin.left + 2;
+    const y = e.offsetY - this.options.margin.top + 2;
     // TODO get bisect idy only for stacked data? //
     let idx = -1;
     let data: any[];
+
+    /*
     if (this.options.yScaleType !== 'band') {
       if (this.options.xScaleType !== 'band') {
         const xScale = this.scale.x as IccScaleLinear;
@@ -76,7 +79,31 @@ export class IccInteractiveDraw<T> {
         idx = this.scaleBandInvert(xScale, x);
       }
       data = this.getBisectData(idx);
+    } */
+
+
+    if (this.options.xScaleType === 'band') {
+      const xScale = this.scale.x as IccScaleBand;
+      idx = this.scaleBandInvert(xScale, x);
+    } else if (this.options.yScaleType === 'band') {
+      const yScale = this.scale.y as IccScaleBand;
+      idx = this.scaleBandInvert(yScale, y);
+    } else { // TODO yScale linear ???
+      const xScale = this.scale.x as IccScaleLinear;
+      const bisect = d3Array.bisector((d) => this.options.x(d)).right;
+      const x0 = xScale.invert(x);
+      this.draw.data.forEach((d) => {
+        const values = this.options.y0(d);
+        idx = bisect(values, x0);
+      });
     }
+
+    // } else if (this.options.xScaleType === 'band') {
+
+    // }
+    data = this.getBisectData(idx);
+
+
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
