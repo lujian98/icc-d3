@@ -84,7 +84,7 @@ export abstract class IccAbstractDraw<T> {
     }
     r.key = this.options.x0(r);
     r.hovered = this.hoveredKey === r.key;
-    r.isGrouped = this.isGrouped;
+    r.hasSummary = this.isGrouped;
     return r;
   }
 

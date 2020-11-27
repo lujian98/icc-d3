@@ -11,7 +11,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
     const r: any = {
       key: data.key,
       isStacked: true,
-      normalized: this.normalized,
+      hasSummary: !this.normalized,
       index: data.index,
       hovered: this.hoveredKey === data.key,
       value: d,

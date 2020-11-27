@@ -129,8 +129,7 @@ export class IccInteractiveDraw<T> {
   private getPopoverData(idx, data): IccD3Popover {
     // console.log(' p data =', data);
     let isStacked = false;
-    let isNormalized = false;
-    let isGrouped = false;
+    let hasSummary = false;
     let val = '';
     let total = 0;
     const sd = data.filter((d) => !d.disabled && d.value.length > 0)
@@ -139,13 +138,11 @@ export class IccInteractiveDraw<T> {
         val = d.valueX;
         let svalue = +d.valueY;
         isStacked = d.isStacked;
-        isNormalized = d.normalized;
-        isGrouped = d.isGrouped;
-        if (isStacked || isGrouped) {
+        hasSummary = d.hasSummary;
+        if (hasSummary) {
           total += +svalue;
-          if (isNormalized) {
-            svalue = svalue * 100;
-          }
+        } else if (isStacked) {
+          svalue = svalue * 100;
         }
         return {
           key: this.options.popover.serieFormatter(d.key),
@@ -156,21 +153,16 @@ export class IccInteractiveDraw<T> {
       });
     if (isStacked) {
       sd.reverse();
-      if (!isNormalized) {
-        sd.push({
-          key: this.options.popover.totalLable,
-          value: this.options.popover.valueFormatter(total)
-        });
-      } else {
+      if (!hasSummary) {
         sd.forEach((d) => d.value = `${d.value}%`);
       }
-    } else if (isGrouped) {
+    }
+    if (hasSummary) {
       sd.push({
         key: this.options.popover.totalLable,
         value: this.options.popover.valueFormatter(total)
       });
     }
-
     return {
       value: this.options.popover.axisFormatter(val),
       series: sd
