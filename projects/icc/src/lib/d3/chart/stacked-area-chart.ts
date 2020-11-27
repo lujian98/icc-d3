@@ -6,14 +6,19 @@ import { IccScale, IccScaleLinear } from '../model';
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
   getDrawData(idx, data): {} {
-    const r = {
+    const d = data[idx];
+    const r: any = {
       key: data.key,
       isStacked: true,
       index: data.index,
-      values: data[idx],
+      value: d,
       cy: this.scale.y(data[idx][1]),
       color: null
     };
+    if (d.data) {
+      r.valueX = this.options.x(d.data);
+      r.valueY = d[1] - d[0];
+    }
     r.color = this.getStackeddrawColor(r, 0);
     return r;
   }

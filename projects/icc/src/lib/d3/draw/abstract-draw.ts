@@ -60,9 +60,18 @@ export abstract class IccAbstractDraw<T> {
   getLinearData(idx, data): {} {
     const r: any = {};
     for (const [k, v] of Object.entries(data)) {
-      r[k] = !Array.isArray(data[k]) ? v : data[k].filter((t, i) => i === idx);
+      if (!Array.isArray(data[k])) {
+        r[k] = v;
+      } else {
+        r.value = data[k].filter((t, i) => i === idx);
+        if (r.value.length > 0) {
+          r.valueX = this.options.x(r.value[0]);
+          r.valueY = this.options.y(r.value[0]);
+          r.cy = this.scale.y(this.options.y(r.value[0]));
+        }
+      }
     }
-    r.cy = this.options.y0(r)[0] ? this.scale.y(this.options.y(this.options.y0(r)[0])) : null;
+    r.key = this.options.x0(r);
     r.color = this.getdrawColor(r, 0);
     return r;
   }

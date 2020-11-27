@@ -35,7 +35,7 @@ export class IccInteractiveDraw<T> {
         .data(() => data.filter((d: any) => !d.disabled))
         .join('g')
         .selectAll('circle')
-        .data((d) => this.options.y0(d))
+        .data((d) => d.value)
         .join('circle')
         .attr('class', 'guideline, circle')
         .style('stroke-width', 2)
@@ -117,24 +117,26 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private getPopoverData(idx, data): IccD3Popover { // TODO move to each draw
+  private getPopoverData(idx, data): IccD3Popover {
+    // console.log(' p data =', data);
     let isStacked = false;
     let val = '';
     let total = 0;
-    const sd = data.filter((d) => !d.disabled && this.options.y0(d).length > 0)
+    const sd = data.filter((d) => !d.disabled && d.value.length > 0)
       .map((d, i) => {
-        const yd = this.options.y0(d)[0];
+        val = d.valueX;
+        let svalue = +d.valueY;
         isStacked = d.isStacked;
-        val = isStacked ? this.options.x(d.values.data) : this.options.x(yd);
-        let svalue = d.isStacked ? (d.values[1] - d.values[0]) : this.options.y(yd);
-        total += +svalue;
-        if (this.options.chartType === 'stackedNormalizedAreaChart') {
-          svalue = svalue * 100;
+        if (isStacked) {
+          total += +svalue;
+          if (this.options.chartType === 'stackedNormalizedAreaChart') {
+            svalue = svalue * 100;
+          }
         }
         return {
-          key: this.options.popover.serieFormatter(this.options.x0(d)),
+          key: this.options.popover.serieFormatter(d.key),
           value: this.options.popover.valueFormatter(svalue),
-          color: this.getdrawColor(d, idx),
+          color: d.color,
           hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
         };
       });
@@ -143,7 +145,7 @@ export class IccInteractiveDraw<T> {
       if (this.options.chartType !== 'stackedNormalizedAreaChart') {
         sd.push({
           key: this.options.popover.totalLable,
-          value: this.options.popover.valueFormatter(total) // sd.map((d) => d.value).reduce((a, c) => a + c)
+          value: this.options.popover.valueFormatter(total)
         });
       } else {
         sd.forEach((d) => d.value = `${d.value}%`);
@@ -155,11 +157,12 @@ export class IccInteractiveDraw<T> {
     };
   }
 
-  public getdrawColor(d, i): string { // TODO get parent defined color?
-    return d && (d.color || this.scale.colors(this.options.drawColor(d, i)));
-  }
 
   /*
+
+    public getdrawColor(d, i): string { // TODO get parent defined color?
+    return d && (d.color || this.scale.colors(this.options.drawColor(d, i)));
+  }
   public drawAllCircles(): void { // TODO
     if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
       let data = [];
