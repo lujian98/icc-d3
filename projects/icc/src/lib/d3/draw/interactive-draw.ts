@@ -72,7 +72,7 @@ export class IccInteractiveDraw<T> {
           idx = bisect(values, x0);
         });
       } else { // TODO
-        idx = this.draw.currentOverIndex;
+        idx = -1;
       }
       data = this.getBisectData(idx);
     }
@@ -86,7 +86,7 @@ export class IccInteractiveDraw<T> {
     if (idx > -1) {
       this.updateGuideLineCircle(data, x, mouseover);
     }
-    if (mouseover && idx > -1) {
+    if (mouseover) {
       const pd = this.getPopoverData(idx, data);
       this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
     }
@@ -118,7 +118,7 @@ export class IccInteractiveDraw<T> {
   }
 
   private getPopoverData(idx, data): IccD3Popover {
-    console.log(' p data =', data);
+    // console.log(' p data =', data);
     let isStacked = false;
     let val = '';
     let total = 0;

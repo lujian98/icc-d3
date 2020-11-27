@@ -8,7 +8,8 @@ export abstract class IccAbstractDraw<T> {
   protected prevData: T[];
   isStacked = false;
   chartType: string;
-  protected hoveredKey = -1;
+  protected hoveredKey = '';
+  protected hoveredIndex = -1;
   protected isAnimation = false;
 
   abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
@@ -40,8 +41,11 @@ export abstract class IccAbstractDraw<T> {
   }
 
   getDataByIdx(idx, data): {} {
+    if (this.hoveredIndex !== -1) {
+      idx = this.hoveredIndex;
+    }
     const chartType = data.chartType || this.options.chartType;
-    if (chartType === this.chartType) {
+    if (idx > -1 && chartType === this.chartType) {
       if (idx === 0) {
         return this.getLinearData(idx, data);
       } else {
@@ -77,10 +81,12 @@ export abstract class IccAbstractDraw<T> {
       }
     }
     r.key = this.options.x0(r);
-    r.hovered = this.hoveredKey === r.key,
-    r.color = this.getdrawColor(r, 0);
+    r.hovered = this.hoveredKey === r.key;
+    r.color = r.value[0].color || this.getdrawColor(r, idx);
     return r;
   }
+
+
 
   redraw(): void {
     this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
