@@ -8,6 +8,7 @@ export abstract class IccAbstractDraw<T> {
   protected prevData: T[];
   isStacked = false;
   chartType: string;
+  protected hoveredKey = -1;
   protected isAnimation = false;
 
   abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
@@ -76,6 +77,7 @@ export abstract class IccAbstractDraw<T> {
       }
     }
     r.key = this.options.x0(r);
+    r.hovered = this.hoveredKey === r.key,
     r.color = this.getdrawColor(r, 0);
     return r;
   }

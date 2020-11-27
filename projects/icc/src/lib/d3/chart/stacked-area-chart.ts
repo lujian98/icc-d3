@@ -11,6 +11,7 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
       key: data.key,
       isStacked: true,
       index: data.index,
+      hovered: this.hoveredKey === data.key,
       value: d,
       cy: this.scale.y(data[idx][1]),
       color: null
@@ -59,7 +60,8 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
   legendMouseover(e, data, mouseover: boolean): void {
     if (e) {
-      this.dispatch.call('drawMouseover', this, { event: e, indexData: mouseover ? data : null });
+      this.hoveredKey = mouseover ? data.key : null;
+      // this.dispatch.call('drawMouseover', this, { event: e, indexData: mouseover ? data : null });
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => d.key === this.options.x0(data)) // key is from stacked data

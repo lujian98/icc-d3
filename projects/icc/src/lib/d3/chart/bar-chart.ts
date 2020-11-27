@@ -18,7 +18,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
     return null;
   }
 
-  getPopoverData(e, d): number {
+  getPopoverData(e, d): any {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');
     const nodes = group.nodes();
     const data = group.data();
@@ -45,8 +45,7 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
         }
       ]
     };
-    return j;
-    // return pd;
+    return { idx: i, jdx: j };
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -61,11 +60,14 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       drawContents
         .on('mouseover', (e: any, d) => {
           this.drawMouseover(d, true);
-          const idx = this.getPopoverData(e, d);
-          this.dispatch.call('drawMouseover', this, { event: e, index: idx });
+          const index = this.getPopoverData(e, d); // TODO clean up here
+          const data = this.data[index.idx];
+          this.hoveredKey = this.options.x0(data);
+          this.dispatch.call('drawMouseover', this, { event: e, index: index.jdx });
         })
         .on('mouseout', (e, d) => {
           this.drawMouseover(d, false);
+          this.hoveredKey = null;
           this.dispatch.call('drawMouseout', this, { event: e, index: -1 });
         });
     }

@@ -34,7 +34,7 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
 
   legendMouseover(e, data, mouseover: boolean): void {
     if (e) {
-      this.dispatch.call('drawMouseover', this, { event: e, indexData: mouseover ? data : null });
+      this.hoveredKey = mouseover ? this.options.x0(data) : null;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data))

@@ -118,7 +118,7 @@ export class IccInteractiveDraw<T> {
   }
 
   private getPopoverData(idx, data): IccD3Popover {
-    // console.log(' p data =', data);
+    console.log(' p data =', data);
     let isStacked = false;
     let val = '';
     let total = 0;
@@ -137,7 +137,7 @@ export class IccInteractiveDraw<T> {
           key: this.options.popover.serieFormatter(d.key),
           value: this.options.popover.valueFormatter(svalue),
           color: d.color,
-          hovered: d.isStacked ? d.index === this.draw.currentOverIndex : i === this.draw.currentOverIndex
+          hovered: d.hovered
         };
       });
     if (isStacked) {
