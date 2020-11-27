@@ -1,3 +1,4 @@
+import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
@@ -6,6 +7,26 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   drawData: T[];
   normalized = false;
+
+  getDrawData(idx, data): {} { // TODO this is same
+    const d = data[idx];
+    const r: any = {
+      key: data.key,
+      isStacked: true,
+      hasSummary: !this.normalized,
+      index: data.index,
+      hovered: this.hoveredKey === data.key,
+      value: d,
+      // cy: this.scale.y(data[idx][1]),
+      color: null
+    };
+    if (d.data) {
+      r.valueX = this.options.y(d.data);
+      r.valueY = d[1] - d[0]; // scaleX(d[1]) - scaleX(d[0]));
+    }
+    r.color = this.getStackeddrawColor(r, 0);
+    return r;
+  }
 
   drawChart(data: T[]): void {
     this.drawData = data;
@@ -39,8 +60,8 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
 
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e, d) => this.drawMouseover(d, true))
-        .on('mouseout', (e, d) => this.drawMouseover(d, false));
+        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
     }
   }
 
@@ -53,10 +74,39 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : null);
   }
 
-  drawMouseover(data, mouseover: boolean): void {
+  drawMouseover(e, data, mouseover: boolean): void {
+    if (e) {
+      if (mouseover) {
+        this.setHovered(e, data);
+      } else {
+        this.hoveredKey = null;
+        this.hoveredIndex = -1;
+      }
+    }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any, i) => data.data && this.options.y(d.data) === this.options.y(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
+  }
+
+  setHovered(e, d): any {
+    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
+    const nodes = group.nodes();
+    const data: any = group.data();
+    const node = d3.select(e.target).node();
+    let i = -1;
+    let j = -1;
+    nodes.forEach((n, k) => {
+      if (j === -1) {
+        const pnodes = d3.select(n).selectAll('rect').nodes();
+        j = pnodes.indexOf(node);
+        if (j > -1) {
+          i = k;
+        }
+      }
+    });
+    this.hoveredKey = data[i].key; // this only difference
+    this.hoveredIndex = j;
+    // console.log('  this.hoveredIndex = ',  this.hoveredIndex, ' this.hoveredKey  = ', this.hoveredKey )
   }
 }
 

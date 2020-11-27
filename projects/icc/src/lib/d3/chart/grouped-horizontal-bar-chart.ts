@@ -1,9 +1,11 @@
+import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccGroupedData } from '../data/grouped-data';
 import { IccScaleLinear, IccScaleBand } from '../model';
 
 export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
+  protected isGrouped = true;
 
   drawChart(data: T[]): void {
     const grouped = new IccGroupedData(this.options);
@@ -44,10 +46,63 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   }
 
   legendMouseover(e, data, mouseover: boolean): void {
+    if (e) {
+      if (mouseover) {
+        this.setHovered(e, data);
+      } else {
+        this.hoveredKey = null;
+        this.hoveredIndex = -1;
+      }
+    }
     this.svg.select('.groupedHorizontalBarChart').selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.x(d) === this.options.x(data)) || this.options.y0(data)))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
+  }
+
+  setHovered(e, d): any {
+    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
+    const nodes = group.nodes();
+    const data: any = group.data();
+    const node = d3.select(e.target).node();
+    let i = -1;
+    let j = -1;
+    nodes.forEach((n, k) => {
+      if (j === -1) {
+        const pnodes = d3.select(n).selectAll('rect').nodes();
+        j = pnodes.indexOf(node);
+        if (j > -1) {
+          i = k;
+        }
+      }
+    });
+    const pd = data[i];
+    const nd = this.options.y0(pd);
+    this.hoveredIndex = i;
+    this.hoveredKey = this.options.x0(nd[j]);
+    // console.log( ' i =', i, ' j =', j, ' nd =', nd, ' pd =', pd);
+    // console.log(' i=', i, '  this.hoveredIndex = ',  this.hoveredIndex, ' this.hoveredKey  = ', this.hoveredKey )
+  }
+
+  getLinearData(idx, data): {} {
+    const r: any = {};
+    for (const [k, v] of Object.entries(data)) {
+      if (!Array.isArray(data[k])) {
+        r[k] = v;
+      } else {
+        r.value = data[k].filter((t, i) => i === idx);
+        if (r.value.length > 0) {
+          r.valueX = this.options.y(r.value[0]); // changed
+          r.valueY = this.options.x(r.value[0]); // changed
+          r.cy = this.getInteractiveCy(r);
+          r.color = r.value[0].color || this.getdrawColor(r, idx);
+        }
+      }
+    }
+    r.key = this.options.x0(r);
+    r.hovered = this.hoveredKey === r.key;
+    r.hasSummary = this.isGrouped;
+    return r;
   }
 }
 
