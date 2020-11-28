@@ -97,5 +97,23 @@ export abstract class IccAbstractDraw<T> {
   getBarColor = (d, i) => d.color || (this.options.barColor && this.scale.colors(this.options.barColor(d, i)));
 
   getStackeddrawColor = (d, i) => d.color || this.scale.colors(d.key); // key is from stacked data
+
+  getHoveredIndex(e): any {
+    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
+    const nodes = group.nodes();
+    const node = d3.select(e.target).node();
+    let i = -1;
+    let j = -1;
+    nodes.forEach((n, k) => {
+      if (j === -1) {
+        const pnodes = d3.select(n).selectAll('rect').nodes();
+        j = pnodes.indexOf(node);
+        if (j > -1) {
+          i = k;
+        }
+      }
+    });
+    return { idx: i, jdx: j };
+  }
 }
 

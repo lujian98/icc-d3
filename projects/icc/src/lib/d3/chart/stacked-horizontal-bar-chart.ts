@@ -8,6 +8,13 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   drawData: T[];
   normalized = false;
 
+  setHovered(e, d): any {
+    const index = this.getHoveredIndex(e);
+    const data: any = this.data[index.idx];
+    this.hoveredKey = data.key; // this only difference
+    this.hoveredIndex = index.jdx;
+  }
+
   getDrawData(idx, data): {} { // TODO this is same
     const d = data[idx];
     const r: any = {
@@ -86,27 +93,6 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any, i) => data.data && this.options.y(d.data) === this.options.y(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
-  }
-
-  setHovered(e, d): any {
-    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
-    const nodes = group.nodes();
-    const data: any = group.data();
-    const node = d3.select(e.target).node();
-    let i = -1;
-    let j = -1;
-    nodes.forEach((n, k) => {
-      if (j === -1) {
-        const pnodes = d3.select(n).selectAll('rect').nodes();
-        j = pnodes.indexOf(node);
-        if (j > -1) {
-          i = k;
-        }
-      }
-    });
-    this.hoveredKey = data[i].key; // this only difference
-    this.hoveredIndex = j;
-    // console.log('  this.hoveredIndex = ',  this.hoveredIndex, ' this.hoveredKey  = ', this.hoveredKey )
   }
 }
 

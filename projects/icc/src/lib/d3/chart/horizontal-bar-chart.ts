@@ -6,6 +6,12 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   getInteractiveCy = (r: any) => null;
 
+  setHovered(e, d): any {
+    const index = this.getHoveredIndex(e);
+    this.hoveredKey = this.options.x0(this.data[index.idx]);
+    this.hoveredIndex = index.jdx;
+  }
+
   getLinearData(idx, data): {} {
     const r: any = {};
     for (const [k, v] of Object.entries(data)) {
@@ -25,27 +31,6 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     r.hovered = this.hoveredKey === r.key;
     r.hasSummary = this.isGrouped;
     return r;
-  }
-
-  setHovered(e, d): any {
-    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
-    const nodes = group.nodes();
-    const data = group.data();
-    const node = d3.select(e.target).node();
-    let i = -1;
-    let j = -1;
-    nodes.forEach((n, k) => {
-      if (j === -1) {
-        const pnodes = d3.select(n).selectAll('rect').nodes();
-        j = pnodes.indexOf(node);
-        if (j > -1) {
-          i = k;
-        }
-      }
-    });
-    this.hoveredKey = this.options.x0(data[i]);
-    this.hoveredIndex = j;
-    // console.log( ' this.hoveredIndex= ', this.hoveredIndex, 'this.hoveredKey = ', this.hoveredKey )
   }
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScale): void {

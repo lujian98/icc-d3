@@ -1,4 +1,3 @@
-import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 
@@ -7,23 +6,9 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
   getInteractiveCy = (r: any) => null;
 
   setHovered(e, d): any {
-    const group = this.svg.select(`.${this.chartType}`).selectAll('g');
-    const nodes = group.nodes();
-    const data = group.data();
-    const node = d3.select(e.target).node();
-    let i = -1;
-    let j = -1;
-    nodes.forEach((n, k) => {
-      if (j === -1) {
-        const pnodes = d3.select(n).selectAll('rect').nodes();
-        j = pnodes.indexOf(node);
-        if (j > -1) {
-          i = k;
-        }
-      }
-    });
-    this.hoveredKey = this.options.x0(data[i]);
-    this.hoveredIndex = j;
+    const index = this.getHoveredIndex(e);
+    this.hoveredKey = this.options.x0(this.data[index.idx]);
+    this.hoveredIndex = index.jdx;
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
