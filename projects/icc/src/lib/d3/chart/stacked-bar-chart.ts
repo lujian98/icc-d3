@@ -6,7 +6,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   drawData: T[];
 
-  setHovered(e, d): any {
+  setHovered(e, d): void {
     const index = this.getHoveredIndex(e);
     const data: any = this.data[index.idx];
     this.hoveredKey = data.key; // this only difference

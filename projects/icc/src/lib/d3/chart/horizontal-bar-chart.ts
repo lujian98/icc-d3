@@ -4,7 +4,7 @@ import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
 
-  setHovered(e, d): any {
+  setHovered(e, d): void {
     const index = this.getHoveredIndex(e);
     this.hoveredKey = this.options.x0(this.data[index.idx]);
     this.hoveredIndex = index.jdx;

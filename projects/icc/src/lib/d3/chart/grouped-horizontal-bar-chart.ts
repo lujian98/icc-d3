@@ -6,7 +6,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   protected isGrouped = true;
 
-  setHovered(e, d): any {
+  setHovered(e, d): void {
     const index = this.getHoveredIndex(e);
     const pd = this.data[index.idx];
     const nd = this.options.y0(pd);

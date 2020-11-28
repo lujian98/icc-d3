@@ -71,7 +71,7 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  private getStackedData(idx, data): IccD3Interactive {
+  private getStackedData(idx: number, data): IccD3Interactive {
     const d = data[idx];
     if (d.data) {
       const r: IccD3Interactive = {
@@ -90,7 +90,7 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  private getDrawData(idx, data): IccD3Interactive {
+  private getDrawData(idx: number, data: T): IccD3Interactive {
     const d = this.options.y0(data).filter((t, i) => i === idx);
     if (d.length > 0) {
       const r: IccD3Interactive = {
@@ -108,9 +108,9 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  setValueXY(r: IccD3Interactive): void {}
+  setValueXY(r: IccD3Interactive): void { }
 
-  getHoveredIndex(e): any {
+  getHoveredIndex(e): { idx: number, jdx: number } {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');
     const nodes = group.nodes();
     const node = d3.select(e.target).node();

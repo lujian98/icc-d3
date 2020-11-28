@@ -8,7 +8,7 @@ export class IccGroupedData<T> {
   }
 
   getGroupedData(data: T[], isXGrouped: boolean): any[] {
-    const options = isXGrouped ? { v: (d: any) => this.options.x(d) } : { v: (d: any) => this.options.y(d) };
+    const options = isXGrouped ? { v: (d) => this.options.x(d) } : { v: (d) => this.options.y(d) };
     let tdata = [];
     data.forEach((d) => {
       let sk; let kv;
