@@ -1,6 +1,6 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
-import { IccScale, IccScaleLinear } from '../model';
+import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
 export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
@@ -13,8 +13,7 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredIndex = index.jdx;
   }
 
-  setStackedValueXY(r): void {
-    super.setStackedValueXY(r);
+  setValueXY(r: IccD3Interactive): void {
     r.valueX = this.options.y(r.value.data);
   }
 

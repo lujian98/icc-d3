@@ -1,5 +1,5 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScale, IccScaleLinear } from '../model';
+import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
@@ -10,8 +10,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredIndex = index.jdx;
   }
 
-  setValueXY(r): void {
-    super.setValueXY(r);
+  setValueXY(r: IccD3Interactive): void {
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }

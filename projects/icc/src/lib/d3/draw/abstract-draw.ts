@@ -1,7 +1,7 @@
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
-import { IccScale, IccD3Options } from '../model';
+import { IccScale, IccD3Options, IccD3Interactive } from '../model';
 
 export abstract class IccAbstractDraw<T> {
   chartType: string;
@@ -53,7 +53,7 @@ export abstract class IccAbstractDraw<T> {
   getStackeddrawColor = (d, i) => d.color || this.scale.colors(d.key); // key is from stacked data
 
   // below for popover data
-  getDataByIdx(idx, data): {} {
+  getInteractiveData(idx, data): IccD3Interactive {
     if (this.hoveredIndex !== -2) {
       idx = this.hoveredIndex;
     }
@@ -71,53 +71,44 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  private getStackedData(idx, data): {} {
+  private getStackedData(idx, data): IccD3Interactive {
     const d = data[idx];
-    const r: any = {
-      key: data.key,
-      isStacked: true,
-      hasSummary: !this.normalized,
-      index: data.index,
-      hovered: this.hoveredKey === data.key,
-      value: d,
-    };
     if (d.data) {
-      r.valueY = d[1] - d[0];
-      this.setStackedValueXY(r);
+      const r: IccD3Interactive = {
+        key: data.key,
+        value: d,
+        isStacked: true,
+        color: this.getStackeddrawColor(data, idx),
+        valueX: this.options.x(d.data),
+        valueY: d[1] - d[0],
+        cy: this.scale.y(d[1]),
+        hovered: this.hoveredKey === data.key,
+        hasSummary: !this.normalized
+      };
+      this.setValueXY(r);
+      return r;
     }
-    r.color = this.getStackeddrawColor(r, 0);
-    return r;
   }
 
-  setStackedValueXY(r): void {
-    r.valueX = this.options.x(r.value.data);
-    r.cy = this.scale.y(r.value[1]);
-  }
-
-  private getDrawData(idx, data): {} {
-    const r: any = {};
-    for (const [k, v] of Object.entries(data)) {
-      if (!Array.isArray(data[k])) {
-        r[k] = v;
-      } else {
-        r.value = data[k].filter((t, i) => i === idx);
-        if (r.value.length > 0) {
-          this.setValueXY(r);
-          r.color = r.value[0].color || this.getdrawColor(r, idx);
-        }
-      }
+  private getDrawData(idx, data): IccD3Interactive {
+    const d = this.options.y0(data).filter((t, i) => i === idx);
+    if (d.length > 0) {
+      const r: IccD3Interactive = {
+        key: this.options.x0(data),
+        value: d,
+        color: d[0].color || this.getdrawColor(data, idx),
+        valueX: this.options.x(d[0]),
+        valueY: this.options.y(d[0]),
+        cy: this.scale.y(this.options.y(d[0])),
+        hovered: this.hoveredKey === this.options.x0(data),
+        hasSummary: this.isGrouped
+      };
+      this.setValueXY(r);
+      return r;
     }
-    r.key = this.options.x0(r);
-    r.hovered = this.hoveredKey === r.key;
-    r.hasSummary = this.isGrouped;
-    return r;
   }
 
-  setValueXY(r): void {
-    r.valueX = this.options.x(r.value[0]);
-    r.valueY = this.options.y(r.value[0]);
-    r.cy = this.scale.y(this.options.y(r.value[0]));
-  }
+  setValueXY(r: IccD3Interactive): void {}
 
   getHoveredIndex(e): any {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');

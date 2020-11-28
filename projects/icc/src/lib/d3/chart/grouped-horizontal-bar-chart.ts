@@ -1,6 +1,6 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccGroupedData } from '../data/grouped-data';
-import { IccScaleLinear, IccScaleBand } from '../model';
+import { IccScaleLinear, IccScaleBand, IccD3Interactive } from '../model';
 
 export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
@@ -14,8 +14,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredKey = this.options.x0(nd[index.jdx]);
   }
 
-  setValueXY(r): void {
-    super.setValueXY(r);
+  setValueXY(r: IccD3Interactive): void {
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }

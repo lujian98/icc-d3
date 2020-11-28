@@ -1,8 +1,8 @@
 
 export interface IccD3PopoverSerie {
-  // key label: need this ??? key: string;
+  key: string;
   value: string;
-  color: string;
+  color?: string;
   hovered?: boolean;
 }
 

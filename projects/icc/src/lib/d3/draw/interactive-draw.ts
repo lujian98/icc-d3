@@ -2,7 +2,7 @@ import * as d3 from 'd3-selection';
 import * as d3Array from 'd3-array';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Component } from '../d3.component';
-import { IccScaleLinear, IccScaleBand, IccD3Options, IccD3Popover } from '../model';
+import { IccScaleLinear, IccScaleBand, IccD3Options, IccD3Popover, IccD3PopoverSerie, IccD3Interactive } from '../model';
 
 export class IccInteractiveDraw<T> {
   constructor(
@@ -28,7 +28,7 @@ export class IccInteractiveDraw<T> {
   }
 
   update(): void {
-    const data = this.getBisectData(0);
+    const data = this.getInteractiveData(0);
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').select('.guideLine').attr('y2', this.options.drawHeight);
     }
@@ -61,7 +61,6 @@ export class IccInteractiveDraw<T> {
     const x = e.offsetX - this.options.margin.left + 2;
     const y = e.offsetY - this.options.margin.top + 2;
     let idx = -1;
-    let data: any[];
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;
       idx = this.scaleBandInvert(xScale, x);
@@ -77,7 +76,7 @@ export class IccInteractiveDraw<T> {
         idx = bisect(values, x0);
       });
     }
-    data = this.getBisectData(idx);
+    const data: IccD3Interactive[] = this.getInteractiveData(idx);
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
@@ -89,7 +88,7 @@ export class IccInteractiveDraw<T> {
       this.updateGuideLineCircle(data, x, mouseover);
     }
     if (mouseover && idx > -1) {
-      const pd = this.getPopoverData(idx, data);
+      const pd = this.getPopoverData(data);
       this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
     }
   }
@@ -113,11 +112,11 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private getBisectData(idx): any[] {
-    const ndata = [];
+  private getInteractiveData(idx): IccD3Interactive[] {
+    const ndata: IccD3Interactive[] = [];
     this.draw.data.filter((d: any) => !d.disabled).forEach((d: any, i) => {
       this.draw.draws.forEach((draw) => {
-        const drawdata = draw.getDataByIdx(idx, d);
+        const drawdata = draw.getInteractiveData(idx, d);
         if (drawdata) {
           ndata.push(drawdata);
         }
@@ -126,12 +125,12 @@ export class IccInteractiveDraw<T> {
     return ndata;
   }
 
-  private getPopoverData(idx, data): IccD3Popover {
+  private getPopoverData(data: IccD3Interactive[]): IccD3Popover {
     let isStacked = false;
     let hasSummary = false;
     let val = '';
     let total = 0;
-    const sd = data.filter((d) => !d.disabled && d.value.length > 0)
+    const sd: IccD3PopoverSerie[] = data.filter((d) => d.value.length > 0)
       .map((d, i) => {
         val = d.valueX;
         let svalue = +d.valueY;
