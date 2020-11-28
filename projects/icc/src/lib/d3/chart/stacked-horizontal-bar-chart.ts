@@ -6,7 +6,6 @@ import { IccScale, IccScaleLinear } from '../model';
 export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
   drawData: T[];
-  normalized = false;
 
   setHovered(e, d): any {
     const index = this.getHoveredIndex(e);
@@ -15,24 +14,10 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredIndex = index.jdx;
   }
 
-  getDrawData(idx, data): {} { // TODO this is same
-    const d = data[idx];
-    const r: any = {
-      key: data.key,
-      isStacked: true,
-      hasSummary: !this.normalized,
-      index: data.index,
-      hovered: this.hoveredKey === data.key,
-      value: d,
-      // cy: this.scale.y(data[idx][1]),
-      color: null
-    };
-    if (d.data) {
-      r.valueX = this.options.y(d.data);
-      r.valueY = d[1] - d[0]; // scaleX(d[1]) - scaleX(d[0]));
-    }
-    r.color = this.getStackeddrawColor(r, 0);
-    return r;
+  setStackedValueXY(r): void {
+    super.setStackedValueXY(r);
+    r.valueX = this.options.y(r.value.data);
+    r.cy = null;
   }
 
   drawChart(data: T[]): void {

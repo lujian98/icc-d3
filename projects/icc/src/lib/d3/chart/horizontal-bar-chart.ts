@@ -12,25 +12,9 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredIndex = index.jdx;
   }
 
-  getLinearData(idx, data): {} {
-    const r: any = {};
-    for (const [k, v] of Object.entries(data)) {
-      if (!Array.isArray(data[k])) {
-        r[k] = v;
-      } else {
-        r.value = data[k].filter((t, i) => i === idx);
-        if (r.value.length > 0) {
-          r.valueX = this.options.y(r.value[0]); // changed
-          r.valueY = this.options.x(r.value[0]); // changed
-          r.cy = this.getInteractiveCy(r);
-          r.color = r.value[0].color || this.getdrawColor(r, idx);
-        }
-      }
-    }
-    r.key = this.options.x0(r);
-    r.hovered = this.hoveredKey === r.key;
-    r.hasSummary = this.isGrouped;
-    return r;
+  setValueXY(r): void {
+    r.valueX = this.options.y(r.value[0]);
+    r.valueY = this.options.x(r.value[0]);
   }
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScale): void {

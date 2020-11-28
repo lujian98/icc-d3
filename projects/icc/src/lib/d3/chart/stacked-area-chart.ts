@@ -4,27 +4,6 @@ import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
-  normalized = false;
-
-  getDrawData(idx, data): {} {
-    const d = data[idx];
-    const r: any = {
-      key: data.key,
-      isStacked: true,
-      hasSummary: !this.normalized,
-      index: data.index,
-      hovered: this.hoveredKey === data.key,
-      value: d,
-      cy: this.scale.y(data[idx][1]),
-      color: null
-    };
-    if (d.data) {
-      r.valueX = this.options.x(d.data);
-      r.valueY = d[1] - d[0];
-    }
-    r.color = this.getStackeddrawColor(r, 0);
-    return r;
-  }
 
   drawChart(data: any[]): void {
     this.isStacked = true;

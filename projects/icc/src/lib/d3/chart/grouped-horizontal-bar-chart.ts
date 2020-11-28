@@ -15,6 +15,11 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredKey = this.options.x0(nd[index.jdx]);
   }
 
+  setValueXY(r): void {
+    r.valueX = this.options.y(r.value[0]);
+    r.valueY = this.options.x(r.value[0]);
+  }
+
   drawChart(data: T[]): void {
     const grouped = new IccGroupedData(this.options);
     const groupeddata = grouped.getGroupedData(data, false);
@@ -66,27 +71,6 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
       .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.x(d) === this.options.x(data)) || this.options.y0(data)))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
-  }
-
-  getLinearData(idx, data): {} {
-    const r: any = {};
-    for (const [k, v] of Object.entries(data)) {
-      if (!Array.isArray(data[k])) {
-        r[k] = v;
-      } else {
-        r.value = data[k].filter((t, i) => i === idx);
-        if (r.value.length > 0) {
-          r.valueX = this.options.y(r.value[0]); // changed
-          r.valueY = this.options.x(r.value[0]); // changed
-          r.cy = this.getInteractiveCy(r);
-          r.color = r.value[0].color || this.getdrawColor(r, idx);
-        }
-      }
-    }
-    r.key = this.options.x0(r);
-    r.hovered = this.hoveredKey === r.key;
-    r.hasSummary = this.isGrouped;
-    return r;
   }
 }
 

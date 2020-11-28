@@ -6,7 +6,9 @@ import { IccScale, IccD3Options } from '../model';
 export abstract class IccAbstractDraw<T> {
   protected data: T[];
   protected prevData: T[];
-  isStacked = false;
+  protected isStacked = false;
+  protected normalized = false;
+
   protected isGrouped = false;
   chartType: string;
   protected hoveredKey = '';
@@ -48,26 +50,46 @@ export abstract class IccAbstractDraw<T> {
     const chartType = data.chartType || this.options.chartType;
     if (idx > -1 && chartType === this.chartType) {
       if (this.isGrouped) {
-        return this.getLinearData(idx, data);
-      } else if (idx === 0 && !this.isStacked) {
-        return this.getLinearData(idx, data);
+        return this.getDrawData(idx, data);
+        // } else if (idx === -1 && !this.isStacked) {
+        //   return this.getDrawData(idx, data);
       } else {
         const key = this.options.x0(data);
         const ndata = this.data.filter((d: any) => key === this.options.x0(d) || (key === d.key));
         if (ndata.length > 0) {
-          return this.getDrawData(idx, ndata[0]);
+          return this.isStacked ? this.getStackedData(idx, ndata[0]) : this.getDrawData(idx, ndata[0]);
         }
       }
     }
   }
 
-  getDrawData(idx, data): {} {
-    return this.getLinearData(idx, data);
+  getStackedData(idx, data): {} {
+    const d = data[idx];
+    const r: any = {
+      key: data.key,
+      isStacked: true,
+      hasSummary: !this.normalized,
+      index: data.index,
+      hovered: this.hoveredKey === data.key,
+      value: d,
+      color: null
+    };
+    if (d.data) {
+      r.valueY = d[1] - d[0];
+      this.setStackedValueXY(r);
+    }
+    r.color = this.getStackeddrawColor(r, 0);
+    return r;
+  }
+
+  setStackedValueXY(r): void {
+    r.valueX = this.options.x(r.value.data);
+    r.cy = this.scale.y(r.value[1]);
   }
 
   getInteractiveCy = (r: any) => this.scale.y(this.options.y(r.value[0]));
 
-  getLinearData(idx, data): {} {
+  private getDrawData(idx, data): {} {
     const r: any = {};
     for (const [k, v] of Object.entries(data)) {
       if (!Array.isArray(data[k])) {
@@ -75,8 +97,7 @@ export abstract class IccAbstractDraw<T> {
       } else {
         r.value = data[k].filter((t, i) => i === idx);
         if (r.value.length > 0) {
-          r.valueX = this.options.x(r.value[0]);
-          r.valueY = this.options.y(r.value[0]);
+          this.setValueXY(r);
           r.cy = this.getInteractiveCy(r);
           r.color = r.value[0].color || this.getdrawColor(r, idx);
         }
@@ -86,6 +107,11 @@ export abstract class IccAbstractDraw<T> {
     r.hovered = this.hoveredKey === r.key;
     r.hasSummary = this.isGrouped;
     return r;
+  }
+
+  setValueXY(r): void {
+    r.valueX = this.options.x(r.value[0]);
+    r.valueY = this.options.y(r.value[0]);
   }
 
   redraw(): void {
