@@ -59,13 +59,11 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   }
 
   drawMouseover(e, data, mouseover: boolean): void {
-    if (e) {
-      if (mouseover) {
-        this.setHovered(e, data);
-      } else {
-        this.hoveredKey = null;
-        this.hoveredIndex = -1;
-      }
+    if (mouseover) {
+      this.setHovered(e, data);
+    } else {
+      this.hoveredKey = null;
+      this.hoveredIndex = -1;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any, i) => data.data && this.options.x(d.data) === this.options.x(data.data))

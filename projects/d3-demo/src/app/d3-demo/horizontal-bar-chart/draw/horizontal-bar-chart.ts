@@ -14,8 +14,8 @@ export class AppHorizontalBarChart<T> extends IccHorizontalBarChart<T> {
 
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e, d) => this.drawMouseover(d, true))
-        .on('mouseout', (e, d) => this.drawMouseover(d, false));
+        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
 
       this.svg.select(drawName).selectAll('g')
         .selectAll('text')

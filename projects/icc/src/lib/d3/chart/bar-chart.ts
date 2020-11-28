@@ -27,18 +27,10 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       .attr('fill', (d: any, i) => this.getBarColor(d, i))
       .attr('x', (d, i) => scaleX(this.options.x(d)))
       .attr('width', this.scale.getXBarWidth(scaleX, this.data));
-
     if (drawName === `.${this.chartType}`) {
       drawContents
-        .on('mouseover', (e: any, d) => {
-          this.drawMouseover(d, true);
-          this.setHovered(e, d);
-        })
-        .on('mouseout', (e, d) => {
-          this.drawMouseover(d, false);
-          this.hoveredKey = null;
-          this.hoveredIndex = -1;
-        });
+        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
     }
     if (this.isAnimation && this.options.duration > 0) {
       drawContents
@@ -64,7 +56,13 @@ export class IccBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
-  drawMouseover(data, mouseover: boolean): void {
+  drawMouseover(e, data, mouseover: boolean): void {
+    if (mouseover) {
+      this.setHovered(e, data);
+    } else {
+      this.hoveredKey = null;
+      this.hoveredIndex = -1;
+    }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
       .filter((d: any) => this.options.x(d) === this.options.x(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
