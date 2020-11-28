@@ -60,28 +60,8 @@ export class IccInteractiveDraw<T> {
   private updateInteractive(e, mouseover: boolean): void {
     const x = e.offsetX - this.options.margin.left + 2;
     const y = e.offsetY - this.options.margin.top + 2;
-    // TODO get bisect idy only for stacked data? //
     let idx = -1;
     let data: any[];
-
-    /*
-    if (this.options.yScaleType !== 'band') {
-      if (this.options.xScaleType !== 'band') {
-        const xScale = this.scale.x as IccScaleLinear;
-        const bisect = d3Array.bisector((d) => this.options.x(d)).right;
-        const x0 = xScale.invert(x);
-        this.draw.data.forEach((d) => {
-          const values = this.options.y0(d);
-          idx = bisect(values, x0);
-        });
-      } else if (this.options.xScaleType === 'band') {
-        const xScale = this.scale.x as IccScaleBand;
-        idx = this.scaleBandInvert(xScale, x);
-      }
-      data = this.getBisectData(idx);
-    } */
-
-
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;
       idx = this.scaleBandInvert(xScale, x);
@@ -97,13 +77,7 @@ export class IccInteractiveDraw<T> {
         idx = bisect(values, x0);
       });
     }
-
-    // } else if (this.options.xScaleType === 'band') {
-
-    // }
     data = this.getBisectData(idx);
-
-
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
@@ -149,19 +123,16 @@ export class IccInteractiveDraw<T> {
         }
       });
     });
-    // console.log(' ndata =', ndata);
     return ndata;
   }
 
   private getPopoverData(idx, data): IccD3Popover {
-    // console.log(' p data =', data);
     let isStacked = false;
     let hasSummary = false;
     let val = '';
     let total = 0;
     const sd = data.filter((d) => !d.disabled && d.value.length > 0)
       .map((d, i) => {
-        // console.log(' d =', d)
         val = d.valueX;
         let svalue = +d.valueY;
         isStacked = d.isStacked;
@@ -195,58 +166,5 @@ export class IccInteractiveDraw<T> {
       series: sd
     };
   }
-
-
-  /*
-
-    public getdrawColor(d, i): string { // TODO get parent defined color?
-    return d && (d.color || this.scale.colors(this.options.drawColor(d, i)));
-  }
-  public drawAllCircles(): void { // TODO
-    if (this.options.xScaleType !== 'band' && this.options.yScaleType !== 'band') {
-      let data = [];
-      this.data.forEach((d, i) => {
-        const key = this.options.x0(d);
-        const draw = this.draw.draws.forEach((dw) => {
-          const odata = this.svg.select(`.${dw.chartType}`).selectAll('g').data();
-          const fdata = odata.filter((od) => key === this.options.x0(od));
-          data = [...data, ...fdata];
-        });
-      });
-      this.svg.select('.interactiveDraw').selectAll('g').remove();
-      const scatterDraw = this.svg.select('.interactiveDraw').selectAll('g')
-        .data(data).enter().append('g')
-        .attr('class', (d, i) => `dataGroup${i}`);
-
-      scatterDraw
-        .style('fill', (d, i) => this.getdrawColor(d, i))
-        .attr('fill-opacity', 0)
-        .selectAll('circle')
-        .data((d, i) => (d && d[0] && d[0].data) ? d : this.options.y0(d))
-        .enter().append('circle')
-        .attr('class', 'circle')
-        .attr('r', (d, i) => 5) // TODO better way ???
-        .on('mouseover', (e: any) => this.onMouseOverNode(e.currentTarget, true))
-        .on('mouseout', (e: any) => this.onMouseOverNode(e.currentTarget, false));
-      this.updateAllCircles();
-    }
-  }
-
-  private onMouseOverNode(currentTarget, mouseover: boolean): void {
-    this.data.forEach((ed, i) => {
-      const group = this.svg.select('.interactiveDraw').select(`.dataGroup${i}`).selectAll('circle');
-      const nodes = group.nodes();
-      const k = nodes.indexOf(currentTarget);
-      if (k > 0) {
-        group.attr('fill-opacity', (d, j) => (mouseover && k === j) ? 1 : null);
-      }
-    });
-  }
-
-  private updateAllCircles(): void {
-    this.svg.select('.interactiveDraw').selectAll('g').selectAll('.circle')
-      .attr('cx', (d: any) => (d && d.data) ? this.scale.x(this.options.x(d.data)) : this.scale.x(this.options.x(d)))
-      .attr('cy', (d: any) => (d && d.data) ? this.scale.y(d[1]) : this.scale.y(this.options.y(d)));
-  } */
 }
 

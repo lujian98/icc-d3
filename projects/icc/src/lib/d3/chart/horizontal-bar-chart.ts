@@ -1,10 +1,8 @@
-import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccScale, IccScaleLinear } from '../model';
 
 export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
-  getInteractiveCy = (r: any) => null;
 
   setHovered(e, d): any {
     const index = this.getHoveredIndex(e);
@@ -13,6 +11,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
   }
 
   setValueXY(r): void {
+    super.setValueXY(r);
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }

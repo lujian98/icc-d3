@@ -1,4 +1,3 @@
-import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
@@ -12,11 +11,6 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
     const data: any = this.data[index.idx];
     this.hoveredKey = data.key; // this only difference
     this.hoveredIndex = index.jdx;
-  }
-
-  setStackedValueXY(r): void {
-    super.setStackedValueXY(r);
-    r.cy = null;
   }
 
   drawChart(data: T[]): void {

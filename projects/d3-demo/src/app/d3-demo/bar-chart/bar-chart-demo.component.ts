@@ -20,7 +20,7 @@ export class AppBarChartDemoComponent implements OnInit {
     y0: (d) => d.values,
     x: (d) => d.letter,
     y: (d) => d.frequency,
-    // useInteractiveGuideline: true,
+    useInteractiveGuideline: true,
     duration: 2000,
     popover: {
       valueFormatter: (d) => d3Format.format(',.3f')(d)
@@ -97,9 +97,6 @@ export class AppBarChartDemoComponent implements OnInit {
       values: STATISTICS
     }];
     this.data = data;
-
-    console.log(' xxxx data =', this.data);
-
   }
 }
 

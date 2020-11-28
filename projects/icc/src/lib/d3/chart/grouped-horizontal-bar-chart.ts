@@ -1,4 +1,3 @@
-import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccGroupedData } from '../data/grouped-data';
 import { IccScaleLinear, IccScaleBand } from '../model';
@@ -16,6 +15,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   }
 
   setValueXY(r): void {
+    super.setValueXY(r);
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }

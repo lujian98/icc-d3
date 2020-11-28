@@ -4,16 +4,15 @@ import { IccScaleDraw } from './scale-draw';
 import { IccScale, IccD3Options } from '../model';
 
 export abstract class IccAbstractDraw<T> {
+  chartType: string;
   protected data: T[];
   protected prevData: T[];
+  protected isAnimation = false;
   protected isStacked = false;
   protected normalized = false;
-
   protected isGrouped = false;
-  chartType: string;
   protected hoveredKey = '';
   protected hoveredIndex = -2;
-  protected isAnimation = false;
 
   abstract drawContents(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
   abstract redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScale, xGroup: IccScale, yGroup: IccScale): void;
@@ -43,6 +42,17 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
+  redraw(): void {
+    this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
+  }
+
+  getdrawColor = (d, i) => d.color || this.scale.colors(this.options.drawColor(d, i));
+
+  getBarColor = (d, i) => d.color || (this.options.barColor && this.scale.colors(this.options.barColor(d, i)));
+
+  getStackeddrawColor = (d, i) => d.color || this.scale.colors(d.key); // key is from stacked data
+
+  // below for popover data
   getDataByIdx(idx, data): {} {
     if (this.hoveredIndex !== -2) {
       idx = this.hoveredIndex;
@@ -51,8 +61,6 @@ export abstract class IccAbstractDraw<T> {
     if (idx > -1 && chartType === this.chartType) {
       if (this.isGrouped) {
         return this.getDrawData(idx, data);
-        // } else if (idx === -1 && !this.isStacked) {
-        //   return this.getDrawData(idx, data);
       } else {
         const key = this.options.x0(data);
         const ndata = this.data.filter((d: any) => key === this.options.x0(d) || (key === d.key));
@@ -63,7 +71,7 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  getStackedData(idx, data): {} {
+  private getStackedData(idx, data): {} {
     const d = data[idx];
     const r: any = {
       key: data.key,
@@ -72,7 +80,6 @@ export abstract class IccAbstractDraw<T> {
       index: data.index,
       hovered: this.hoveredKey === data.key,
       value: d,
-      color: null
     };
     if (d.data) {
       r.valueY = d[1] - d[0];
@@ -87,8 +94,6 @@ export abstract class IccAbstractDraw<T> {
     r.cy = this.scale.y(r.value[1]);
   }
 
-  getInteractiveCy = (r: any) => this.scale.y(this.options.y(r.value[0]));
-
   private getDrawData(idx, data): {} {
     const r: any = {};
     for (const [k, v] of Object.entries(data)) {
@@ -98,7 +103,6 @@ export abstract class IccAbstractDraw<T> {
         r.value = data[k].filter((t, i) => i === idx);
         if (r.value.length > 0) {
           this.setValueXY(r);
-          r.cy = this.getInteractiveCy(r);
           r.color = r.value[0].color || this.getdrawColor(r, idx);
         }
       }
@@ -112,17 +116,8 @@ export abstract class IccAbstractDraw<T> {
   setValueXY(r): void {
     r.valueX = this.options.x(r.value[0]);
     r.valueY = this.options.y(r.value[0]);
+    r.cy = this.scale.y(this.options.y(r.value[0]));
   }
-
-  redraw(): void {
-    this.redrawContent(`.${this.chartType}`, this.scale.x, this.scale.y, this.scale.xGroup, this.scale.yGroup);
-  }
-
-  getdrawColor = (d, i) => d.color || this.scale.colors(this.options.drawColor(d, i));
-
-  getBarColor = (d, i) => d.color || (this.options.barColor && this.scale.colors(this.options.barColor(d, i)));
-
-  getStackeddrawColor = (d, i) => d.color || this.scale.colors(d.key); // key is from stacked data
 
   getHoveredIndex(e): any {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');

@@ -1,4 +1,3 @@
-import * as d3 from 'd3-selection';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccStackedData } from '../data/stacked-data';
 import { IccScale, IccScaleLinear } from '../model';
@@ -17,7 +16,6 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
   setStackedValueXY(r): void {
     super.setStackedValueXY(r);
     r.valueX = this.options.y(r.value.data);
-    r.cy = null;
   }
 
   drawChart(data: T[]): void {

@@ -3,7 +3,6 @@ import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
-  getInteractiveCy = (r: any) => null;
 
   setHovered(e, d): any {
     const index = this.getHoveredIndex(e);
