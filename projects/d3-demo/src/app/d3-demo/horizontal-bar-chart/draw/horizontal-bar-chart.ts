@@ -1,5 +1,8 @@
 import { IccHorizontalBarChart, IccScale, IccScaleLinear } from 'icc';
 import * as d3Transition from 'd3-transition';
+import * as d3Interpolate from 'd3-interpolate';
+import * as d3Format from 'd3-format';
+import * as d3Ease from 'd3-ease';
 
 export class AppHorizontalBarChart<T> extends IccHorizontalBarChart<T> {
 
@@ -38,32 +41,25 @@ export class AppHorizontalBarChart<T> extends IccHorizontalBarChart<T> {
           .attr('font-weight', 'normal')
           // .attr('x', -6)
           .attr('dy', '1.15em')
-          .text((d: any) => {
-            return d.value;
-          })
         );
 
+      this.svg.select(drawName).selectAll('g').selectAll('tspan')
+        .transition()
+        .duration(200)
+        .ease(d3Ease.easeLinear)
+        .tween('text', (d: any, i) => {
+          let start = 0;
+          if (this.prevData) {
+            const data = this.options.y0(this.prevData[0]).filter((t, j) => i === j);
+            if (data.length > 0) {
+              start = +data[0].value;
+            }
+          }
+          // const tt = this.textTween(start, +d.value);
+          // console.log(' tt =', tt)
+          return this.textTween(start, +d.value);
+        });
     }
-
-    /*
-
-        const transition = svg.transition()
-        .duration(duration)
-        .ease(d3.easeLinear);
-
-    .call(bar => bar.transition(transition)
-      .attr("transform", d => `translate(${x(d.value)},${y(d.rank)})`)
-      .call(g => g.select("tspan").tween("text", d => textTween((prev.get(d) || d).value, d.value))))
-formatNumber = d3.format(",d")
-
-function textTween(a, b) {
-  const i = d3.interpolateNumber(a, b);
-  return function(t) {
-    this.textContent = formatNumber(i(t));
-  };
-}
-
-          */
 
     if (this.isAnimation && this.options.duration > 0) {
       drawContents
@@ -78,6 +74,13 @@ function textTween(a, b) {
         .attr('x', (d, i) => scaleX(Math.min(0, this.options.x(d))))
         .attr('width', (d, i) => scaleX(Math.abs(this.options.x(d))) - scaleX(0));
     }
+  }
+
+  textTween(a, b): any {
+    const i = d3Interpolate.interpolateNumber(a, b);
+    return function (t) {
+      this.textContent = d3Format.format(',d')(i(t));
+    };
   }
 }
 
