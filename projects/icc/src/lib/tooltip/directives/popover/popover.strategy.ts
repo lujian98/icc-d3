@@ -122,3 +122,30 @@ export class IccPopoverContextmenuStrategy extends IccBasePopoverStrategy {
     takeWhile(() => this.alive)
   );
 }
+
+export class IccPopoverPointStrategy extends IccBasePopoverStrategy {
+  show$ = fromEvent(this.host, 'mouseenter')
+    .pipe(
+      filter(() => !this.isOpened),
+      switchMap(enterEvent =>
+        fromEvent(document, 'mousemove')
+          .pipe(
+            startWith(enterEvent),
+            debounceTime(100),
+            filter(event => this.host.contains(event.target as Node))
+          )
+      ),
+      takeWhile(() => this.alive)
+    );
+  hide$ = fromEvent(document, 'mousemove')
+    .pipe(
+      debounceTime(10),
+      filter(() => this.isOpened),
+      filter(event => this.isMovedOutside(event)),
+      takeWhile(() => this.alive)
+    );
+
+  private isMovedOutside(event): boolean {
+    return !(this.host.contains(event.target as Node));
+  }
+}

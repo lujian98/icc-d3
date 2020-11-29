@@ -7,7 +7,7 @@ import { IccOverlayConfig } from '../../services/overlay/overlay.model';
 import { IccOverlayService } from '../../services/overlay/overlay.service';
 import {
   IccBasePopoverStrategy, IccPopoverClickStrategy, IccPopoverHoverStrategy,
-  IccPopoverContextmenuStrategy
+  IccPopoverContextmenuStrategy, IccPopoverPointStrategy
 } from './popover.strategy';
 
 
@@ -41,6 +41,8 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
       } else if (this.popoverType === 'contextmenu') {
         this.popoverStrategy = new IccPopoverContextmenuStrategy(document, this.elementRef.nativeElement);
         this.popoverStrategy.change$.subscribe((event: MouseEvent) => this.closePopover());
+      } else if (this.popoverType === 'point') {
+        this.popoverStrategy = new IccPopoverPointStrategy(document, this.elementRef.nativeElement);
       } else {
         this.popoverStrategy = new IccPopoverHoverStrategy(document, this.elementRef.nativeElement);
       }
@@ -58,9 +60,9 @@ export class IccPopoverDirective<T> implements OnInit, OnDestroy {
           getBoundingClientRect: (): ClientRect => ({
             bottom: mouseEvent.clientY,
             height: 0,
-            left: mouseEvent.clientX + 20,
+            left: mouseEvent.clientX,
             right: mouseEvent.clientX,
-            top: mouseEvent.clientY + 20,
+            top: mouseEvent.clientY,
             width: 0,
           })
         };

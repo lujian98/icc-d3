@@ -84,6 +84,8 @@ export class IccOverlayService<T> {
     let positions = this.getPositions(config.position);
     if (config.popoverType === 'contextmenu') {
       positions = this.contextPositionStrategy();
+    } else if (config.popoverType === 'point') {
+      positions = this.pointPositionStrategy();
     }
     // TODO define the position from the config.position and offset.
     return this.overlay
@@ -95,6 +97,16 @@ export class IccOverlayService<T> {
     // .withViewportMargin(8)
     // .withDefaultOffsetY(10)
     // }
+  }
+
+  pointPositionStrategy(): ConnectionPositionPair[] {
+    const postions: ConnectionPositionPair[] = [
+      { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetX: 10, offsetY: 10 },
+      { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'top', offsetX: -10, offsetY: 10 },
+      { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetX: 10, offsetY: -10 },
+      { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetX: -10, offsetY: -10 },
+    ];
+    return postions;
   }
 
   contextPositionStrategy(): ConnectionPositionPair[] {
