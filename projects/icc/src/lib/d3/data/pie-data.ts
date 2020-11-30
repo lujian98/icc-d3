@@ -8,13 +8,13 @@ export class IccPieData<T> {
   ) {
   }
 
-  getPieData(data: T[]): any[] {  // default 0pi - 2pi
+  getPieData(data: T[]): any[] {
     const pie = d3Shape.pie()
       .padAngle(0.005) // TODO options?
       .sort(null)
       .value((d: any) => this.options.y(d))
-      .startAngle(Math.PI * -0) // TODO options?
-      .endAngle(Math.PI * 2);   // TODO options?
+      .startAngle(this.options.pie.startAngle)
+      .endAngle(this.options.pie.endAngle);
     const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
     return pie([...mdata]);
   }

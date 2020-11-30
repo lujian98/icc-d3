@@ -71,6 +71,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   cloneData = (data: T[]) => data && data.map((d) => Object.assign({}, d));
 
   public updateChart(data: T[]): void {
+    this.chartTypes = this.getChartTypes(data);
     if (this.isViewReady && data) {
       if (!this.svg) {
         this.createChart(data);
@@ -102,7 +103,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public createChart(data: T[]): void {
-    this.chartTypes = this.getChartTypes(data);
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
     this.view = new IccView(this.elementRef, this.options, this.chartTypes);
@@ -181,19 +181,32 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     for (const [key, value] of Object.entries(this.options)) {
       if (key === 'zoom') {
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
+      } else if (key === 'pie') {
+        this.options.pie = { ...DEFAULT_CHART_OPTIONS.pie, ...this.options.pie };
       } else if (key === 'popover') {
         this.options.popover = { ...DEFAULT_CHART_OPTIONS.popover, ...this.options.popover };
       }
     }
     this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };
     const chartTypes = [this.options.chartType];
-    data.forEach((d: any) => {
+    this.data = this.checkData(data);
+    this.data.forEach((d: any) => {
       if (d.chartType && chartTypes.filter((type) => type === d.chartType).length === 0) {
         chartTypes.push(d.chartType);
       }
     });
-    // console.log( ' this.options =', this.options)
     return chartTypes;
+  }
+
+  private checkData(data: T[]): any[] {
+    if (this.options.chartType === 'pieChart' && !this.options.y0(data[0])) {
+      return [{
+        key: 'Pie Chart',
+        values: data,
+      }];
+    } else {
+      return data;
+    }
   }
 
   ngOnDestroy(): void {

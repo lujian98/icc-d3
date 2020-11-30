@@ -36,7 +36,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
     const radius = Math.min(this.options.drawWidth, this.options.drawHeight) / 2;
     return d3Shape.arc()
-      .innerRadius(radius * 0.67) // TODO options
+      .innerRadius(radius * Math.min(0.95, this.options.pie.donut))
       .outerRadius(radius - 10 + grow);
   }
 
