@@ -15,6 +15,8 @@ import { IccHorizontalBarChart } from './chart/horizontal-bar-chart';
 import { IccGroupedHorizontalBarChart } from './chart/grouped-horizontal-bar-chart';
 import { IccStackedHorizontalBarChart } from './chart/stacked-horizontal-bar-chart';
 
+import { IccPieChart } from './chart/pie-chart';
+
 import { IccCandleStickBarChart } from './chart/candle-stick-bar-chart';
 
 @Injectable()
@@ -36,6 +38,8 @@ export class IccDrawServie<T> {
     groupedHorizontalBarChart: IccGroupedHorizontalBarChart,
     stackedHorizontalBarChart: IccStackedHorizontalBarChart,
     stackedNormalizedHorizontalBarChart: IccStackedHorizontalBarChart,
+
+    pieChart: IccPieChart,
 
     candleStickBarChart: IccCandleStickBarChart,
   };

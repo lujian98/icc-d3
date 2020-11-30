@@ -52,7 +52,8 @@ export class IccLegendDraw<T> {
   }
 
   private drawLegend(): void {
-    const legendArea = this.svg.select('.legendArea').selectAll('g').data(this.data);
+    const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
+    const legendArea = this.svg.select('.legendArea').selectAll('g').data(data);
     const legendDraw = legendArea.enter().append('g').attr('class', 'legends');
 
     legendDraw.append('circle')
