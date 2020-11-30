@@ -14,8 +14,8 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName)
       .attr('stroke', 'white')
-      .selectAll('g').data(this.data).join('g')
-      .append('path')
+      .selectAll('path').data(this.data).join('path')
+      // .append('path')
       .attr('transform', (d: any) => `translate(${this.options.drawWidth / 2}, ${this.options.drawHeight / 2})`)
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
@@ -23,7 +23,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
+    const drawContents = this.svg.select(drawName).selectAll('.draw')
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .attr('d', this.drawArc());
     if (drawName === `.${this.chartType}`) {
@@ -41,9 +41,10 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   drawMouseover(e, data, mouseover: boolean): void {
-    this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
+    this.svg.select(`.${this.chartType}`).selectAll('.draw')
+      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .filter((d: any) => d.index === data.index)
-      .transition().duration(70)
+      .transition().duration(50)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
       .attr('d', mouseover ? this.drawArc(5) : this.drawArc());
   }
@@ -52,9 +53,10 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     if (e) {
       // this.hoveredKey = mouseover ? this.options.x0(data) : null;
     }
-    this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
+
+    this.svg.select(`.${this.chartType}`).selectAll('.draw')
+      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .filter((d: any) => [d.data].indexOf(data) !== -1)
-      .transition().duration(70)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
       .attr('d', mouseover ? this.drawArc(5) : this.drawArc());
   }

@@ -15,7 +15,7 @@ export class IccPieData<T> {
       .value((d: any) => this.options.y(d))
       .startAngle(Math.PI * -0) // TODO options?
       .endAngle(Math.PI * 2);   // TODO options?
-    const mdata = this.options.y0(data[0]);
+    const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
     return pie([...mdata]);
   }
 }
