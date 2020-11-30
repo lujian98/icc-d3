@@ -195,8 +195,7 @@ export class IccScaleDraw<T> {
 
   public setColorDomain(data: T[]): void {
     let keys = data.map((d) => this.options.drawColor(d));
-
-    if (this.options.chartType === 'barChart') { // TODO all array data to get unique keys
+    if (this.options.chartType === 'barChart' || this.options.chartType === 'pieChart') {
       const values = this.options.y0(data[0]);
       keys = values.map((d) => this.options.drawColor(d));
     }
