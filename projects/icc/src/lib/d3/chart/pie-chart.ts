@@ -6,35 +6,55 @@ import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 export class IccPieChart<T> extends IccAbstractDraw<T> {
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return this.options.y0(data).map((d, i) => {
-      return {
-        key: this.options.x(d),
-        value: d,
-        color: d.color || this.getdrawColor(d, idx),
-        valueX: null,
-        valueY: this.options.y(d),
-        cy: null,
-        hovered: i === idx,
-        hasSummary: null
-      };
-    });
+    return this.options.y0(data).filter((d) => !d.disabled)
+      .map((d, i) => {
+        return {
+          key: this.options.x(d),
+          value: d,
+          color: d.color || this.getdrawColor(d, idx),
+          valueX: null,
+          valueY: this.options.y(d),
+          cy: null,
+          hovered: i === idx,
+          hasSummary: true
+        };
+      });
   }
 
   drawChart(data: T[]): void {
     const pie = new IccPieData(this.options);
     const piedata = pie.getPieData(data);
+    console.log(' piedata =', piedata);
     super.drawChart(piedata);
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName)
-      .attr('stroke', 'white')
+      // .attr('stroke', 'white')
       .selectAll('g').data(this.data).join('g')
       .append('path')
       .attr('transform', (d: any) => `translate(${this.options.drawWidth / 2}, ${this.options.drawHeight / 2})`)
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
     this.redrawContent(drawName, scaleX, scaleY);
+
+
+    this.svg.select(drawName)
+      .selectAll('text').data(this.data).join('text')
+      // .append('text')
+      .attr('class', 'label')
+      .text((d: any) => this.options.x(d.data))
+      .attr('text-anchor', 'middle')
+      .attr('alignment-baseline', 'middle')
+      .attr('transform', (d: any) => {
+        const center = this.drawArc().centroid(d);
+        const angle = (d.startAngle + d.endAngle) / 2;
+        const midAngle = angle < Math.PI ? angle : angle + Math.PI;
+        center[0] = center[0] + this.options.drawWidth / 2;
+        center[1] = center[1] + this.options.drawHeight / 2;
+        return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
+      });
+
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -46,6 +66,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
     }
+    // this.svg.select(drawName).selectAll('g').select('.label')
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
@@ -71,7 +92,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       })
       .transition().duration(50)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
-      .attr('d', mouseover ? this.drawArc(5) : this.drawArc());
+      .attr('d', mouseover ? this.drawArc(7) : this.drawArc());
   }
 
   legendMouseover(e, data, mouseover: boolean): void {
