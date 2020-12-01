@@ -5,11 +5,19 @@ import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
 export class IccPieChart<T> extends IccAbstractDraw<T> {
 
-  setValueXY(r: IccD3Interactive, idx: number): void {
-    r.key = r.valueX;
-    r.valueX = null;
-    r.cy = null;
-    r.color = r.value[0].color || this.getdrawColor(r.value[0], idx);
+  getDrawData(idx: number, data: T): IccD3Interactive[] {
+    return this.options.y0(data).map((d, i) => {
+      return {
+        key: this.options.x(d),
+        value: d,
+        color: d.color || this.getdrawColor(d, idx),
+        valueX: null,
+        valueY: this.options.y(d),
+        cy: null,
+        hovered: i === idx,
+        hasSummary: null
+      };
+    });
   }
 
   drawChart(data: T[]): void {
@@ -49,13 +57,11 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
 
   drawMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      // .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .filter((d: any) => {
         if (d.index === data.index) {
           if (mouseover) {
             this.hoveredKey = this.options.x(d.data);
             this.hoveredIndex = d.index;
-            console.log(' 2222 d =', d, 'this.hoveredKey =', this.hoveredKey, ' this.hoveredIndex =', this.hoveredIndex);
           } else {
             this.hoveredKey = null;
             this.hoveredIndex = -1;
@@ -69,12 +75,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   legendMouseover(e, data, mouseover: boolean): void {
-    if (e) {
-      // this.hoveredKey = mouseover ? this.options.x0(data) : null;
-    }
-
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      // .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .filter((d: any) => [d.data].indexOf(data) !== -1)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
       .attr('d', mouseover ? this.drawArc(5) : this.drawArc());

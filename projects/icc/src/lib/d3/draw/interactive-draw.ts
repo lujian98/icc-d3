@@ -130,7 +130,7 @@ export class IccInteractiveDraw<T> {
     let hasSummary = false;
     let val = '';
     let total = 0;
-    const sd: IccD3PopoverSerie[] = data.filter((d) => d.value.length > 0)
+    const sd: IccD3PopoverSerie[] = data.filter((d) => d.value)
       .map((d, i) => {
         val = d.valueX;
         let svalue = +d.valueY;

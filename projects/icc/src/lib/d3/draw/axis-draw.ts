@@ -10,9 +10,11 @@ export class IccAxisDraw<T> {
     private scale: IccScaleDraw<T>,
     private options: IccD3Options,
   ) {
-    this.drawID = Math.floor(Math.random() * 100000);
-    this.init();
-    this.update();
+    if (this.options.chartType !== 'pieChart') {
+      this.drawID = Math.floor(Math.random() * 100000);
+      this.init();
+      this.update();
+    }
   }
 
   init(): void {
