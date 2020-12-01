@@ -49,7 +49,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       .attr('transform', (d: any) => {
         const center = this.drawArc().centroid(d);
         const angle = (d.startAngle + d.endAngle) / 2;
-        const midAngle = angle < Math.PI ? angle : angle + Math.PI;
+        const midAngle = angle < Math.PI && angle > 0 ? angle : angle + Math.PI;
         center[0] = center[0] + this.options.drawWidth / 2;
         center[1] = center[1] + this.options.drawHeight / 2;
         return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;

@@ -38,8 +38,8 @@ export class AppPieChartDemoComponent implements OnInit {
     y: (d) => d.y,
     drawColor: (d, i) => d.key,
     pie: {
-      // startAngle: -Math.PI * 0.5,
-      // endAngle: Math.PI * 0.5
+      startAngle: -Math.PI * 0.5,
+      endAngle: Math.PI * 1.5
     },
     zoom: {
       enabled: false,
