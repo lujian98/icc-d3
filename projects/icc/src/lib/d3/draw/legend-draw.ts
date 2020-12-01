@@ -70,7 +70,7 @@ export class IccLegendDraw<T> {
       .attr('dy', '.32em')
       .attr('dx', '8')
       .attr('fill', (d, i) => this.getLegendColor(d, i))
-      .text((d) => this.options.x0(d));
+      .text((d) => this.options.chartType === 'pieChart' ? this.options.x(d) : this.options.x0(d));
 
     legendDraw
       .on('click', (e, d: any) => {

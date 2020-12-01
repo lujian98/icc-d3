@@ -25,6 +25,7 @@ import { AppStackedHorizontalBarDemoComponent } from './horizontal-bar-chart/sta
 import { AppStockHistoryDemoComponent } from './horizontal-bar-chart/stock-history-demo.component';
 
 import { AppPieChartDemoComponent } from './pie-chart/pie-chart-demo.component';
+import { AppDonutChartDemoComponent } from './pie-chart/donut-chart-demo.component';
 
 import { AppCandleStickChartDemoComponent } from './candle-stick-chart/candle-stick-chart-demo.component';
 
@@ -49,6 +50,7 @@ const components = [
   AppStockHistoryDemoComponent,
 
   AppPieChartDemoComponent,
+  AppDonutChartDemoComponent,
 
   AppCandleStickChartDemoComponent
 ];
