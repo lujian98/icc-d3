@@ -53,7 +53,7 @@ export abstract class IccAbstractDraw<T> {
   getStackeddrawColor = (d, i) => d.color || this.scale.colors(d.key); // key is from stacked data
 
   // below for popover data
-  getInteractiveData(idx, data): IccD3Interactive {
+  getInteractiveData(idx, data): IccD3Interactive[] {
     if (this.hoveredIndex !== -2) {
       idx = this.hoveredIndex;
     }
@@ -73,7 +73,7 @@ export abstract class IccAbstractDraw<T> {
     }
   }
 
-  private getStackedData(idx: number, data): IccD3Interactive {
+  private getStackedData(idx: number, data): IccD3Interactive[] {
     const d = data[idx];
     if (d.data) {
       const r: IccD3Interactive = {
@@ -88,11 +88,11 @@ export abstract class IccAbstractDraw<T> {
         hasSummary: !this.normalized
       };
       this.setValueXY(r, idx);
-      return r;
+      return [r];
     }
   }
 
-  getDrawData(idx: number, data: T): IccD3Interactive {
+  getDrawData(idx: number, data: T): IccD3Interactive[] {
     const d = this.options.y0(data).filter((t, i) => i === idx);
     if (d.length > 0) {
       const r: IccD3Interactive = {
@@ -106,7 +106,7 @@ export abstract class IccAbstractDraw<T> {
         hasSummary: this.isGrouped
       };
       this.setValueXY(r, idx);
-      return r;
+      return [r];
     }
   }
 

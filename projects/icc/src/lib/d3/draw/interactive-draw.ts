@@ -118,7 +118,7 @@ export class IccInteractiveDraw<T> {
       this.draw.draws.forEach((draw) => {
         const drawdata = draw.getInteractiveData(idx, d);
         if (drawdata) {
-          ndata.push(drawdata);
+          ndata.push(...drawdata);
         }
       });
     });
