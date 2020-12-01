@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
-import { IccD3Options } from './model';
 import { IccScaleDraw } from './draw/scale-draw';
 import { IccAbstractDraw } from './draw/abstract-draw';
 import { IccLineChart } from './chart/line-chart';

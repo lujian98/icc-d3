@@ -13,6 +13,7 @@ export * from './draw/scale-draw';
 export * from './draw/zoom-draw';
 
 export * from './data/grouped-data';
+export * from './data/pie-data';
 export * from './data/stacked-data';
 
 export * from './scale/abstract-scale';
