@@ -18,5 +18,10 @@ icc-d3 {
   .grid path {
     stroke-width: 0;
   }
+
+  .drawlabel {
+    pointer-events: none;
+  }
 }
+
 

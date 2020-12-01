@@ -28,6 +28,10 @@ export abstract class IccAbstractDraw<T> {
     this.chartType = chartType;
   }
 
+  updateOptions(options: IccD3Options): void {
+    this.options = options;
+  }
+
   drawChart(data: T[]): void {
     this.prevData = this.data;
     this.data = data;

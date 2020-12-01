@@ -128,6 +128,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.draws.forEach((draw: IccAbstractDraw<T>) => {
       const drawData = data.filter((d: any) => !d.disabled &&
         (d.chartType === draw.chartType || (this.options.chartType === draw.chartType && !d.chartType)));
+      draw.updateOptions(this.options);
       draw.drawChart(drawData);
     });
   }

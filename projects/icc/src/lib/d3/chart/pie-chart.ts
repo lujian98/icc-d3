@@ -24,25 +24,36 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   drawChart(data: T[]): void {
     const pie = new IccPieData(this.options);
     const piedata = pie.getPieData(data);
-    console.log(' piedata =', piedata);
+    // console.log(' piedata =', piedata);
     super.drawChart(piedata);
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName)
-      // .attr('stroke', 'white')
       .selectAll('g').data(this.data).join('g')
       .append('path')
-      .attr('transform', (d: any) => `translate(${this.options.drawWidth / 2}, ${this.options.drawHeight / 2})`)
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
+
+    this.svg.select(`${drawName}Label`)
+      .selectAll('g').data(this.data).join('g')
+      .append('text')
+      .attr('class', 'drawlabel');
+
     this.redrawContent(drawName, scaleX, scaleY);
+  }
 
-
-    this.svg.select(drawName)
-      .selectAll('text').data(this.data).join('text')
-      // .append('text')
-      .attr('class', 'label')
+  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
+    const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
+      .attr('transform', (d: any) => `translate(${this.options.drawWidth / 2}, ${this.options.drawHeight / 2})`)
+      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
+      .attr('d', this.drawArc());
+    if (drawName === `.${this.chartType}`) {
+      drawContents
+        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+        .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
+    }
+    this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .text((d: any) => this.options.x(d.data))
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
@@ -54,19 +65,6 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         center[1] = center[1] + this.options.drawHeight / 2;
         return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
       });
-
-  }
-
-  redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
-      .attr('d', this.drawArc());
-    if (drawName === `.${this.chartType}`) {
-      drawContents
-        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
-        .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
-    }
-    // this.svg.select(drawName).selectAll('g').select('.label')
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {

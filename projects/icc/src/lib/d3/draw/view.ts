@@ -77,6 +77,7 @@ export class IccView {
 
     this.chartTypes.forEach((type) => {
       drawArea.append('g').attr('class', type).attr('clip-path', `url(#clip${drawID})`);
+      drawArea.append('g').attr('class', `${type}Label`).attr('clip-path', `url(#clip${drawID})`);
       brushDraw.append('g').attr('class', `${type}Brush`);
       brushDraw.append('g').attr('class', `${type}BrushY`);
     });
