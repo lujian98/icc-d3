@@ -61,6 +61,8 @@ export abstract class IccAbstractDraw<T> {
     if (idx > -1 && chartType === this.chartType) {
       if (this.isGrouped) {
         return this.getDrawData(idx, data);
+      } else if (this.options.chartType === 'pieChart') {
+        return this.getDrawData(idx, data);
       } else {
         const key = this.options.x0(data);
         const ndata = this.data.filter((d: any) => key === this.options.x0(d) || (key === d.key));
@@ -85,12 +87,12 @@ export abstract class IccAbstractDraw<T> {
         hovered: this.hoveredKey === data.key,
         hasSummary: !this.normalized
       };
-      this.setValueXY(r);
+      this.setValueXY(r, idx);
       return r;
     }
   }
 
-  private getDrawData(idx: number, data: T): IccD3Interactive {
+  getDrawData(idx: number, data: T): IccD3Interactive {
     const d = this.options.y0(data).filter((t, i) => i === idx);
     if (d.length > 0) {
       const r: IccD3Interactive = {
@@ -103,12 +105,12 @@ export abstract class IccAbstractDraw<T> {
         hovered: this.hoveredKey === this.options.x0(data),
         hasSummary: this.isGrouped
       };
-      this.setValueXY(r);
+      this.setValueXY(r, idx);
       return r;
     }
   }
 
-  setValueXY(r: IccD3Interactive): void { }
+  setValueXY(r: IccD3Interactive, idx: number): void { }
 
   getHoveredIndex(e): { idx: number, jdx: number } {
     const group = this.svg.select(`.${this.chartType}`).selectAll('g');

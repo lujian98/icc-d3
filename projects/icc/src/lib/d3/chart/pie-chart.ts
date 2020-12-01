@@ -1,9 +1,16 @@
 import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
-import { IccScale, IccScaleLinear } from '../model';
+import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
 export class IccPieChart<T> extends IccAbstractDraw<T> {
+
+  setValueXY(r: IccD3Interactive, idx: number): void {
+    r.key = r.valueX;
+    r.valueX = null;
+    r.cy = null;
+    r.color = r.value[0].color || this.getdrawColor(r.value[0], idx);
+  }
 
   drawChart(data: T[]): void {
     const pie = new IccPieData(this.options);
@@ -42,8 +49,20 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
 
   drawMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
-      .filter((d: any) => d.index === data.index)
+      // .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
+      .filter((d: any) => {
+        if (d.index === data.index) {
+          if (mouseover) {
+            this.hoveredKey = this.options.x(d.data);
+            this.hoveredIndex = d.index;
+            console.log(' 2222 d =', d, 'this.hoveredKey =', this.hoveredKey, ' this.hoveredIndex =', this.hoveredIndex);
+          } else {
+            this.hoveredKey = null;
+            this.hoveredIndex = -1;
+          }
+          return true;
+        }
+      })
       .transition().duration(50)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
       .attr('d', mouseover ? this.drawArc(5) : this.drawArc());
@@ -55,7 +74,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     }
 
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
+      // .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .filter((d: any) => [d.data].indexOf(data) !== -1)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
       .attr('d', mouseover ? this.drawArc(5) : this.drawArc());

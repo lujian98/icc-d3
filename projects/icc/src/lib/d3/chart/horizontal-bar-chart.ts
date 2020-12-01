@@ -10,7 +10,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredIndex = index.jdx;
   }
 
-  setValueXY(r: IccD3Interactive): void {
+  setValueXY(r: IccD3Interactive, idx: number): void {
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }

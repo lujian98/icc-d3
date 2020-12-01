@@ -199,6 +199,7 @@ export class IccScaleDraw<T> {
       const values = this.options.y0(data[0]);
       keys = values.map((d) => this.options.drawColor(d));
     }
+    console.log( 'ffffffffffffff  keys =', keys)
     this.colors.domain(keys);
   }
 }

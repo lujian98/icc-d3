@@ -14,7 +14,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     this.hoveredKey = this.options.x0(nd[index.jdx]);
   }
 
-  setValueXY(r: IccD3Interactive): void {
+  setValueXY(r: IccD3Interactive, idx: number): void {
     r.valueX = this.options.y(r.value[0]);
     r.valueY = this.options.x(r.value[0]);
   }
