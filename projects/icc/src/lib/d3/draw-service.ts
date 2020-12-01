@@ -49,7 +49,6 @@ export class IccDrawServie<T> {
   getDraw(
     svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     scale: IccScaleDraw<T>,
-    options: IccD3Options,
     dispatch: d3Dispatch.Dispatch<{}>,
     chartType: string
   ): IccAbstractDraw<T> {
@@ -57,7 +56,7 @@ export class IccDrawServie<T> {
     if (!component) {
       component = this.componentMapper.lineChart;
     }
-    const componentRef = new component(svg, scale, options, dispatch, chartType);
+    const componentRef = new component(svg, scale, dispatch, chartType);
     return componentRef;
   }
 }

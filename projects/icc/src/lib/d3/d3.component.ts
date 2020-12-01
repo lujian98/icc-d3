@@ -71,6 +71,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   cloneData = (data: T[]) => data && data.map((d) => Object.assign({}, d));
 
   public updateChart(data: T[]): void {
+    this.initOptions();
+    this.data = this.checkData(data);
     this.chartTypes = this.getChartTypes(data);
     if (this.isViewReady && data) {
       if (!this.svg) {
@@ -113,7 +115,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
 
     this.chartTypes.forEach((type) => {
-      const draw = this.drawServie.getDraw(this.svg, this.scale, this.options, this.dispatch, type);
+      const draw = this.drawServie.getDraw(this.svg, this.scale, this.dispatch, type);
       this.draws.push(draw);
     });
     this.setDrawDomain(data);
@@ -178,7 +180,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.draws.forEach((draw: IccAbstractDraw<T>) => draw.redraw());
   }
 
-  private getChartTypes(data: T[]): string[] {
+  private initOptions(): void {
     for (const [key, value] of Object.entries(this.options)) {
       if (key === 'zoom') {
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
@@ -189,25 +191,27 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       }
     }
     this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };
+  }
+
+  private getChartTypes(data: T[]): string[] {
     const chartTypes = [this.options.chartType];
-    this.data = this.checkData(data);
-    this.data.forEach((d: any) => {
-      if (d.chartType && chartTypes.filter((type) => type === d.chartType).length === 0) {
-        chartTypes.push(d.chartType);
-      }
-    });
+    if (data) {
+      data.forEach((d: any) => {
+        if (d.chartType && chartTypes.filter((type) => type === d.chartType).length === 0) {
+          chartTypes.push(d.chartType);
+        }
+      });
+    }
     return chartTypes;
   }
 
   private checkData(data: T[]): any[] {
-    if (this.options.chartType === 'pieChart' && !this.options.y0(data[0])) {
-      return [{
+    return data && this.options.chartType === 'pieChart' && !this.options.y0(data[0]) ?
+      [{
         key: 'Pie Chart',
         values: data,
-      }];
-    } else {
-      return data;
-    }
+      }]
+      : data;
   }
 
   ngOnDestroy(): void {

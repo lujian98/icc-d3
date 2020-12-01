@@ -6,6 +6,7 @@ import { IccScale, IccD3Options, IccD3Interactive } from '../model';
 export abstract class IccAbstractDraw<T> {
   chartType: string;
   protected data: T[];
+  protected options: IccD3Options;
   protected prevData: T[];
   protected isAnimation = false;
   protected isStacked = false;
@@ -21,7 +22,6 @@ export abstract class IccAbstractDraw<T> {
   constructor(
     protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     protected scale: IccScaleDraw<T>,
-    protected options: IccD3Options,
     protected dispatch: d3Dispatch.Dispatch<{}>,
     chartType: string
   ) {
