@@ -4,11 +4,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Angular d3 demo: https://github.com/lujian98/angular-d3-demo
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-
 ## Build
 
 npm install
