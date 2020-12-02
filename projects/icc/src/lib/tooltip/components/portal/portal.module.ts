@@ -16,6 +16,7 @@ import { IccPortalComponent } from './portal.component';
     IccPortalComponent
   ],
   entryComponents: [
+    IccPortalComponent
   ],
   providers: [],
   bootstrap: []
