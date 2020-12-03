@@ -58,8 +58,11 @@ export class IccInteractiveDraw<T> {
   }
 
   private updateInteractive(e, mouseover: boolean): void {
-    const x = e.offsetX - this.options.margin.left + 2;
-    const y = e.offsetY - this.options.margin.top + 2;
+    const dx = (this.draw.platform.BLINK ? this.options.margin.left : 0) - 2;
+    const dy = (this.draw.platform.BLINK ? +this.options.margin.top : 0) - 2;
+    const x = e.offsetX - dx;
+    const y = e.offsetY - dy;
+    // console.log('x =', x, ' draw.platform =', this.draw.platform)
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;

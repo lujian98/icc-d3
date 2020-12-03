@@ -87,12 +87,12 @@ export class AppBarChartDemoComponent implements OnInit {
   ngOnInit() {
     const data = [{
       label: 'Frequency',
-      chartType: 'barChart',
+      chartType: 'lineChart',
       color: 'blue',
       values: STATISTICS
     }, {
       label: 'Frequency',
-      chartType: 'lineChart',
+      chartType: 'barChart',
       color: 'green',
       values: STATISTICS
     }];
