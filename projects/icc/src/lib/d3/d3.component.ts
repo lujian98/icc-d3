@@ -2,7 +2,6 @@ import {
   AfterViewInit, Component, ViewChild, ElementRef, HostListener, Input, OnChanges,
   OnDestroy, OnInit, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, share, switchMap, takeWhile } from 'rxjs/operators';
 import * as d3 from 'd3-selection';
@@ -48,7 +47,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   constructor(
     protected elementRef: ElementRef,
     private drawServie: IccDrawServie<T>,
-    public platform: Platform,
   ) {
     this.setDispatch();
   }
