@@ -26,9 +26,9 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     },
     zoom: {
       enabled: true,
-      horizontalOff: false,
+      horizontalOff: true,
       horizontalBrushShow: true,
-      verticalOff: true,
+      verticalOff: false,
       verticalBrushShow: true
     }
   };

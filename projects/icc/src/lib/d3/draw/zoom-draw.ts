@@ -190,6 +190,9 @@ export class IccZoomDraw<T> {
       this.scale.y.range(x);
     }
     this.redraw();
+    this.svg.select('.drawArea').call(this.zoom.transform, d3Zoom.zoomIdentity
+      .scale(this.options.drawHeight / (range[1] - range[0]))
+      .translate(0, -range[0])); // TODO x = 0 is incorrect
   }
 
   private brushed(event): void {
@@ -209,7 +212,7 @@ export class IccZoomDraw<T> {
     // this.svg.select('.zoom')
     this.svg.select('.drawArea').call(this.zoom.transform, d3Zoom.zoomIdentity
       .scale(this.options.drawWidth / (range[1] - range[0]))
-      .translate(-range[0], 0));
+      .translate(-range[0], 0)); // TODO y = 0 is incorrect
   }
 
   private brushXScaleLinear(range): void {

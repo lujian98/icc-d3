@@ -58,7 +58,7 @@ export class IccInteractiveDraw<T> {
   }
 
   private updateInteractive(e, mouseover: boolean): void {
-    const p = d3.pointer(e); // d3 bug when mouse click and hold
+    const p = d3.pointer(e); // TODO d3 bug when mouse click and hold
     // const x = p[0] + 2;
     // const y = p[1] + 2;
 
