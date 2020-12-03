@@ -16,6 +16,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
   drawChart(data: T[]): void {
     this.drawData = data;
     this.isStacked = true;
+    this.reverse = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
     this.normalized = stacked.normalized;
     const stackdata = data.length > 0 ? stacked.getStackedData(data, true) : [];

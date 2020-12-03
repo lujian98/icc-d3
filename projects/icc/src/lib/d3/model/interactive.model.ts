@@ -8,4 +8,5 @@ export interface IccD3Interactive {
   hovered: boolean;
   hasSummary: boolean;
   isStacked?: boolean;
+  reverse?: boolean;
 }

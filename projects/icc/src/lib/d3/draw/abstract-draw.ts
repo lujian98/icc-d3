@@ -10,6 +10,7 @@ export abstract class IccAbstractDraw<T> {
   protected prevData: T[];
   protected isAnimation = false;
   protected isStacked = false;
+  protected reverse = false;
   protected normalized = false;
   protected isGrouped = false;
   protected hoveredKey = '';
@@ -84,6 +85,7 @@ export abstract class IccAbstractDraw<T> {
         key: data.key,
         value: d,
         isStacked: true,
+        reverse: this.reverse,
         color: this.getStackeddrawColor(data, idx),
         valueX: this.options.x(d.data),
         valueY: d[1] - d[0],

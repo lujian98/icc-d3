@@ -22,6 +22,7 @@ import { AppLinearStackedBarChartComponent } from './bar-chart/linear-stacked-ba
 import { AppHorizontalBarDemoComponent } from './horizontal-bar-chart/horizontal-bar-chart-demo.component';
 import { AppGroupedHorizontalBarDemoComponent } from './horizontal-bar-chart/grouped-horizontal-bar-chart-demo.component';
 import { AppStackedHorizontalBarDemoComponent } from './horizontal-bar-chart/stacked-horizontal-bar-chart-demo.component';
+import { AppStackedNormalizedHorizontalBarDemoComponent } from './horizontal-bar-chart/stacked-normalized-horizontal-bar-chart-demo.component';
 import { AppStockHistoryDemoComponent } from './horizontal-bar-chart/stock-history-demo.component';
 
 import { AppPieChartDemoComponent } from './pie-chart/pie-chart-demo.component';
@@ -47,6 +48,7 @@ const components = [
   AppHorizontalBarDemoComponent,
   AppGroupedHorizontalBarDemoComponent,
   AppStackedHorizontalBarDemoComponent,
+  AppStackedNormalizedHorizontalBarDemoComponent,
   AppStockHistoryDemoComponent,
 
   AppPieChartDemoComponent,

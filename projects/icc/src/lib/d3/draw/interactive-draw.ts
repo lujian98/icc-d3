@@ -128,6 +128,7 @@ export class IccInteractiveDraw<T> {
 
   private getPopoverData(data: IccD3Interactive[]): IccD3Popover {
     let isStacked = false;
+    let reverse = false;
     let hasSummary = false;
     let val = '';
     let total = 0;
@@ -136,6 +137,7 @@ export class IccInteractiveDraw<T> {
         val = d.valueX;
         let svalue = +d.valueY;
         isStacked = d.isStacked;
+        reverse = d.reverse;
         hasSummary = d.hasSummary;
         if (hasSummary) {
           total += +svalue;
@@ -150,7 +152,9 @@ export class IccInteractiveDraw<T> {
         };
       });
     if (isStacked) {
-      sd.reverse();
+      if (reverse) {
+        sd.reverse();
+      }
       if (!hasSummary) {
         sd.forEach((d) => d.value = `${d.value}%`);
       }

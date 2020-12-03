@@ -38,6 +38,7 @@ export class AppStackedBarChartDemoComponent implements OnInit {
 
   ngOnInit() {
     this.data = this.formatData(this.data);
+    console.log( ' this.data =', this.data)
   }
 
   private formatData(data) {

@@ -19,6 +19,7 @@ import { AppLinearStackedBarChartComponent } from './bar-chart/linear-stacked-ba
 import { AppHorizontalBarDemoComponent } from './horizontal-bar-chart/horizontal-bar-chart-demo.component';
 import { AppGroupedHorizontalBarDemoComponent } from './horizontal-bar-chart/grouped-horizontal-bar-chart-demo.component';
 import { AppStackedHorizontalBarDemoComponent } from './horizontal-bar-chart/stacked-horizontal-bar-chart-demo.component';
+import { AppStackedNormalizedHorizontalBarDemoComponent } from './horizontal-bar-chart/stacked-normalized-horizontal-bar-chart-demo.component';
 import { AppStockHistoryDemoComponent } from './horizontal-bar-chart/stock-history-demo.component';
 
 import { AppPieChartDemoComponent } from './pie-chart/pie-chart-demo.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
   { path: 'horizontal-bar-chart', component: AppHorizontalBarDemoComponent },
   { path: 'grouped-horizontal-bar-chart', component: AppGroupedHorizontalBarDemoComponent },
   { path: 'stacked-horizontal-bar-chart', component: AppStackedHorizontalBarDemoComponent },
+  { path: 'stacked-normalized-horizontal-bar-chart', component: AppStackedNormalizedHorizontalBarDemoComponent },
   { path: 'stock-history-demo', component: AppStockHistoryDemoComponent },
 
   { path: 'pie-chart-demo', component: AppPieChartDemoComponent },
