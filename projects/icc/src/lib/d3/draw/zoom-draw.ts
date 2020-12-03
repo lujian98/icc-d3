@@ -206,7 +206,8 @@ export class IccZoomDraw<T> {
       this.brushXScaleBand(range);
     }
     this.redraw();
-    this.svg.select('.zoom').call(this.zoom.transform, d3Zoom.zoomIdentity
+    // this.svg.select('.zoom')
+    this.svg.select('.drawArea').call(this.zoom.transform, d3Zoom.zoomIdentity
       .scale(this.options.drawWidth / (range[1] - range[0]))
       .translate(-range[0], 0));
   }

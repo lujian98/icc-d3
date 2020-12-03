@@ -58,9 +58,13 @@ export class IccInteractiveDraw<T> {
   }
 
   private updateInteractive(e, mouseover: boolean): void {
-    const p = d3.pointer(e);
-    const x = p[0] + 2;
-    const y = p[1] + 2;
+    const p = d3.pointer(e); // d3 bug when mouse click and hold
+    // const x = p[0] + 2;
+    // const y = p[1] + 2;
+
+    const x = e.offsetX + 2 - this.options.margin.left;
+    const y = e.offsetX + 2 - this.options.margin.top;
+
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;

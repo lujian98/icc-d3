@@ -23,6 +23,13 @@ export class AppStackedAreaChartDemoComponent implements OnInit {
       totalLable: 'TOTAL',
       axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(new Date(d))
     },
+    zoom: {
+      enabled: true,
+      horizontalOff: false,
+      horizontalBrushShow: true,
+      verticalOff: true,
+      verticalBrushShow: true
+    }
   };
 
   options2: IccD3Options = {

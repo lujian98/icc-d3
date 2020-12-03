@@ -24,6 +24,13 @@ export class AppMultiSeriesDemoComponent implements OnInit {
     popover: {
       axisFormatter: (d) => d3TimeFormat.timeFormat('%x')(d)
     },
+    zoom: {
+      enabled: true,
+      horizontalOff: false,
+      horizontalBrushShow: true,
+      verticalOff: true,
+      verticalBrushShow: true
+    }
   };
 
   data2: any;
