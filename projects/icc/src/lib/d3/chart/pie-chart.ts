@@ -6,7 +6,7 @@ import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 export class IccPieChart<T> extends IccAbstractDraw<T> {
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return this.options.y0(data).filter((d) => !d.disabled)
+    return this.options.y0(data).filter((d) => this.hoveredIndex > -1 && !d.disabled)
       .map((d, i) => {
         return {
           key: this.options.x(d),
