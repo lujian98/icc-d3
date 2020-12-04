@@ -62,8 +62,8 @@ export class IccInteractiveDraw<T> {
 
   private updateInteractive(e, mouseover: boolean): void {
     const p = d3.pointer(e); // TODO d3 bug when mouse click and hold
-    const x = this.isMouseDown ? e.offsetX - this.options.margin.left + 2 : p[0] + 2;
-    const y = this.isMouseDown ? e.offsetY - this.options.margin.top + 2 : p[1] + 2;
+    const x = this.isMouseDown ? e.offsetX - this.options.margin.left : p[0];
+    const y = this.isMouseDown ? e.offsetY - this.options.margin.top : p[1];
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;

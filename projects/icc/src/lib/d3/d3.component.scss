@@ -19,7 +19,7 @@ icc-d3 {
     stroke-width: 0;
   }
 
-  .drawlabel .guideLine {
+  .drawlabel, .guideLine {
     pointer-events: none;
   }
 }
