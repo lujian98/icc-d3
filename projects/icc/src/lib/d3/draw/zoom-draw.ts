@@ -50,8 +50,7 @@ export class IccZoomDraw<T> {
   private initZoom(): void {
     this.zoom = d3Zoom.zoom().scaleExtent([1, Infinity]);
     this.svg.select('.drawArea').call(this.zoom);
-    this.zoom.on('zoom', this.zoomed.bind(this))
-      .on('end', this.zoomEnd.bind(this));
+    this.zoom.on('zoom', this.zoomed.bind(this));
   }
 
   private updateZoom(): void {
@@ -113,10 +112,6 @@ export class IccZoomDraw<T> {
         this.svg.select('.contextBrushY').select('.brush').call(this.brushY.move, range);
       }
     }
-  }
-
-  private zoomEnd(event): void {
-    this.draw.dispatch.call('zoomEnd', this, event);
   }
 
   private zoomed(event): void {

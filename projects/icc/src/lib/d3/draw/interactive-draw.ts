@@ -5,7 +5,6 @@ import { IccD3Component } from '../d3.component';
 import { IccScaleLinear, IccScaleBand, IccD3Options, IccD3Popover, IccD3PopoverSerie, IccD3Interactive } from '../model';
 
 export class IccInteractiveDraw<T> {
-  private isMouseDown = false;
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
@@ -17,12 +16,7 @@ export class IccInteractiveDraw<T> {
       .on('mouseout', (e, d) => this.updateInteractive(e, false));
     this.init();
     this.update();
-
-    this.draw.dispatch.on('drawZoom', (e) => {
-      this.isMouseDown = true;
-      this.updateInteractive(e.sourceEvent, true);
-    });
-    this.draw.dispatch.on('zoomEnd', (e) => this.isMouseDown = false);
+    this.draw.dispatch.on('drawZoom', (e) => this.updateInteractive(e.sourceEvent, true));
   }
 
   updateOptions(options: IccD3Options): void {
@@ -61,20 +55,18 @@ export class IccInteractiveDraw<T> {
   }
 
   private updateInteractive(e, mouseover: boolean): void {
-    const p = d3.pointer(e); // TODO d3 bug when mouse click and hold
-    const x = this.isMouseDown ? e.offsetX - this.options.margin.left : p[0];
-    const y = this.isMouseDown ? e.offsetY - this.options.margin.top : p[1];
+    const pxy = d3.pointer(e, e.target);
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;
-      idx = this.scaleBandInvert(xScale, x);
+      idx = this.scaleBandInvert(xScale, pxy[0]);
     } else if (this.options.yScaleType === 'band') {
       const yScale = this.scale.y as IccScaleBand;
-      idx = this.scaleBandInvert(yScale, y);
+      idx = this.scaleBandInvert(yScale, pxy[1]);
     } else { // TODO yScale linear ???
       const xScale = this.scale.x as IccScaleLinear;
       const bisect = d3Array.bisector((d) => this.options.x(d)).right;
-      const x0 = xScale.invert(x);
+      const x0 = xScale.invert(pxy[0]);
       this.draw.data.forEach((d) => {
         const values = this.options.y0(d);
         idx = bisect(values, x0);
@@ -85,11 +77,11 @@ export class IccInteractiveDraw<T> {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
         .style('opacity', mouseover ? 1 : 0)
-        .attr('x1', x)
-        .attr('x2', x);
+        .attr('x1', pxy[0])
+        .attr('x2', pxy[0]);
     }
     if (idx > -1) {
-      this.updateGuideLineCircle(data, x, mouseover);
+      this.updateGuideLineCircle(data, pxy[0], mouseover);
       if (mouseover) {
         const pd = this.getPopoverData(data);
         this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
