@@ -63,9 +63,8 @@ export class IccInteractiveDraw<T> {
 
   private updateInteractive(e, mouseover: boolean): void {
     const p = d3.pointer(e); // TODO d3 bug when mouse click and hold
-    const x = p[0] + 2;
-    const y = p[1] + 2;
-
+    const x = this.isMouseDown ? e.offsetX - this.options.margin.left + 2 : p[0] + 2;
+    const y = this.isMouseDown ? e.offsetY - this.options.margin.top + 2 : p[1] + 2;
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;
@@ -86,18 +85,16 @@ export class IccInteractiveDraw<T> {
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
-        .style('opacity', mouseover && !this.isMouseDown ? 1 : 0)
+        .style('opacity', mouseover ? 1 : 0)
         .attr('x1', x)
         .attr('x2', x);
     }
     if (idx > -1) {
-      this.updateGuideLineCircle(data, x, mouseover && !this.isMouseDown);
-    }
-    if (mouseover && !this.isMouseDown && idx > -1) {
-      const pd = this.getPopoverData(data);
-      this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
-    } else {
-      this.draw.dispatch.call('drawMouseout', this);
+      this.updateGuideLineCircle(data, x, mouseover);
+      if (mouseover) {
+        const pd = this.getPopoverData(data);
+        this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
+      }
     }
   }
 

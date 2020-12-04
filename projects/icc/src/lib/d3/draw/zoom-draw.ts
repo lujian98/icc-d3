@@ -118,18 +118,15 @@ export class IccZoomDraw<T> {
   }
 
   private zoomStart(event): void {
-    console.log(' zoomsSatrt')
     this.draw.dispatch.call('zoomStart', this, event);
   }
 
   private zoomEnd(event): void {
-    console.log(' end')
     this.draw.dispatch.call('zoomEnd', this, event);
   }
 
   private zoomed(event): void {
     if (event.sourceEvent) {
-      console.log(' xxxxxxxxxxxxx ')
       if (!this.options.zoom.horizontalOff) {
         if (this.options.xScaleType === 'linear' || this.options.xScaleType === 'time') {
           const t = event.transform;
