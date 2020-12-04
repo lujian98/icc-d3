@@ -153,8 +153,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   setDispatch(): void {
-    this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout',
-      'drawZoom', 'zoomStart', 'zoomEnd',
+    this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout', 'drawZoom', 'zoomEnd',
       'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
     this.dispatch.on('legendClick', (d) => {
       this.legendMouseover(d, !d.disabled);

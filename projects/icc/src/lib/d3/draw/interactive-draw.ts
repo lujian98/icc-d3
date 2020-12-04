@@ -18,12 +18,11 @@ export class IccInteractiveDraw<T> {
     this.init();
     this.update();
 
-    this.draw.dispatch.on('drawZoom', (e) => this.updateInteractive(e.sourceEvent, true));
-    this.draw.dispatch.on('zoomStart', (e) => this.isMouseDown = true);
-    this.draw.dispatch.on('zoomEnd', (e) => {
-      this.isMouseDown = false;
-      // this.updateInteractive(e.sourceEvent, true);
+    this.draw.dispatch.on('drawZoom', (e) => {
+      this.isMouseDown = true;
+      this.updateInteractive(e.sourceEvent, true);
     });
+    this.draw.dispatch.on('zoomEnd', (e) => this.isMouseDown = false);
   }
 
   updateOptions(options: IccD3Options): void {
