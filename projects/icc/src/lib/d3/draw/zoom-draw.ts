@@ -190,9 +190,11 @@ export class IccZoomDraw<T> {
       this.scale.y.range(x);
     }
     this.redraw();
+    const sx0 = this.xRange ? -this.xRange[0] : 0;
+    // TODO bug WARNING d3 only support one direction scale
     this.svg.select('.drawArea').call(this.zoom.transform, d3Zoom.zoomIdentity
       .scale(this.options.drawHeight / (range[1] - range[0]))
-      .translate(0, -range[0])); // TODO x = 0 is incorrect
+      .translate(sx0, -range[0]));
   }
 
   private brushed(event): void {
@@ -209,10 +211,11 @@ export class IccZoomDraw<T> {
       this.brushXScaleBand(range);
     }
     this.redraw();
-    // this.svg.select('.zoom')
+    const sy0 = this.yRange ? -this.yRange[0] : 0;
+    // TODO bug WARNING d3 only support one direction scale
     this.svg.select('.drawArea').call(this.zoom.transform, d3Zoom.zoomIdentity
       .scale(this.options.drawWidth / (range[1] - range[0]))
-      .translate(-range[0], 0)); // TODO y = 0 is incorrect
+      .translate(-range[0], sy0));
   }
 
   private brushXScaleLinear(range): void {

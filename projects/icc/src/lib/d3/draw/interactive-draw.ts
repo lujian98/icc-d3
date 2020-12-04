@@ -59,11 +59,14 @@ export class IccInteractiveDraw<T> {
 
   private updateInteractive(e, mouseover: boolean): void {
     const p = d3.pointer(e); // TODO d3 bug when mouse click and hold
-    // const x = p[0] + 2;
-    // const y = p[1] + 2;
+    const x = p[0] + 2;
+    const y = p[1] + 2;
 
-    const x = e.offsetX + 2 - this.options.margin.left;
-    const y = e.offsetX + 2 - this.options.margin.top;
+    // console.log( 'e =', e, ' x =', x, ' y=',y )
+
+    // firefox not working with e.offsetX and e.offsetY
+    // const x = e.offsetX + 2 - this.options.margin.left;
+    // const y = e.offsetX + 2 - this.options.margin.top;
 
     let idx = -1;
     if (this.options.xScaleType === 'band') {
