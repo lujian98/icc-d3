@@ -153,7 +153,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   setDispatch(): void {
-    this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout', 'drawZoom',
+    this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout',
+      'drawZoom', 'zoomStart', 'zoomEnd',
       'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
     this.dispatch.on('legendClick', (d) => {
       this.legendMouseover(d, !d.disabled);
@@ -169,7 +170,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         this.popover.openPopover(p.event);
       }
     });
-    this.dispatch.on('drawMouseout', (p) => { });
+    this.dispatch.on('drawMouseout', (p) => this.popover.closePopover());
   }
 
   legendMouseover(data: T[], mouseover: boolean): void {

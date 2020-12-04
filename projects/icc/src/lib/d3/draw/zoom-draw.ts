@@ -50,7 +50,10 @@ export class IccZoomDraw<T> {
   private initZoom(): void {
     this.zoom = d3Zoom.zoom().scaleExtent([1, Infinity]);
     this.svg.select('.drawArea').call(this.zoom);
-    this.zoom.on('zoom', this.zoomed.bind(this));
+    this.zoom
+      .on('start', this.zoomStart.bind(this))
+      .on('zoom', this.zoomed.bind(this))
+      .on('end', this.zoomEnd.bind(this))
   }
 
   private updateZoom(): void {
@@ -114,8 +117,19 @@ export class IccZoomDraw<T> {
     }
   }
 
+  private zoomStart(event): void {
+    console.log(' zoomsSatrt')
+    this.draw.dispatch.call('zoomStart', this, event);
+  }
+
+  private zoomEnd(event): void {
+    console.log(' end')
+    this.draw.dispatch.call('zoomEnd', this, event);
+  }
+
   private zoomed(event): void {
     if (event.sourceEvent) {
+      console.log(' xxxxxxxxxxxxx ')
       if (!this.options.zoom.horizontalOff) {
         if (this.options.xScaleType === 'linear' || this.options.xScaleType === 'time') {
           const t = event.transform;

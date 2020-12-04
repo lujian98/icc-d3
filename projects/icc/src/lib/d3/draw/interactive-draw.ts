@@ -5,6 +5,7 @@ import { IccD3Component } from '../d3.component';
 import { IccScaleLinear, IccScaleBand, IccD3Options, IccD3Popover, IccD3PopoverSerie, IccD3Interactive } from '../model';
 
 export class IccInteractiveDraw<T> {
+  private isMouseDown = false;
   constructor(
     private svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>,
     private scale: IccScaleDraw<T>,
@@ -17,8 +18,11 @@ export class IccInteractiveDraw<T> {
     this.init();
     this.update();
 
-    this.draw.dispatch.on('drawZoom', (e) => {
-      this.updateInteractive(e.sourceEvent, true);
+    this.draw.dispatch.on('drawZoom', (e) => this.updateInteractive(e.sourceEvent, true));
+    this.draw.dispatch.on('zoomStart', (e) => this.isMouseDown = true);
+    this.draw.dispatch.on('zoomEnd', (e) => {
+      this.isMouseDown = false;
+      // this.updateInteractive(e.sourceEvent, true);
     });
   }
 
@@ -62,12 +66,6 @@ export class IccInteractiveDraw<T> {
     const x = p[0] + 2;
     const y = p[1] + 2;
 
-    // console.log( 'e =', e, ' x =', x, ' y=',y )
-
-    // firefox not working with e.offsetX and e.offsetY
-    // const x = e.offsetX + 2 - this.options.margin.left;
-    // const y = e.offsetX + 2 - this.options.margin.top;
-
     let idx = -1;
     if (this.options.xScaleType === 'band') {
       const xScale = this.scale.x as IccScaleBand;
@@ -88,16 +86,18 @@ export class IccInteractiveDraw<T> {
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw')
         .select('.guideLine')
-        .style('opacity', mouseover ? 1 : 0)
+        .style('opacity', mouseover && !this.isMouseDown ? 1 : 0)
         .attr('x1', x)
         .attr('x2', x);
     }
     if (idx > -1) {
-      this.updateGuideLineCircle(data, x, mouseover);
+      this.updateGuideLineCircle(data, x, mouseover && !this.isMouseDown);
     }
-    if (mouseover && idx > -1) {
+    if (mouseover && !this.isMouseDown && idx > -1) {
       const pd = this.getPopoverData(data);
       this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
+    } else {
+      this.draw.dispatch.call('drawMouseout', this);
     }
   }
 
