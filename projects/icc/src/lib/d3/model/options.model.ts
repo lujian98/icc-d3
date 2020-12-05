@@ -66,7 +66,8 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
     totalLable: 'Total',
     axisFormatter: (d) => d,
     serieFormatter: (d) => d,
-    valueFormatter: (d) => d3Format.format(',.2f')(d)
+    valueFormatter: (d) => d3Format.format(',.2f')(d),
+    normalizedFormatter: (d) => d3Format.format(',.2f')(d)
   },
   zoom: {
     enabled: true,

@@ -7,6 +7,6 @@ export interface IccD3Interactive {
   cy: number;
   hovered: boolean;
   hasSummary: boolean;
-  isStacked?: boolean;
+  normalized?: boolean;
   reverse?: boolean;
 }

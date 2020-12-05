@@ -14,8 +14,9 @@ export interface IccD3Popover {
 
 export interface IccD3PopoverOptions {
   totalLable?: string;
-  axisFormatter?: Function; // labelFormatter
-  serieFormatter?: Function; // key
+  axisFormatter?: Function;
+  serieFormatter?: Function;
   valueFormatter?: Function;
+  normalizedFormatter?: Function;
 }
 

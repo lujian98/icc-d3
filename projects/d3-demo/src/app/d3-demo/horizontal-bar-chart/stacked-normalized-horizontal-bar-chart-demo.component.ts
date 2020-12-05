@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3Format from 'd3-format';
 import { IccD3Options } from 'icc';
 import { POPULATION } from '../shared/population2';
 
@@ -19,6 +20,9 @@ export class AppStackedNormalizedHorizontalBarDemoComponent implements OnInit {
     x: (d) => d.value,
     y: (d) => d.name,
     drawColor: (d, i) => d.label,
+    popover: {
+      valueFormatter: (d) => d3Format.format(',.0f')(d),
+    },
     zoom: {
       enabled: true,
       horizontalOff: true,

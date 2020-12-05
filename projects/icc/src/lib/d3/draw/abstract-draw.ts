@@ -84,14 +84,14 @@ export abstract class IccAbstractDraw<T> {
       const r: IccD3Interactive = {
         key: data.key,
         value: d,
-        isStacked: true,
-        reverse: this.reverse,
         color: this.getStackeddrawColor(data, idx),
         valueX: this.options.x(d.data),
         valueY: d[1] - d[0],
         cy: this.scale.y(d[1]),
         hovered: this.hoveredKey === data.key,
-        hasSummary: !this.normalized
+        hasSummary: !this.normalized,
+        reverse: this.reverse,
+        normalized: this.normalized
       };
       this.setValueXY(r, idx);
       return [r];

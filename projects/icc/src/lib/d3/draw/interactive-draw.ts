@@ -122,7 +122,6 @@ export class IccInteractiveDraw<T> {
   }
 
   private getPopoverData(data: IccD3Interactive[]): IccD3Popover {
-    let isStacked = false;
     let reverse = false;
     let hasSummary = false;
     let val = '';
@@ -130,29 +129,30 @@ export class IccInteractiveDraw<T> {
     const sd: IccD3PopoverSerie[] = data.filter((d) => d.value)
       .map((d, i) => {
         val = d.valueX;
-        let svalue = +d.valueY;
-        isStacked = d.isStacked;
+        let svalue = '';
         reverse = d.reverse;
         hasSummary = d.hasSummary;
-        if (hasSummary) {
-          total += +svalue;
-        } else if (isStacked) {
-          svalue = svalue * 100;
+        total += d.hasSummary ? +d.valueY : 0;
+        if (d.normalized) {
+          svalue = `${this.options.popover.normalizedFormatter(+d.valueY * 100)}%`;
+          if (d.value.data) {
+            hasSummary = true;
+            const avalue = d.value.data[d.key];
+            total += +avalue;
+            svalue += ` (${this.options.popover.valueFormatter(avalue)})`;
+          }
+        } else {
+          svalue = this.options.popover.valueFormatter(+d.valueY);
         }
         return {
           key: this.options.popover.serieFormatter(d.key),
-          value: this.options.popover.valueFormatter(svalue),
+          value: svalue,
           color: d.color,
           hovered: d.hovered
         };
       });
-    if (isStacked) {
-      if (reverse) {
-        sd.reverse();
-      }
-      if (!hasSummary) {
-        sd.forEach((d) => d.value = `${d.value}%`);
-      }
+    if (reverse) {
+      sd.reverse();
     }
     if (hasSummary) {
       sd.push({
