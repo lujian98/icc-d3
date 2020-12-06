@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, Component, ViewChild, ElementRef, HostListener, Input, OnChanges,
+  AfterViewInit, Component, ViewChild, ElementRef, HostBinding, HostListener, Input, OnChanges,
   OnDestroy, OnInit, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription, of } from 'rxjs';
@@ -43,6 +43,15 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   isWindowReszie$: Subject<{}> = new Subject();
   @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
   d3Popover = IccD3PopoverComponent;
+
+  @HostBinding('style.flex-direction') get flexDirection(): string {
+    switch (this.options.legend.position) {
+      case 'top': return 'column-reverse';
+      case 'bottom': return 'column';
+      case 'right':
+      case 'default': return '';
+    }
+  }
 
   constructor(
     protected elementRef: ElementRef,
@@ -186,6 +195,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
       } else if (key === 'pie') {
         this.options.pie = { ...DEFAULT_CHART_OPTIONS.pie, ...this.options.pie };
+      } else if (key === 'legend') {
+        this.options.legend = { ...DEFAULT_CHART_OPTIONS.legend, ...this.options.legend };
       } else if (key === 'popover') {
         this.options.popover = { ...DEFAULT_CHART_OPTIONS.popover, ...this.options.popover };
       }

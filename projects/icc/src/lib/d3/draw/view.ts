@@ -43,8 +43,12 @@ export class IccView {
   private setViewDimension(): void {
     this.setZoomOptions();
     const margin = this.options.margin;
-    this.width = this.elementRef.nativeElement.clientWidth;
-    this.height = this.elementRef.nativeElement.clientHeight;
+    // this.width = this.elementRef.nativeElement.clientWidth;
+    // this.height = this.elementRef.nativeElement.clientHeight;
+    const elementRef = this.elementRef.nativeElement.firstChild;
+    this.width = elementRef.clientWidth;
+    this.height = elementRef.clientHeight;
+
     const zoom = this.options.zoom;
     const drawDimension = {
       drawWidth: this.width - margin.left - margin.right

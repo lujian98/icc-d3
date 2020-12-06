@@ -6,6 +6,7 @@ import { IccPortalModule } from '../tooltip/components/portal/portal.module';
 import { IccDrawServie } from './draw-service';
 import { IccD3Component } from './d3.component';
 import { IccD3PopoverComponent } from './popover/popover.component';
+import { IccD3LegendComponent } from './legend/legend.component';
 
 @NgModule({
   imports: [
@@ -16,13 +17,16 @@ import { IccD3PopoverComponent } from './popover/popover.component';
   declarations: [
     IccD3Component,
     IccD3PopoverComponent,
+    IccD3LegendComponent
   ],
   exports: [
     IccD3Component,
-    IccD3PopoverComponent
+    IccD3PopoverComponent,
+    IccD3LegendComponent
   ],
   entryComponents: [
-    IccD3PopoverComponent
+    IccD3PopoverComponent,
+    IccD3LegendComponent
   ],
   providers: [
     IccDrawServie,

@@ -1,4 +1,5 @@
 export * from './interactive.model';
+export * from './legend.model';
 export * from './options.model';
 export * from './pie.model';
 export * from './popover.model';
