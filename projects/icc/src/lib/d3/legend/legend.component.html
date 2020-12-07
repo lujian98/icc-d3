@@ -1,1 +1,13 @@
-<span>legend</span>
+<table *ngIf="legendData">
+  <tbody>
+    <tr *ngFor="let data of legendData; let i = index">
+      <td *ngFor="let item of data"
+        (click)="itemClick($event, item)"
+        (mouseover)="itemMouseOver($event, item)"
+        (mouseout)="itemMouseOut($event, item)">
+        <div *ngIf="item" class="legend-icon" [ngStyle]="{'background-color': 'green'}"></div>
+        <div>{{ item }}</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
