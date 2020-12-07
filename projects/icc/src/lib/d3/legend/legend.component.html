@@ -6,7 +6,7 @@
         (mouseover)="itemMouseOver($event, item)"
         (mouseout)="itemMouseOut($event, item)">
         <div *ngIf="item" class="legend-icon" [ngStyle]="iconStyles(item, i)"></div>
-        <div [ngStyle]="{'color': legendColor(item, i)}">
+        <div *ngIf="item" [ngStyle]="{'color': legendColor(item, i)}">
           {{ legendText(item) }}
         </div>
       </td>

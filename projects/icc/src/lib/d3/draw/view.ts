@@ -45,6 +45,7 @@ export class IccView {
     const margin = this.options.margin;
     // this.width = this.elementRef.nativeElement.clientWidth;
     // this.height = this.elementRef.nativeElement.clientHeight;
+    console.log(' this.elementRef =', this.elementRef)
     const elementRef = this.elementRef.nativeElement.firstChild;
     this.width = elementRef.clientWidth;
     this.height = elementRef.clientHeight;

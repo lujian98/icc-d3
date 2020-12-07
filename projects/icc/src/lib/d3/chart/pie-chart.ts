@@ -95,7 +95,6 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   legendMouseover(e, data, mouseover: boolean): void {
-    console.log( ' 222 data =', data)
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
       .filter((d: any) => [d.data].indexOf(data) !== -1)
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)

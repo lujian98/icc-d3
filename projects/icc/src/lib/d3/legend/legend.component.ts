@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from '../draw/scale-draw';
 import { IccD3Options } from '../model';
@@ -8,7 +8,7 @@ import { IccD3Options } from '../model';
   templateUrl: './legend.component.html',
   styleUrls: ['./legend.component.scss']
 })
-export class IccD3LegendComponent<T> implements OnInit {
+export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   @Input() options: IccD3Options;
   @Input() data: T[];
   @Input() scale: IccScaleDraw<T>;
@@ -16,24 +16,58 @@ export class IccD3LegendComponent<T> implements OnInit {
 
   legendData: any[][];
 
-  constructor(
-  ) {
+  ngOnInit(): void {
+    this.setLegendData();
   }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(' sssssssssssssssss this.options =', this.options)
+    this.setLegendData();
+  }
+
+  setLegendData(): void { // TODO resize events
     const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
-    this.legendData = [data];
-    console.log(' ldata data =', data)
-    // const width = this.calculateTextWidth('Test AZZqQ');
-    //  console.log('w =', width);
+    let columns = 1;
+    this.legendData = [];
+    if (this.options.drawWidth && this.options.legend.position !== 'right') {
+      let maxWidth = 0;
+      data.forEach(d => {
+        const text = this.legendText(d);
+        const w = this.calculateTextWidth(text);
+        maxWidth += w > maxWidth ? w : 0;
+      });
+      columns = Math.floor(this.options.drawWidth / (maxWidth + 5));
+    }
+    console.log(' columns=', columns);
+    let nd = [];
+    data.forEach((d, i) => {
+      if (nd.length >= columns) {
+        this.legendData.push(nd);
+        nd = [];
+      }
+      nd.push(d);
+    });
+    if (nd.length < columns) {
+      const arr = [];
+      while (arr.length < columns - nd.length) {
+        arr.push(null);
+      }
+      if (this.legendData.length === 0) { // TODO for right only
+        nd = [...arr, ...nd];
+      } else {
+        nd = [...nd, ...arr];
+      }
+    }
+    this.legendData.push(nd);
+    console.log(' laaaaaaaaaaaaaaaadata data =', this.legendData);
   }
 
   legendText(d: T): string {
-    return this.options.chartType === 'pieChart' ? this.options.x(d) : this.options.x0(d);
+    return d && this.options.chartType === 'pieChart' ? this.options.x(d) : this.options.x0(d);
   }
 
   legendColor(d, i): string {
-    if (this.scale && this.scale.colors) {
+    if (d && this.scale && this.scale.colors) {
       return d.color || this.scale.colors(this.options.drawColor(d, i));
     }
   }
@@ -48,7 +82,6 @@ export class IccD3LegendComponent<T> implements OnInit {
 
   itemClick(event, d: any): void {
     d.disabled = !d.disabled;
-    // this.setLegendShape(d);
     this.dispatch.call('legendClick', this, d);
   }
 

@@ -119,11 +119,12 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   public createChart(data: T[]): void {
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
-    this.scaleChange$.next(this.scale);
     this.view = new IccView(this.elementRef, this.options, this.chartTypes);
     this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;
     this.options = this.view.getOptions();
+    console.log( ' qqqq this.options =', this.options)
+    this.scaleChange$.next(this.scale);
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
 
