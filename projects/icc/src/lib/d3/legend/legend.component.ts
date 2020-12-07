@@ -58,6 +58,10 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     } */
     this.legendData.push(data);
     // console.log(' laaaaaaaaaaaaaaaadata data =', this.legendData);
+    setTimeout(() => {
+      this.dispatch.call('legendResize', this, data);
+    }, 1);
+
   }
 
   legendStyles(): any { // 110px

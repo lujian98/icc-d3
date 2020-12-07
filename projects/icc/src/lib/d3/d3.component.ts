@@ -123,8 +123,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;
     this.options = this.view.getOptions();
-    console.log( ' qqqq this.options =', this.options)
-    this.scaleChange$.next(this.scale);
+    console.log(' qqqq this.options =', this.options)
+
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
 
@@ -138,6 +138,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.zoom = new IccZoomDraw(this.svg, this.scale, this, this.options);
     }
     this.interactive = new IccInteractiveDraw(this.svg, this.scale, this.options, this);
+    this.scaleChange$.next(this.scale);
   }
 
   drawChart(data: T[]): void {
@@ -168,12 +169,13 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   setDispatch(): void {
     this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout', 'drawZoom',
-      'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
+      'legendClick', 'legendResize', 'legendMouseover', 'legendMouseout', 'stateChange');
     this.dispatch.on('legendClick', (d) => {
       this.legendMouseover(d, !d.disabled);
       this.stateChangeDraw();
       this.legendMouseover(d, !d.disabled);
     });
+    this.dispatch.on('legendResize', (d) => this.resizeChart(this.data));
     this.dispatch.on('legendMouseover', (d) => this.legendMouseover(d, true));
     this.dispatch.on('legendMouseout', (d) => this.legendMouseover(d, false));
     this.dispatch.on('drawMouseover', (p) => {
