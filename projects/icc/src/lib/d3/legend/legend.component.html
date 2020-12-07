@@ -1,4 +1,33 @@
-<table *ngIf="legendData">
+<div [ngStyle]="legendStyles()"
+  *ngFor="let data of legendData; let i = index">
+  <div style="display: flex" *ngFor="let item of data" (click)="itemClick($event, item)"
+    (mouseover)="itemMouseOver($event, item)" (mouseout)="itemMouseOut($event, item)">
+    <div *ngIf="item" class="legend-icon" [ngStyle]="iconStyles(item, i)"></div>
+    <div *ngIf="item" [ngStyle]="{'color': legendColor(item, i)}">
+      {{ legendText(item) }}
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--
+
+  style="display: flex; margin-left:auto; margin-right:0;"
+
+      .style('stroke-width', 2)
+      .style('stroke', (d, i) => this.getLegendColor(d, i))
+      .attr('class', 'legend-symbol')
+      .attr('fill', (d, i) => this.getLegendColor(d, i))
+      .style('fill-opacity', (d: any) => !!d.disabled ? 0 : 1)
+
+
+        .attr('text-anchor', 'start')
+      .attr('class', 'legend-text')
+-->
+<!--
+  <table *ngIf="legendData">
   <tbody>
     <tr *ngFor="let data of legendData; let i = index">
       <td *ngFor="let item of data"
@@ -13,15 +42,4 @@
     </tr>
   </tbody>
 </table>
-
-<!--
-      .style('stroke-width', 2)
-      .style('stroke', (d, i) => this.getLegendColor(d, i))
-      .attr('class', 'legend-symbol')
-      .attr('fill', (d, i) => this.getLegendColor(d, i))
-      .style('fill-opacity', (d: any) => !!d.disabled ? 0 : 1)
-
-
-        .attr('text-anchor', 'start')
-      .attr('class', 'legend-text')
 -->

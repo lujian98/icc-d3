@@ -29,6 +29,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
     let columns = 1;
     this.legendData = [];
+    /*
     if (this.options.drawWidth && this.options.legend.position !== 'right') {
       let maxWidth = 0;
       data.forEach(d => {
@@ -49,17 +50,24 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     });
     if (nd.length < columns) {
       const arr = [];
-      while (arr.length < columns - nd.length) {
-        arr.push(null);
-      }
       if (this.legendData.length === 0) { // TODO for right only
         nd = [...arr, ...nd];
       } else {
         nd = [...nd, ...arr];
       }
-    }
-    this.legendData.push(nd);
-    console.log(' laaaaaaaaaaaaaaaadata data =', this.legendData);
+    } */
+    this.legendData.push(data);
+    // console.log(' laaaaaaaaaaaaaaaadata data =', this.legendData);
+  }
+
+  legendStyles(): any { // 110px
+    const right = 20 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
+    const left = this.options.margin.left - 10;
+    return {
+      display: this.options.legend.position !== 'right' ? 'flex' : null,
+      'margin-left': this.options.legend.align === 'right' ? 'auto' : `${left}px`,
+      'margin-right': this.options.legend.align === 'right' ? `${right}px` : 'auto'
+    };
   }
 
   legendText(d: T): string {

@@ -1,6 +1,8 @@
 :host {
-  display: block;
+  display: flex;
+  // flex-direction: row;
 
+  /*
   table {
     width: 100%;
   }
@@ -8,13 +10,14 @@
   table tr, td {
     display: flex;
     flex: 1;
-  }
+  } */
 
   .legend-icon {
     width: 12px;
     height: 12px;
     border-radius: 50%;
     margin-right: 5px;
+    margin-left: 15px;
     margin-top: 2px;
     vertical-align: middle; // TODO this seems not working
     border: 2px solid;
