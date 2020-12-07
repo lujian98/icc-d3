@@ -3,7 +3,7 @@ import {
   OnDestroy, OnInit, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, share, switchMap, takeWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, share, startWith, delay, switchMap, takeWhile } from 'rxjs/operators';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import * as d3Transition from 'd3-transition';
@@ -33,6 +33,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   dispatch: d3Dispatch.Dispatch<{}>;
   chartTypes: string[] = [];
   scale: IccScaleDraw<T>;
+  scaleChange$ = new Subject<IccScaleDraw<T>>();
+  scale$ = new Subject<IccScaleDraw<T>>();
   view: IccView;
   draws: IccAbstractDraw<T>[] = [];
   zoom: IccZoomDraw<T>;
@@ -63,6 +65,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   ngOnInit(): void {
     this.isWindowReszie$.pipe(takeWhile(() => this.alive), debounceTime(100))
       .subscribe(() => this.resizeChart(this.data));
+    this.scaleChange$.pipe(delay(0)).subscribe((scale: any) => this.scale$.next(scale));
   }
 
   ngAfterViewInit(): void {
@@ -116,6 +119,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   public createChart(data: T[]): void {
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
+    this.scaleChange$.next(this.scale);
     this.view = new IccView(this.elementRef, this.options, this.chartTypes);
     this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;

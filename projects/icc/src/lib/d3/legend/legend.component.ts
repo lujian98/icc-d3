@@ -33,11 +33,17 @@ export class IccD3LegendComponent<T> implements OnInit {
   }
 
   legendColor(d, i): string {
-    /*
-    if (this.scale) {
+    if (this.scale && this.scale.colors) {
       return d.color || this.scale.colors(this.options.drawColor(d, i));
-    } */
-    return 'green';
+    }
+  }
+
+  iconStyles(d, i): any {
+    const color = this.legendColor(d, i);
+    return {
+      'background-color': !d.disabled ? color : null,
+      'border-color': color
+    };
   }
 
   itemClick(event, d: any): void {
