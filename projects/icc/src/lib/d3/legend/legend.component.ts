@@ -25,6 +25,8 @@ export class IccD3LegendComponent<T> implements OnInit {
 
   ngOnInit(): void {
     // console.log(' options = ', this.options);
+    const width = this.displayTextWidth('Test AZZqQ');
+    console.log('w =', width);
   }
 
   itemClick(event, item): void {
@@ -40,7 +42,18 @@ export class IccD3LegendComponent<T> implements OnInit {
     console.log(' ooo out item=', item);
     this.dispatch.call('legendMouseout', this, item);
   }
+
+  private displayTextWidth(text: string, font = ''): number {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (font) {
+      context.font = font;
+    }
+    const metrics = context.measureText(text);
+    return metrics.width;
+  }
 }
+
 /*
 
 
