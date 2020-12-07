@@ -6,8 +6,22 @@
         (mouseover)="itemMouseOver($event, item)"
         (mouseout)="itemMouseOut($event, item)">
         <div *ngIf="item" class="legend-icon" [ngStyle]="{'background-color': 'green'}"></div>
-        <div [ngStyle]="{'color': 'green'}">{{ item }}</div>
+        <div [ngStyle]="{'color': legendColor(item, i)}">
+          {{ legendText(item) }}
+        </div>
       </td>
     </tr>
   </tbody>
 </table>
+
+<!--
+      .style('stroke-width', 2)
+      .style('stroke', (d, i) => this.getLegendColor(d, i))
+      .attr('class', 'legend-symbol')
+      .attr('fill', (d, i) => this.getLegendColor(d, i))
+      .style('fill-opacity', (d: any) => !!d.disabled ? 0 : 1)
+
+
+        .attr('text-anchor', 'start')
+      .attr('class', 'legend-text')
+-->

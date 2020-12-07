@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import * as d3Dispatch from 'd3-dispatch';
+import { IccScaleDraw } from '../draw/scale-draw';
 import { IccD3Options } from '../model';
 
 @Component({
@@ -10,40 +11,50 @@ import { IccD3Options } from '../model';
 export class IccD3LegendComponent<T> implements OnInit {
   @Input() options: IccD3Options;
   @Input() data: T[];
+  @Input() scale: IccScaleDraw<T>;
   @Input() dispatch: d3Dispatch.Dispatch<{}>;
 
   legendData: any[][];
 
   constructor(
   ) {
-    this.legendData = [
-      ['Test A', 'Test B', 'Test C'],
-      ['Test D', 'Test E', '']
-    ];
-    console.log(this.legendData);
   }
 
   ngOnInit(): void {
-    // console.log(' options = ', this.options);
-    const width = this.displayTextWidth('Test AZZqQ');
-    console.log('w =', width);
+    const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
+    this.legendData = [data];
+    console.log(' ldata data =', data)
+    // const width = this.calculateTextWidth('Test AZZqQ');
+    //  console.log('w =', width);
   }
 
-  itemClick(event, item): void {
-    console.log(' click item=', item);
+  legendText(d: T): string {
+    return this.options.chartType === 'pieChart' ? this.options.x(d) : this.options.x0(d);
   }
 
-  itemMouseOver(event, item): void {
-    console.log(' 111 Over item=', item);
-    this.dispatch.call('legendMouseover', this, item);
+  legendColor(d, i): string {
+    /*
+    if (this.scale) {
+      return d.color || this.scale.colors(this.options.drawColor(d, i));
+    } */
+    return 'green';
   }
 
-  itemMouseOut(event, item): void {
-    console.log(' ooo out item=', item);
-    this.dispatch.call('legendMouseout', this, item);
+  itemClick(event, d: any): void {
+    d.disabled = !d.disabled;
+    // this.setLegendShape(d);
+    this.dispatch.call('legendClick', this, d);
   }
 
-  private displayTextWidth(text: string, font = ''): number {
+  itemMouseOver(event, d: T): void {
+    this.dispatch.call('legendMouseover', this, d);
+  }
+
+  itemMouseOut(event, d: T): void {
+    this.dispatch.call('legendMouseout', this, d);
+  }
+
+  private calculateTextWidth(text: string, font = ''): number {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     if (font) {
