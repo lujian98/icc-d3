@@ -20,7 +20,7 @@ export class AppDonutChartDemoComponent implements OnInit {
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
     legend: {
-      position: 'right',
+      // position: 'right',
     },
     popover: {
       valueFormatter: (d) => d3Format.format(',.0f')(d)
