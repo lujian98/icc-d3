@@ -1,6 +1,5 @@
 import { ElementRef } from '@angular/core';
 import * as d3 from 'd3-selection';
-import * as d3Dispatch from 'd3-dispatch';
 import { IccD3Options } from '../model';
 
 export class IccView {

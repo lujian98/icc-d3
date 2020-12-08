@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IccPopoverModule } from '../tooltip/directives/popover';
 import { IccPortalModule } from '../tooltip/components/portal/portal.module';
 
-import { IccDrawServie } from './draw-service';
+import { IccDrawServie } from './service';
 import { IccD3Component } from './d3.component';
 import { IccD3PopoverComponent } from './popover/popover.component';
 import { IccD3LegendComponent } from './legend/legend.component';

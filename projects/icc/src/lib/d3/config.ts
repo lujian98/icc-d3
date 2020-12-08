@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef } from '@angular/core';
 import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model';
 
 export class IccD3Config {

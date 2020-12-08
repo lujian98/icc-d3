@@ -1,4 +1,3 @@
-
 export interface IccD3ZoomOptions {
   enabled?: boolean;
   // scaleExtent?: [1, 10],

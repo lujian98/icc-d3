@@ -1,5 +1,5 @@
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScale, IccScaleLinear, IccD3Popover } from '../model';
+import { IccScale, IccScaleLinear } from '../model';
 
 export class IccBarChart<T> extends IccAbstractDraw<T> {
   protected hoveredIndex = -1;
