@@ -5,6 +5,7 @@ import { IccD3Options } from '../model';
 
 export class IccView {
   private _svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+  private options: IccD3Options;
 
   get svg(): d3.Selection<d3.BaseType, {}, HTMLElement, any> {
     return this._svg;
@@ -14,56 +15,25 @@ export class IccView {
     this._svg = v;
   }
 
-  width: number;
-  height: number;
-  getOptions(): IccD3Options {
-    return this.options;
-  }
+  private height: number;
 
   constructor(
     protected elementRef: ElementRef,
-    private options: IccD3Options,
     private chartTypes: any[]
   ) {
     this.clearElement();
     this.initSvg();
-    this.update();
   }
 
   public clearElement(): void {
     d3.select(this.elementRef.nativeElement).select('g').remove();
   }
 
-  update(): void {
-    this.setViewDimension();
-    this.updateViewDimension();
-  }
-
-  private setViewDimension(): void {
-    this.setZoomOptions();
-    const margin = this.options.margin;
-    // this.width = this.elementRef.nativeElement.clientWidth;
-    // this.height = this.elementRef.nativeElement.clientHeight;
+  update(options: IccD3Options): void {
+    this.options = options;
     const elementRef = this.elementRef.nativeElement.firstChild;
-    this.width = elementRef.clientWidth || 300;
     this.height = elementRef.clientHeight || 300;
-
-    const zoom = this.options.zoom;
-    const drawDimension = {
-      drawWidth: this.width - margin.left - margin.right
-        - (zoom.verticalBrushShow ? this.options.brushYWidth + 30 : 0),
-      drawHeight: this.height - margin.top - margin.bottom
-        - (zoom.horizontalBrushShow ? this.options.drawHeight2 + 30 : 0)
-    };
-    this.options = { ...this.options, ...drawDimension };
-  }
-
-  private setZoomOptions(): void {
-    const zoom = this.options.zoom;
-    zoom.horizontalOff = !zoom.enabled ? true : zoom.horizontalOff;
-    zoom.horizontalBrushShow = !zoom.enabled || zoom.horizontalOff ? false : zoom.horizontalBrushShow;
-    zoom.verticalOff = !zoom.enabled ? true : zoom.verticalOff;
-    zoom.verticalBrushShow = !zoom.enabled || zoom.verticalOff ? false : zoom.verticalBrushShow;
+    this.updateViewDimension();
   }
 
   private initSvg(): void {
