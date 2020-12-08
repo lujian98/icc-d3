@@ -19,7 +19,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   legendData: any[][];
 
   @HostBinding('style.display') get display(): string {
-    return this.columnWidths.length === this.getData().length ? 'flex' : null;
+    return this.getData() && this.columnWidths.length === this.getData().length ? 'flex' : null;
   }
 
   constructor(
@@ -32,6 +32,9 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left) {
+      if (this.options.drawWidth <= 0) {
+        this.options.drawWidth = 300;
+      }
       this.availableWidth = this.options.drawWidth - this.options.margin.left;
       this.setLegendData();
     }
@@ -40,27 +43,29 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   getData(): any[] {
     return this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
   }
+
   setLegendData(): void {
     const data = this.getData();
-    this.legendData = [];
-    if (this.options.drawWidth && this.options.legend.position !== 'right') {
-      const seriesPerRow = this.getSeriesPerRow();
-      let nd = [];
-      data.forEach((d, i) => {
-        if (i !== 0 && i % seriesPerRow === 0) {
-          this.legendData.push(nd);
-          nd = [];
-        }
-        nd.push(d);
-      });
-      this.legendData.push(nd);
-    } else {
-      this.legendData.push(data);
+    if (data) {
+      this.legendData = [];
+      if (this.options.legend.position !== 'right') {
+        const seriesPerRow = this.getSeriesPerRow();
+        let nd = [];
+        data.forEach((d, i) => {
+          if (i !== 0 && i % seriesPerRow === 0) {
+            this.legendData.push(nd);
+            nd = [];
+          }
+          nd.push(d);
+        });
+        this.legendData.push(nd);
+      } else {
+        this.legendData.push(data);
+      }
+      setTimeout(() => {
+        this.dispatch.call('legendResize', this, data);
+      }, 1);
     }
-    setTimeout(() => {
-      this.dispatch.call('legendResize', this, data);
-    }, 1);
-
   }
 
   getSeriesPerRow(): number {
