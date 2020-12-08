@@ -1,6 +1,11 @@
 icc-d3 {
   display: flex;
   flex: 1;
+
+  svg {
+    flex: 1;
+  }
+
   .line {
     fill: none;
   }

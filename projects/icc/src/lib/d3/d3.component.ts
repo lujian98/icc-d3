@@ -1,9 +1,9 @@
 import {
-  AfterViewInit, Component, ViewChild, ElementRef, HostListener, Input, OnChanges,
+  AfterViewInit, Component, ViewChild, ElementRef, HostBinding, HostListener, Input, OnChanges,
   OnDestroy, OnInit, SimpleChanges, ViewEncapsulation
 } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, Subject, Subscription, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, share, switchMap, takeWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, share, startWith, delay, switchMap, takeWhile } from 'rxjs/operators';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import * as d3Transition from 'd3-transition';
@@ -33,6 +33,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   dispatch: d3Dispatch.Dispatch<{}>;
   chartTypes: string[] = [];
   scale: IccScaleDraw<T>;
+  scaleChange$ = new Subject<IccScaleDraw<T>>();
+  scale$ = new Subject<IccScaleDraw<T>>();
   view: IccView;
   draws: IccAbstractDraw<T>[] = [];
   zoom: IccZoomDraw<T>;
@@ -44,6 +46,15 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   @ViewChild(IccPopoverDirective) popover: IccPopoverDirective<T>;
   d3Popover = IccD3PopoverComponent;
 
+  @HostBinding('style.flex-direction') get flexDirection(): string {
+    switch (this.options.legend.position) {
+      case 'top': return 'column-reverse';
+      case 'bottom': return 'column';
+      case 'right':
+      case 'default': return '';
+    }
+  }
+
   constructor(
     protected elementRef: ElementRef,
     private drawServie: IccDrawServie<T>,
@@ -54,6 +65,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   ngOnInit(): void {
     this.isWindowReszie$.pipe(takeWhile(() => this.alive), debounceTime(100))
       .subscribe(() => this.resizeChart(this.data));
+    this.scaleChange$.pipe(delay(0)).subscribe((scale: any) => this.scale$.next(scale));
   }
 
   ngAfterViewInit(): void {
@@ -113,7 +125,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.options = this.view.getOptions();
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
-
+    this.scaleChange$.next(this.scale);
     this.chartTypes.forEach((type) => {
       const draw = this.drawServie.getDraw(this.svg, this.scale, this.dispatch, type);
       this.draws.push(draw);
@@ -154,12 +166,13 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   setDispatch(): void {
     this.dispatch = d3Dispatch.dispatch('drawMouseover', 'drawMouseout', 'drawZoom',
-      'legendClick', 'legendDblclick', 'legendMouseover', 'legendMouseout', 'stateChange');
+      'legendClick', 'legendResize', 'legendMouseover', 'legendMouseout', 'stateChange');
     this.dispatch.on('legendClick', (d) => {
       this.legendMouseover(d, !d.disabled);
       this.stateChangeDraw();
       this.legendMouseover(d, !d.disabled);
     });
+    this.dispatch.on('legendResize', (d) => this.resizeChart(this.data));
     this.dispatch.on('legendMouseover', (d) => this.legendMouseover(d, true));
     this.dispatch.on('legendMouseout', (d) => this.legendMouseover(d, false));
     this.dispatch.on('drawMouseover', (p) => {
@@ -186,6 +199,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
         this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
       } else if (key === 'pie') {
         this.options.pie = { ...DEFAULT_CHART_OPTIONS.pie, ...this.options.pie };
+      } else if (key === 'legend') {
+        this.options.legend = { ...DEFAULT_CHART_OPTIONS.legend, ...this.options.legend };
       } else if (key === 'popover') {
         this.options.popover = { ...DEFAULT_CHART_OPTIONS.popover, ...this.options.popover };
       }

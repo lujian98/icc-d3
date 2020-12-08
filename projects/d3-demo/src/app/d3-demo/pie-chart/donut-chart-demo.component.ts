@@ -11,7 +11,7 @@ import { IccD3Options } from 'icc';
     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
   </div>
   `,
-})
+}) //     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
 export class AppDonutChartDemoComponent implements OnInit {
 
   options: IccD3Options = {
@@ -20,6 +20,9 @@ export class AppDonutChartDemoComponent implements OnInit {
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
+    legend: {
+      position: 'bottom',
+    },
     popover: {
       valueFormatter: (d) => d3Format.format(',.0f')(d)
     },
@@ -37,6 +40,9 @@ export class AppDonutChartDemoComponent implements OnInit {
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
+    legend: {
+      position: 'right',
+    },
     pie: {
       donut: 0.66,
       startAngle: Math.PI * 0.5,

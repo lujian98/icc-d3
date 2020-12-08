@@ -33,3 +33,4 @@ export * from './chart/stacked-bar-chart';
 export * from './chart/stacked-horizontal-bar-chart';
 
 export * from './popover/popover.component';
+export * from './legend/legend.component';

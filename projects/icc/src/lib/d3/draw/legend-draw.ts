@@ -3,7 +3,7 @@ import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from './scale-draw';
 import { IccD3Options } from '../model';
 
-export class IccLegendDraw<T> {
+export class IccLegendDraw<T> { // TODO remove this
   margin = { top: 5, right: 0, bottom: 5, left: 0 };
   private _height = 20;
   rightAlign = true;
@@ -91,6 +91,7 @@ export class IccLegendDraw<T> {
       legendText.nodes().forEach((d: any, i) => {
         seriesWidths.push(d.getComputedTextLength() + this.padding);
       });
+      // console.log(' 0000 availableWidth =', availableWidth, ' 000 seriesWidths =', seriesWidths)
       let seriesPerRow = 0;
       let columnWidths = [];
       let legendWidth = 0;
@@ -118,7 +119,6 @@ export class IccLegendDraw<T> {
         xPositions[i] = curX;
         curX += columnWidths[i];
       }
-
       this.svg.selectAll('.legends')
         .attr('transform', (d, i) => `translate(${xPositions[i % seriesPerRow]},${(5 + Math.floor(i / seriesPerRow) * versPadding)})`);
 

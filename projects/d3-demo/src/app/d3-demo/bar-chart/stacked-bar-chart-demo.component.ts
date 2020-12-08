@@ -33,7 +33,10 @@ export class AppStackedBarChartDemoComponent implements OnInit {
     x: (d) => d.State,
     y: (d) => d.value,
     drawColor: (d, i) => d.label,
-    colors: ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00']
+    colors: ['#98abc5', '#8a89a6', '#7b6888', '#6b486b', '#a05d56', '#d0743c', '#ff8c00'],
+    legend: {
+      align: 'left',
+    },
   };
 
   ngOnInit() {

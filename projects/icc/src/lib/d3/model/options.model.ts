@@ -1,4 +1,5 @@
 import * as d3Format from 'd3-format';
+import { IccD3LegendOptions } from './legend.model';
 import { IccD3PieOptions } from './pie.model';
 import { IccD3PopoverOptions } from './popover.model';
 import { IccD3ZoomOptions } from './zoom.model';
@@ -29,6 +30,7 @@ export interface IccD3Options {
   barColor?: Function;
   duration?: number;
 
+  legend?: IccD3LegendOptions,
   pie?: IccD3PieOptions;
   popover?: IccD3PopoverOptions;
   zoom?: IccD3ZoomOptions;
@@ -57,6 +59,10 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.y,
   drawColor: (d, i) => d.key,
   duration: 0,
+  legend: {
+    position: 'top',
+    align: 'right'
+  },
   pie: {
     startAngle: 0,
     endAngle: Math.PI * 2,
