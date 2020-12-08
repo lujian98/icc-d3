@@ -14,13 +14,12 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   @Input() data: T[];
   @Input() scale: IccScaleDraw<T>;
   @Input() dispatch: d3Dispatch.Dispatch<{}>;
-
   availableWidth = 0;
   columnWidths = [];
   legendData: any[][];
 
   @HostBinding('style.display') get display(): string {
-    return this.columnWidths.length === this.data.length ? 'flex' : null;
+    return this.columnWidths.length === this.getData().length ? 'flex' : null;
   }
 
   constructor(
@@ -38,8 +37,11 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     }
   }
 
-  setLegendData(): void { // TODO resize events
-    const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
+  getData(): any[] {
+    return this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
+  }
+  setLegendData(): void {
+    const data = this.getData();
     this.legendData = [];
     if (this.options.drawWidth && this.options.legend.position !== 'right') {
       const seriesPerRow = this.getSeriesPerRow();
@@ -55,7 +57,6 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     } else {
       this.legendData.push(data);
     }
-    // console.log(' laaaaaaaaaaaaaaaadata data =', this.legendData);
     setTimeout(() => {
       this.dispatch.call('legendResize', this, data);
     }, 1);
@@ -90,7 +91,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   }
 
   legendWidth(i: number): string {
-    if (this.columnWidths.length > 0 && this.columnWidths.length !== this.data.length) {
+    if (this.columnWidths.length > 0 && this.columnWidths.length !== this.getData().length) {
       return `${this.columnWidths[i]}px`;
     }
   }
@@ -101,7 +102,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
       display: this.options.legend.position !== 'right' ? 'flex' : null,
       'margin-right': this.options.legend.align === 'right' ? `${right}px` : 'auto',
       'margin-left': this.options.legend.align === 'right' &&
-        this.columnWidths.length === this.data.length ? 'auto' : `${this.options.margin.left}px`
+        this.columnWidths.length === this.getData().length ? 'auto' : `${this.options.margin.left}px`
     };
   }
 
