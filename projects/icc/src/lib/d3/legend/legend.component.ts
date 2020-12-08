@@ -98,11 +98,20 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
 
   legendStyles(): any {
     const right = 10 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
+    let marginRight = `${right}px`;
+    let marginLeft = `${this.options.margin.left}px`;
+    if (this.options.legend.align === 'right' && this.columnWidths.length === this.getData().length) {
+      marginLeft = 'auto';
+    } else if (this.options.legend.position === 'right') {
+      marginLeft = 'auto';
+    }
+    if (this.options.legend.align !== 'right' || this.options.legend.position === 'right') {
+      marginRight = 'auto';
+    }
     return {
       display: this.options.legend.position !== 'right' ? 'flex' : null,
-      'margin-right': this.options.legend.align === 'right' ? `${right}px` : 'auto',
-      'margin-left': this.options.legend.align === 'right' &&
-        this.columnWidths.length === this.getData().length ? 'auto' : `${this.options.margin.left}px`
+      'margin-right': marginRight,
+      'margin-left': marginLeft
     };
   }
 
