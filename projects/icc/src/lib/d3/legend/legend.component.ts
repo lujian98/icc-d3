@@ -17,7 +17,6 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
 
   availableWidth = 0;
   columnWidths = [];
-  padding = 32; // define how much space between legend items. - recommend 32 for furious version
   legendData: any[][];
 
   @HostBinding('style.display') get display(): string {
@@ -26,8 +25,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
 
   constructor(
     private elementRef: ElementRef,
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     this.setLegendData();
@@ -36,53 +34,17 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left) {
       this.availableWidth = this.options.drawWidth - this.options.margin.left;
-      console.log(' sssssssssssssssss this.options =', this.options)
       this.setLegendData();
     }
   }
 
   setLegendData(): void { // TODO resize events
-    const availableWidth = this.options.drawWidth - this.options.margin.left; // - this.margin.left - this.margin.right;
     const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
-    const legendText = d3.select(this.elementRef.nativeElement).selectAll('.legend');
-    console.log('qqqqqqqqqqq legends= ', legendText)
-    const seriesWidths = [];
-    legendText.nodes().forEach((d: any, i) => {
-      seriesWidths.push(d.getBoundingClientRect().width);
-    });
-    // console.log(' 11111 availableWidth =', availableWidth, ' 111 seriesWidths =', seriesWidths);
-    let seriesPerRow = 0;
-    let columnWidths = [];
-    let legendWidth = 0;
-    while (legendWidth < availableWidth && seriesPerRow < seriesWidths.length) {
-      columnWidths[seriesPerRow] = seriesWidths[seriesPerRow];
-      legendWidth += seriesWidths[seriesPerRow++];
-    }
-    if (seriesPerRow === 0) {
-      seriesPerRow = 1;
-    }
-    while (legendWidth > availableWidth && seriesPerRow > 1) {
-      columnWidths = [];
-      seriesPerRow--;
-      for (let k = 0; k < seriesWidths.length; k++) {
-        if (seriesWidths[k] > (columnWidths[k % seriesPerRow] || 0)) {
-          columnWidths[k % seriesPerRow] = seriesWidths[k];
-        }
-      }
-      legendWidth = columnWidths.reduce((prev, cur, index, array) => {
-        return prev + cur;
-      });
-    }
-
-    console.log('1111 seriesPerRow =', seriesPerRow);
-    console.log('1111 columnWidths =', columnWidths)
-    this.columnWidths = columnWidths;
-
     this.legendData = [];
     if (this.options.drawWidth && this.options.legend.position !== 'right') {
+      const seriesPerRow = this.getSeriesPerRow();
       let nd = [];
       data.forEach((d, i) => {
-        // console.log(' i=', i, ' i % seriesPerRow=', i % seriesPerRow)
         if (i !== 0 && i % seriesPerRow === 0) {
           this.legendData.push(nd);
           nd = [];
@@ -98,6 +60,33 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
       this.dispatch.call('legendResize', this, data);
     }, 1);
 
+  }
+
+  getSeriesPerRow(): number {
+    let seriesPerRow = 0;
+    this.columnWidths = [];
+    const legendText = d3.select(this.elementRef.nativeElement).selectAll('.legend');
+    const seriesWidths = [];
+    legendText.nodes().forEach((d: any, i) => seriesWidths.push(d.getBoundingClientRect().width));
+    let legendWidth = 0;
+    while (legendWidth < this.availableWidth && seriesPerRow < seriesWidths.length) {
+      this.columnWidths[seriesPerRow] = seriesWidths[seriesPerRow];
+      legendWidth += seriesWidths[seriesPerRow++];
+    }
+    if (seriesPerRow === 0) {
+      seriesPerRow = 1;
+    }
+    while (legendWidth > this.availableWidth && seriesPerRow > 1) {
+      this.columnWidths = [];
+      seriesPerRow--;
+      for (let k = 0; k < seriesWidths.length; k++) {
+        if (seriesWidths[k] > (this.columnWidths[k % seriesPerRow] || 0)) {
+          this.columnWidths[k % seriesPerRow] = seriesWidths[k];
+        }
+      }
+      legendWidth = this.columnWidths.reduce((prev, cur, index, array) => prev + cur);
+    }
+    return seriesPerRow;
   }
 
   legendWidth(i: number): string {
@@ -147,62 +136,3 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     this.dispatch.call('legendMouseout', this, d);
   }
 }
-
-/*
-
-
-<canvas id="canvas"></canvas>
-
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-let text = ctx.measureText('foo'); // TextMetrics object
-text.width; // 16;
-
-
-
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
-ctx.font = "30px Arial";
-var txt = "Hello World"
-ctx.fillText("width:" + ctx.measureText(txt).width, 10, 50)
-ctx.fillText(txt, 10, 100);
-
-function displayTextWidth(text, font) {
-  let canvas = displayTextWidth.canvas || (displayTextWidth.canvas = document.createElement("canvas"));
-  let context = canvas.getContext("2d");
-  context.font = font;
-  let metrics = context.measureText(text);
-  return metrics.width;
-}
-console.log("Text Width: " + displayTextWidth("This is demo text!", "italic 19pt verdana")); //
-*/
-
-/*
-<svg width="150" height="150">
-	<text id="test1" y="50">test1</text>
-	<text id="test2" y="100">
-		<tspan id="test3">test3</tspan>
-	</text>
-	<tspan id="test4">test4</tspan>
-</svg>
-var test1 = document.getElementById('test1');
-var test2 = document.getElementById('test2');
-var test3 = document.getElementById('test3');
-var test4 = document.getElementById('test4');
-
-test1.getBBox().width;
-test2.getBBox().width;
-test3.getBBox().width;
-test4.getBBox().width;
-
-test1.getBoundingClientRect().width;
-test2.getBoundingClientRect().width;
-test3.getBoundingClientRect().width;
-test4.getBoundingClientRect().width;
-
-test1.getComputedTextLength();
-test2.getComputedTextLength();
-test3.getComputedTextLength();
-test4.getComputedTextLength();
-
-*/

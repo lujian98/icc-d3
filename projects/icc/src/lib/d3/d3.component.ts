@@ -123,11 +123,9 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;
     this.options = this.view.getOptions();
-    console.log(' qqqq this.options =', this.options)
-
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
-
+    this.scaleChange$.next(this.scale);
     this.chartTypes.forEach((type) => {
       const draw = this.drawServie.getDraw(this.svg, this.scale, this.dispatch, type);
       this.draws.push(draw);
@@ -138,7 +136,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       this.zoom = new IccZoomDraw(this.svg, this.scale, this, this.options);
     }
     this.interactive = new IccInteractiveDraw(this.svg, this.scale, this.options, this);
-    this.scaleChange$.next(this.scale);
   }
 
   drawChart(data: T[]): void {

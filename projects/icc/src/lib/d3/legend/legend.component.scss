@@ -1,17 +1,4 @@
 :host {
-  // margin-left: 40px;
-  // display: flex;
-  // flex-direction: row;
-
-  /*
-  table {
-    width: 100%;
-  }
-
-  table tr, td {
-    display: flex;
-    flex: 1;
-  } */
 
   .legend-icon {
     width: 12px;
@@ -20,7 +7,7 @@
     margin-right: 5px;
     margin-left: 0px;
     margin-top: 2px;
-    vertical-align: middle; // TODO this seems not working
+    // vertical-align: middle; // TODO this seems not working
     border: 2px solid;
   }
 }

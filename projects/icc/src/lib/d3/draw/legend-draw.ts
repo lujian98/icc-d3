@@ -119,10 +119,6 @@ export class IccLegendDraw<T> { // TODO remove this
         xPositions[i] = curX;
         curX += columnWidths[i];
       }
-
-      // console.log( '000 seriesPerRow =', seriesPerRow);
-      // console.log(' 000 columnWidths =', columnWidths)
-      console.log('000 xPositions =', xPositions)
       this.svg.selectAll('.legends')
         .attr('transform', (d, i) => `translate(${xPositions[i % seriesPerRow]},${(5 + Math.floor(i / seriesPerRow) * versPadding)})`);
 
