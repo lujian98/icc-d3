@@ -34,15 +34,15 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options && this.availableWidth !== this.options.drawWidth) {
-      this.availableWidth = this.options.drawWidth;
+    if (changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left) {
+      this.availableWidth = this.options.drawWidth - this.options.margin.left;
       console.log(' sssssssssssssssss this.options =', this.options)
       this.setLegendData();
     }
   }
 
   setLegendData(): void { // TODO resize events
-    const availableWidth = this.options.drawWidth; // - this.margin.left - this.margin.right;
+    const availableWidth = this.options.drawWidth - this.options.margin.left; // - this.margin.left - this.margin.right;
     const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
     const legendText = d3.select(this.elementRef.nativeElement).selectAll('.legend');
     console.log('qqqqqqqqqqq legends= ', legendText)
@@ -108,11 +108,11 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
 
   legendStyles(): any {
     const right = 10 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
-    const left = this.options.margin.left - 10;
     return {
       display: this.options.legend.position !== 'right' ? 'flex' : null,
-      'margin-left': this.options.legend.align === 'right' ? 'auto' : `${left}px`,
-      'margin-right': this.options.legend.align === 'right' ? `${right}px` : 'auto'
+      'margin-right': this.options.legend.align === 'right' ? `${right}px` : 'auto',
+      'margin-left': this.options.legend.align === 'right' &&
+        this.columnWidths.length === this.data.length ? 'auto' : `${this.options.margin.left}px`
     };
   }
 
