@@ -101,8 +101,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public resizeChart(data: T[]): void {
-    this.view.update();
-    this.options = this.view.getOptions();
+    this.setViewDimension();
+    this.view.update(this.options);
     this.scale.update(this.options);
     this.drawAxis.updateOptions(this.options);
     this.setDrawDomain(data);
@@ -117,9 +117,10 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   public createChart(data: T[]): void {
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
-    this.view = new IccView(this.elementRef, this.options, this.chartTypes);
+    this.setViewDimension();
+    this.view = new IccView(this.elementRef, this.chartTypes);
+    this.view.update(this.options);
     this.svg = this.view.svg;
-    this.options = this.view.getOptions();
     this.scale.buildScales(this.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.options);
     this.scaleChange$.next(this.scale);
@@ -203,6 +204,33 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       }
     }
     this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };
+  }
+
+  private setViewDimension(): void {
+    this.setZoomOptions();
+    const margin = this.options.margin;
+    // this.width = this.elementRef.nativeElement.clientWidth;
+    // this.height = this.elementRef.nativeElement.clientHeight;
+    const elementRef = this.elementRef.nativeElement.firstChild;
+    const width = elementRef.clientWidth || 300;
+    const height = elementRef.clientHeight || 300;
+
+    const zoom = this.options.zoom;
+    const drawDimension = {
+      drawWidth: width - margin.left - margin.right
+        - (zoom.verticalBrushShow ? this.options.brushYWidth + 30 : 0),
+      drawHeight: height - margin.top - margin.bottom
+        - (zoom.horizontalBrushShow ? this.options.drawHeight2 + 30 : 0)
+    };
+    this.options = { ...this.options, ...drawDimension };
+  }
+
+  private setZoomOptions(): void {
+    const zoom = this.options.zoom;
+    zoom.horizontalOff = !zoom.enabled ? true : zoom.horizontalOff;
+    zoom.horizontalBrushShow = !zoom.enabled || zoom.horizontalOff ? false : zoom.horizontalBrushShow;
+    zoom.verticalOff = !zoom.enabled ? true : zoom.verticalOff;
+    zoom.verticalBrushShow = !zoom.enabled || zoom.verticalOff ? false : zoom.verticalBrushShow;
   }
 
   private getChartTypes(data: T[]): string[] {
