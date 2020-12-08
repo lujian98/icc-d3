@@ -3,6 +3,7 @@ export * from './d3.component';
 export * from './draw-service';
 
 export * from './model/index';
+export * from './config';
 
 export * from './draw/abstract-draw';
 export * from './draw/view';
