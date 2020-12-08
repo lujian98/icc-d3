@@ -46,8 +46,8 @@ export class IccView {
     // this.width = this.elementRef.nativeElement.clientWidth;
     // this.height = this.elementRef.nativeElement.clientHeight;
     const elementRef = this.elementRef.nativeElement.firstChild;
-    this.width = elementRef.clientWidth;
-    this.height = elementRef.clientHeight;
+    this.width = elementRef.clientWidth || 300;
+    this.height = elementRef.clientHeight || 300;
 
     const zoom = this.options.zoom;
     const drawDimension = {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from '../draw/scale-draw';
@@ -9,7 +9,7 @@ import { IccD3Options } from '../model';
   templateUrl: './legend.component.html',
   styleUrls: ['./legend.component.scss']
 })
-export class IccD3LegendComponent<T> implements OnInit, OnChanges {
+export class IccD3LegendComponent<T> implements OnChanges {
   @Input() options: IccD3Options;
   @Input() data: T[];
   @Input() scale: IccScaleDraw<T>;
@@ -26,15 +26,9 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
     private elementRef: ElementRef,
   ) { }
 
-  ngOnInit(): void {
-    this.setLegendData();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left) {
-      if (this.options.drawWidth <= 0) {
-        this.options.drawWidth = 300;
-      }
+    if ((changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left)
+      || changes.data) {
       this.availableWidth = this.options.drawWidth - this.options.margin.left;
       this.setLegendData();
     }
