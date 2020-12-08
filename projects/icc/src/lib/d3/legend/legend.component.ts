@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from '../draw/scale-draw';
 import { IccD3Options } from '../model';
@@ -14,19 +15,78 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   @Input() scale: IccScaleDraw<T>;
   @Input() dispatch: d3Dispatch.Dispatch<{}>;
 
+  availableWidth = 0;
+  padding = 32; // define how much space between legend items. - recommend 32 for furious version
   legendData: any[][];
+
+  constructor(
+    private elementRef: ElementRef,
+  ) {
+  }
 
   ngOnInit(): void {
     this.setLegendData();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(' sssssssssssssssss this.options =', this.options)
-    this.setLegendData();
+    if (changes.options && this.availableWidth !== this.options.drawWidth) {
+      this.availableWidth = this.options.drawWidth;
+      console.log(' sssssssssssssssss this.options =', this.options)
+      this.setLegendData();
+    }
+
+    //
   }
 
   setLegendData(): void { // TODO resize events
+    const availableWidth = this.options.drawWidth; // - this.margin.left - this.margin.right;
     const data = this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
+
+    const legendText = d3.select(this.elementRef.nativeElement).selectAll('.legend');
+    console.log( 'qqqqqqqqqqq legends= ', legendText)
+    const versPadding = 20;
+    const seriesWidths = [];
+
+    legendText.nodes().forEach((d: any, i) => {
+      //  seriesWidths.push(d.getComputedTextLength() + this.padding);
+      const w = d.getBoundingClientRect().width;
+      seriesWidths.push(w);
+      console.log( ' 11111 w =', w)
+    });
+
+    console.log(' 11111 availableWidth =', availableWidth, ' 111 seriesWidths =', seriesWidths);
+
+    let seriesPerRow = 0;
+    let columnWidths = [];
+    let legendWidth = 0;
+    while (legendWidth < availableWidth && seriesPerRow < seriesWidths.length) {
+      columnWidths[seriesPerRow] = seriesWidths[seriesPerRow];
+      legendWidth += seriesWidths[seriesPerRow++];
+    }
+    if (seriesPerRow === 0) {
+      seriesPerRow = 1;
+    }
+    while (legendWidth > availableWidth && seriesPerRow > 1) {
+      columnWidths = [];
+      seriesPerRow--;
+      for (let k = 0; k < seriesWidths.length; k++) {
+        if (seriesWidths[k] > (columnWidths[k % seriesPerRow] || 0)) {
+          columnWidths[k % seriesPerRow] = seriesWidths[k];
+        }
+      }
+      legendWidth = columnWidths.reduce((prev, cur, index, array) => {
+        return prev + cur;
+      });
+    }
+    const xPositions = [];
+    for (let i = 0, curX = 0; i < seriesPerRow; i++) {
+      xPositions[i] = curX;
+      curX += columnWidths[i];
+    }
+
+    console.log('1111 seriesPerRow =', seriesPerRow);
+    console.log('1111 columnWidths =', columnWidths)
+    console.log('1111 xPositions =', xPositions)
     let columns = 1;
     this.legendData = [];
     /*
@@ -65,7 +125,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges {
   }
 
   legendStyles(): any { // 110px
-    const right = 20 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
+    const right = 10 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
     const left = this.options.margin.left - 10;
     return {
       display: this.options.legend.position !== 'right' ? 'flex' : null,

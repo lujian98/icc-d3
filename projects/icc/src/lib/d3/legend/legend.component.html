@@ -1,11 +1,11 @@
 <div [ngStyle]="legendStyles()"
   *ngFor="let data of legendData; let i = index">
-  <div style="display: flex" *ngFor="let item of data" (click)="itemClick($event, item)"
+  <div class="legend" style="display: flex" *ngFor="let item of data" (click)="itemClick($event, item)"
     (mouseover)="itemMouseOver($event, item)" (mouseout)="itemMouseOut($event, item)">
     <div *ngIf="item" class="legend-icon" [ngStyle]="iconStyles(item, i)"></div>
-    <div *ngIf="item" [ngStyle]="{'color': legendColor(item, i)}">
+    <span *ngIf="item" [ngStyle]="{'white-space': 'nowrap','color': legendColor(item, i), 'margin-right': '15px'}">
       {{ legendText(item) }}
-    </div>
+    </span>
   </div>
 </div>
 

@@ -8,10 +8,9 @@ import { IccD3Options } from 'icc';
   template: `
   <div style="height: 100%; display: flex;">
     <icc-d3 [options]="options" [data]="data"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data2"></icc-d3>
   </div>
   `,
-})
+}) //     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
 export class AppDonutChartDemoComponent implements OnInit {
 
   options: IccD3Options = {
@@ -20,6 +19,9 @@ export class AppDonutChartDemoComponent implements OnInit {
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
+    legend: {
+      position: 'right',
+    },
     popover: {
       valueFormatter: (d) => d3Format.format(',.0f')(d)
     },

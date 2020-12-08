@@ -7,11 +7,6 @@ import { IccD3Options } from 'icc';
   template: `
   <div style="height: 100%; display: flex;">
     <icc-d3 [options]="options1" [data]="data"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data"></icc-d3>
-  </div>
-  <div style="height: 100%; display: flex; margin-top: 20px;">
-    <icc-d3 [options]="options3" [data]="data"></icc-d3>
-    <icc-d3 [options]="options4" [data]="data"></icc-d3>
   </div>
   `,
 })
@@ -21,8 +16,8 @@ import { IccD3Options } from 'icc';
     <icc-d3 [options]="options2" [data]="data"></icc-d3>
   </div>
   <div style="height: 100%; display: flex; margin-top: 20px;">
-    <icc-d3 [options]="options1" [data]="data"></icc-d3>
-    <icc-d3 [options]="options1" [data]="data"></icc-d3>
+    <icc-d3 [options]="options3" [data]="data"></icc-d3>
+    <icc-d3 [options]="options4" [data]="data"></icc-d3>
   </div>
   */
 export class AppLineChartDemoComponent implements OnInit {

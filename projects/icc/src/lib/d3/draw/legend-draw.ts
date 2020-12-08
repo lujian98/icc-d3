@@ -91,6 +91,7 @@ export class IccLegendDraw<T> { // TODO remove this
       legendText.nodes().forEach((d: any, i) => {
         seriesWidths.push(d.getComputedTextLength() + this.padding);
       });
+      // console.log(' 0000 availableWidth =', availableWidth, ' 000 seriesWidths =', seriesWidths)
       let seriesPerRow = 0;
       let columnWidths = [];
       let legendWidth = 0;
@@ -119,6 +120,9 @@ export class IccLegendDraw<T> { // TODO remove this
         curX += columnWidths[i];
       }
 
+      // console.log( '000 seriesPerRow =', seriesPerRow);
+      // console.log(' 000 columnWidths =', columnWidths)
+      console.log('000 xPositions =', xPositions)
       this.svg.selectAll('.legends')
         .attr('transform', (d, i) => `translate(${xPositions[i % seriesPerRow]},${(5 + Math.floor(i / seriesPerRow) * versPadding)})`);
 
