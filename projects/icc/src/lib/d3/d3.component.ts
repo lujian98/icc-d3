@@ -90,7 +90,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       if (!this.svg) {
         this.createChart(data);
       } else {
-        this.view.drawLegend(this.scale, data, this.dispatch);
         this.setDrawDomain(data);
         this.drawChart(data);
         if (this.options.zoom.enabled) {
@@ -103,7 +102,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   public resizeChart(data: T[]): void {
     this.view.update();
-    this.view.drawLegend(this.scale, data, this.dispatch);
     this.options = this.view.getOptions();
     this.scale.update(this.options);
     this.drawAxis.updateOptions(this.options);
@@ -120,7 +118,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.options);
     this.view = new IccView(this.elementRef, this.options, this.chartTypes);
-    this.view.drawLegend(this.scale, data, this.dispatch);
     this.svg = this.view.svg;
     this.options = this.view.getOptions();
     this.scale.buildScales(this.options);

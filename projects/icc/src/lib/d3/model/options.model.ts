@@ -45,7 +45,7 @@ export interface IccD3Options {
 export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   chartType: 'lineChart',
   useInteractiveGuideline: false,
-  margin: { top: 10, right: 10, bottom: 20, left: 40 },
+  margin: { top: 0, right: 10, bottom: 20, left: 40 },
   width: '100%',
   // height: 500, // TODO not used yet
   brushYWidth: 50,

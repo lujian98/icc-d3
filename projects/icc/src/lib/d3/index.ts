@@ -8,7 +8,6 @@ export * from './draw/abstract-draw';
 export * from './draw/view';
 export * from './draw/axis-draw';
 export * from './draw/interactive-draw';
-export * from './draw/legend-draw';
 export * from './draw/scale-draw';
 export * from './draw/zoom-draw';
 

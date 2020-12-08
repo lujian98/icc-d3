@@ -1,7 +1,6 @@
 import { ElementRef } from '@angular/core';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
-import { IccLegendDraw } from './legend-draw';
 import { IccD3Options } from '../model';
 
 export class IccView {
@@ -117,16 +116,6 @@ export class IccView {
 
     brushDraw.select('.context').attr('transform', `translate(${left}, ${top})`);
     brushDraw.select('.contextBrushY').attr('transform', `translate(${yBrushPos}, 0)`);
-  }
-
-  drawLegend(scale: any, data: any[], dispatch: d3Dispatch.Dispatch<{}>): void {
-    const drawLegend = new IccLegendDraw(this.svg, scale, data, this.options, dispatch);
-    const legendHeight = drawLegend.height;
-    if (legendHeight - 10 !== this.options.legendHeight) {
-      this.options.legendHeight = legendHeight - 10;
-      this.update();
-      drawLegend.updateOptions(this.options);
-    }
   }
 }
 

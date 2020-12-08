@@ -16,7 +16,7 @@ export class IccD3LegendComponent<T> implements OnChanges {
   @Input() dispatch: d3Dispatch.Dispatch<{}>;
   availableWidth = 0;
   columnWidths = [];
-  legendData: any[][];
+  legendData: T[][];
 
   @HostBinding('style.display') get display(): string {
     return this.getData() && this.columnWidths.length === this.getData().length ? 'flex' : null;
@@ -34,7 +34,7 @@ export class IccD3LegendComponent<T> implements OnChanges {
     }
   }
 
-  getData(): any[] {
+  getData(): T[] {
     return this.options.chartType === 'pieChart' ? this.options.y0(this.data[0]) : this.data;
   }
 
