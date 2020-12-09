@@ -45,7 +45,7 @@ export class IccInteractiveDraw<T> {
     if (this.options.useInteractiveGuideline) {
       this.svg.select('.interactiveDraw').append('line')
         .attr('class', 'guideLine')
-        .style('stroke', 'red')
+        // .style('stroke', 'red')
         .style('stroke-width', 2)
         .style('opacity', 0)
         .attr('x1', 0)

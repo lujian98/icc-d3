@@ -17,12 +17,18 @@ icc-d3 {
 
   .axis line {
     fill: none;
-    stroke: #e5e5e5;
+    stroke: #bfbfbf;
     shape-rendering: crispEdges;
   }
 
   .drawlabel, .guideLine {
     pointer-events: none;
+  }
+
+  .guideLine {
+    fill: none;
+    stroke: #bfbfbf;
+    shape-rendering: crispEdges;
   }
 }
 
