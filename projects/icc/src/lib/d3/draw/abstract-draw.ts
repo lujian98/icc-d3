@@ -80,7 +80,7 @@ export abstract class IccAbstractDraw<T> {
 
   private getStackedData(idx: number, data): IccD3Interactive[] {
     const d = data[idx];
-    if (d.data) {
+    if (d && d.data) {
       const r: IccD3Interactive = {
         key: data.key,
         value: d,

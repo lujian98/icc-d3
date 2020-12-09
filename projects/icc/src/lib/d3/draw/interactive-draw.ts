@@ -80,12 +80,10 @@ export class IccInteractiveDraw<T> {
         .attr('x1', pxy[0])
         .attr('x2', pxy[0]);
     }
-    if (data.length > 0) {
-      this.updateGuideLineCircle(data, pxy[0], mouseover);
-      if (mouseover) {
-        const pd = this.getPopoverData(data);
-        this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
-      }
+    this.updateGuideLineCircle(data, pxy[0], mouseover);
+    if (data.length > 0 && mouseover) {
+      const pd = this.getPopoverData(data);
+      this.draw.dispatch.call('drawMouseover', this, { event: e, data: pd });
     }
   }
 
