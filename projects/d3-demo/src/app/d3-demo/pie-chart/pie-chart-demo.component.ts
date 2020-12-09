@@ -10,7 +10,7 @@ import { IccD3Options } from 'icc';
     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
   </div>
   `,
-})
+}) //     <icc-d3 [options]="options" [data]="data"></icc-d3>
 export class AppPieChartDemoComponent implements OnInit {
 
   options: IccD3Options = {
@@ -39,10 +39,11 @@ export class AppPieChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key,
     legend: {
       position: 'right',
+      align: 'center'
     },
     pie: {
-      startAngle: -Math.PI * 0.5,
-      endAngle: Math.PI * 0.5
+      startAngle: Math.PI * -1 / 2,
+      endAngle: Math.PI * 1 / 2
     },
     zoom: {
       enabled: false,
