@@ -23,14 +23,13 @@ export class AppDonutChartDemoComponent implements OnInit {
     legend: {
       position: 'top',
     },
-    popover: {
-      valueFormatter: (d) => d3Format.format(',.0f')(d)
-    },
     pie: {
-      donut: 0.50
+      donut: 0.66,
+      startAngle: Math.PI * 0.5,
+      endAngle: Math.PI * -1.0
     },
     zoom: {
-      enabled: false
+      enabled: false,
     }
   };
 
@@ -42,14 +41,16 @@ export class AppDonutChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.name,
     legend: {
       position: 'right',
+      align: 'center'
+    },
+    popover: {
+      valueFormatter: (d) => d3Format.format(',.0f')(d)
     },
     pie: {
-      donut: 0.66,
-      startAngle: Math.PI * 0.5,
-      endAngle: Math.PI * -1.0
+      donut: 0.50
     },
     zoom: {
-      enabled: false,
+      enabled: false
     }
   };
 

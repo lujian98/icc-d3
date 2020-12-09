@@ -19,7 +19,12 @@ export class IccD3LegendComponent<T> implements OnChanges {
   legendData: T[][];
 
   @HostBinding('style.display') get display(): string {
-    return this.getData() && this.columnWidths.length === this.getData().length ? 'flex' : null;
+    return (this.getData() && this.columnWidths.length === this.getData().length) ||
+      this.options.legend.position === 'right' ? 'flex' : null;
+  }
+
+  @HostBinding('style.align-items') get alignItems(): string {
+    return this.options.legend.position === 'right' ? this.options.legend.align : null;
   }
 
   constructor(

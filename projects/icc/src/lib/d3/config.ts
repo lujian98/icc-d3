@@ -41,8 +41,7 @@ export class IccD3Config {
     switch (this.options.legend.position) {
       case 'top': return 'column-reverse';
       case 'bottom': return 'column';
-      case 'right':
-      case 'default': return '';
+      case 'right': return '';
     }
   }
 
