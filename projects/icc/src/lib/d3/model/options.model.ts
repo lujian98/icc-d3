@@ -3,6 +3,7 @@ import { IccD3LegendOptions } from './legend.model';
 import { IccD3PieOptions } from './pie.model';
 import { IccD3PopoverOptions } from './popover.model';
 import { IccD3ZoomOptions } from './zoom.model';
+import { IccD3AxisOptions } from './axis.model';
 
 export interface IccMargin {
   top: number;
@@ -30,6 +31,8 @@ export interface IccD3Options {
   barColor?: Function;
   duration?: number;
 
+  xAxis?: IccD3AxisOptions;
+  yAxis?: IccD3AxisOptions;
   legend?: IccD3LegendOptions,
   pie?: IccD3PieOptions;
   popover?: IccD3PopoverOptions;
@@ -45,7 +48,7 @@ export interface IccD3Options {
 export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   chartType: 'lineChart',
   useInteractiveGuideline: false,
-  margin: { top: 0, right: 10, bottom: 20, left: 40 },
+  margin: { top: 0, right: 10, bottom: 40, left: 50 },
   width: '100%',
   // height: 500, // TODO not used yet
   brushYWidth: 50,
@@ -59,6 +62,12 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.y,
   drawColor: (d, i) => d.key,
   duration: 0,
+  xAxis: {
+    axisLabelDistance: 0
+  },
+  yAxis: {
+    axisLabelDistance: 0
+  },
   legend: {
     position: 'top',
     align: 'right'

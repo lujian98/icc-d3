@@ -48,14 +48,8 @@ export class IccD3Config {
 
   private init(): void {
     for (const [key, value] of Object.entries(this.options)) {
-      if (key === 'zoom') {
-        this.options.zoom = { ...DEFAULT_CHART_OPTIONS.zoom, ...this.options.zoom };
-      } else if (key === 'pie') {
-        this.options.pie = { ...DEFAULT_CHART_OPTIONS.pie, ...this.options.pie };
-      } else if (key === 'legend') {
-        this.options.legend = { ...DEFAULT_CHART_OPTIONS.legend, ...this.options.legend };
-      } else if (key === 'popover') {
-        this.options.popover = { ...DEFAULT_CHART_OPTIONS.popover, ...this.options.popover };
+      if (typeof value === 'object' && value !== null && DEFAULT_CHART_OPTIONS[key]) {
+        this.options[key] = { ...DEFAULT_CHART_OPTIONS[key], ...this.options[key] };
       }
     }
     this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };

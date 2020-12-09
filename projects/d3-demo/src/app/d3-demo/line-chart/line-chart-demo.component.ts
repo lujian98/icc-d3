@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3Format from 'd3-format';
 import { IccD3Options } from 'icc';
 
 @Component({
@@ -34,6 +35,14 @@ export class AppLineChartDemoComponent implements OnInit {
     x0: (d) => d.key,
     y0: (d) => d.values,
     drawColor: (d, i) => d.key,
+    xAxis: {
+      axisLabel: 'Time (ms)',
+      axisLabelDistance: 0
+    },
+    yAxis: {
+      axisLabel: 'Voltage (v)',
+      axisLabelDistance: 0
+    },
     zoom: {
       enabled: true,
       horizontalOff: false,
@@ -48,6 +57,14 @@ export class AppLineChartDemoComponent implements OnInit {
     x0: (d) => d.key,
     y0: (d) => d.values,
     drawColor: (d, i) => d.key,
+    xAxis: {
+      axisLabel: 'Time (ms)',
+      axisLabelDistance: -10
+    },
+    yAxis: {
+      axisLabel: 'Voltage (v)',
+      axisLabelDistance: -10
+    },
     zoom: {
       enabled: true,
       horizontalOff: false,
@@ -64,6 +81,14 @@ export class AppLineChartDemoComponent implements OnInit {
     x0: (d) => d.key,
     y0: (d) => d.values,
     drawColor: (d, i) => d.key,
+    xAxis: {
+      axisLabel: 'Time (ms)',
+      axisLabelDistance: 0
+    },
+    yAxis: {
+      axisLabel: 'Voltage (v)',
+      axisLabelDistance: 0
+    },
     zoom: {
       enabled: true,
       horizontalOff: true,
@@ -80,6 +105,14 @@ export class AppLineChartDemoComponent implements OnInit {
     x0: (d) => d.key,
     y0: (d) => d.values,
     drawColor: (d, i) => d.key,
+    xAxis: {
+      axisLabel: 'Time (ms)',
+      axisLabelDistance: 0
+    },
+    yAxis: {
+      axisLabel: 'Voltage (v)',
+      axisLabelDistance: 0
+    },
     zoom: {
       enabled: true,
       horizontalOff: false,
@@ -91,7 +124,7 @@ export class AppLineChartDemoComponent implements OnInit {
 
   ngOnInit() {
     this.data = this.getData();
-    console.log(' n data =', this.data);
+    // console.log(' n data =', this.data);
   }
 
   private getData(): any[] {

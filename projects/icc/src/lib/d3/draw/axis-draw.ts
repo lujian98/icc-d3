@@ -1,6 +1,6 @@
 import * as d3 from 'd3-selection';
-import { IccScaleDraw } from './scale-draw';
 import { IccD3Options } from '../model';
+import { IccScaleDraw } from './scale-draw';
 
 export class IccAxisDraw<T> {
   private drawID: number;
@@ -45,6 +45,13 @@ export class IccAxisDraw<T> {
         .attr('height', this.options.drawHeight + this.options.margin.top + this.options.margin.bottom)
         .attr('x', 0).attr('y', 0);
     }
+
+    xAxisDraw.select('.xAxis--label')
+      .attr('transform', 'translate(0,' + this.options.drawHeight + ')')
+      .style('text-anchor', 'middle')
+      .attr('dy', 30 + this.options.xAxis.axisLabelDistance)
+      .attr('x', this.options.drawWidth / 2)
+      .text(() => this.options.xAxis.axisLabel);
   }
 
   updateYAxis(): void {
@@ -59,6 +66,13 @@ export class IccAxisDraw<T> {
         .attr('height', this.options.drawHeight)
         .attr('x', -this.options.margin.left).attr('y', 0);
     }
+
+    yAxisDraw.select('.yAxis--label')
+      .attr('transform', `rotate(-90, 0, ${this.options.drawHeight / 2})`)
+      .style('text-anchor', 'middle')
+      .attr('y', this.options.drawHeight / 2)
+      .attr('dy', -30 + + this.options.xAxis.axisLabelDistance)
+      .text(() => this.options.yAxis.axisLabel);
   }
 
   private drawXAxis(): void {
@@ -68,6 +82,7 @@ export class IccAxisDraw<T> {
       xAxisDraw.attr('clip-path', `url(#clip-axis--x${this.drawID})`);
     }
     xAxisDraw.append('g').attr('class', 'axis axis--x');
+    xAxisDraw.append('g').append('text').attr('class', 'xAxis--label');
   }
 
   private drawYAxis(): void {
@@ -77,6 +92,7 @@ export class IccAxisDraw<T> {
       yAxisDraw.attr('clip-path', `url(#clip-axis--y${this.drawID})`);
     }
     yAxisDraw.append('g').attr('class', 'axis axis--y');
+    yAxisDraw.append('g').append('text').attr('class', 'yAxis--label');
   }
 }
 
