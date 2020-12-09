@@ -14,14 +14,11 @@ icc-d3 {
     fill: none;
     pointer-events: all;
   }
-  .grid line, .grid .tick {
-    // stroke: lightgrey;
-    opacity: 0.1;
-    shape-rendering: crispEdges;
-  }
 
-  .grid path {
-    stroke-width: 0;
+  .axis line {
+    fill: none;
+    stroke: #e5e5e5;
+    shape-rendering: crispEdges;
   }
 
   .drawlabel, .guideLine {
