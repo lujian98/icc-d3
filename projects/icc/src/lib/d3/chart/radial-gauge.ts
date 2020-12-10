@@ -4,6 +4,91 @@ import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
+
+  upperLimit = 6;
+  lowerLimit = 0;
+  unit = 'kW';
+  precision = 2;
+
+  ranges = [
+    {
+      min: 0,
+      max: 1.5,
+      color: '#DEDEDE'
+    },
+    {
+      min: 1.5,
+      max: 2.5,
+      color: '#8DCA2F'
+    },
+    {
+      min: 2.5,
+      max: 3.5,
+      color: '#FDC702'
+    },
+    {
+      min: 3.5,
+      max: 4.5,
+      color: '#FF7700'
+    },
+    {
+      min: 4.5,
+      max: 6.0,
+      color: '#C50200'
+    }
+  ];
+
+  // value = 1.5;
+  // data = this.gaugeRanges,
+  value = 3;
+
+  gaugeRanges = [
+    {
+      From: 1.5,
+      To: 2.5,
+      Color: '#8DCB2A'
+    }, {
+      From: 2.5,
+      To: 3.5,
+      Color: '#FFC700'
+    }, {
+      From: 3.5,
+      To: 4.5,
+      Color: '#FF7A00'
+    },
+    {
+      From: 4.5,
+      To: 6,
+      Color: '#C20000'
+    }];
+
+  innerRadius = 130;
+  outterRadius = 145;
+  majorGraduations = 6;
+  minorGraduations = 10;
+  majorGraduationLenght = 16;
+  minorGraduationLenght = 10;
+  majorGraduationMarginTop = 7;
+  majorGraduationColor = 'green'; // '#EAEAEA';
+  minorGraduationColor = 'blue'; // '#EAEAEA';
+  majorGraduationTextColor = '#6C6C6C';
+  majorGraduationDecimals = 2;
+  needleColor = '#2DABC1';
+  valueVerticalOffset = 40;
+
+  unactiveColor: string;
+
+  majorGraduationTextSize: number;
+  /*
+      $scope.increase = function() {
+        $scope.value = $scope.value * 1.1;
+    }
+    */
+
+  private width: number;
+  private maxLimit: number;
+  private minLimit: number;
+
   private sx = 0;
   private sy = 0;
   getDrawData(idx: number, data: T): IccD3Interactive[] {
@@ -57,12 +142,75 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
+  private getMajorGraduationValues(minLimit, maxLimit): any[] {
+    const scaleRange = maxLimit - minLimit;
+    const majorGraduationValues = [];
+    for (let i = 0; i <= this.majorGraduations; i++) {
+      const scaleValue = minLimit + i * scaleRange / (this.majorGraduations);
+      majorGraduationValues.push(scaleValue.toFixed(this.precision));
+    }
+    return majorGraduationValues;
+  }
+
+  private getMajorGraduationAngles(): any[] {
+    const scaleRange = 240;
+    const minScale = -120;
+    const graduationsAngles = [];
+    for (let i = 0; i <= this.majorGraduations; i++) {
+      const scaleValue = minScale + i * scaleRange / (this.majorGraduations);
+      graduationsAngles.push(scaleValue);
+    }
+    return graduationsAngles;
+  }
+
+  private getMinorGraduationAngles(majorGraduationsAngles: any[]): any[] {
+    const minorGraduationsAngles = [];
+    for (let indexMajor = 1; indexMajor <= this.majorGraduations; indexMajor++) {
+      const minScale = majorGraduationsAngles[indexMajor - 1];
+      const maxScale = majorGraduationsAngles[indexMajor];
+      const scaleRange = maxScale - minScale;
+      for (let i = 1; i < this.minorGraduations; i++) {
+        const scaleValue = minScale + i * scaleRange / this.minorGraduations;
+        minorGraduationsAngles.push(scaleValue);
+      }
+    }
+    return minorGraduationsAngles;
+  }
+
   drawChart(data: T[]): void {
     this.setPieScaleXY();
+    this.width = Math.min((Math.abs(this.sx) + 1) * this.options.drawWidth, (Math.abs(this.sy) + 1) * this.options.drawHeight);
+    this.innerRadius = Math.round((this.width * 130) / 300);
+    this.outterRadius = Math.round((this.width * 145) / 300);
+
+    // this.majorGraduations = parseInt(attrs.majorGraduations - 1) || 5;
+    // this.minorGraduations = parseInt(attrs.minorGraduations) || 10;
+    this.majorGraduationLenght = Math.round((this.width * 16) / 300);
+    this.minorGraduationLenght = Math.round((this.width * 10) / 300);
+    this.majorGraduationMarginTop = Math.round((this.width * 7) / 300);
+    // this.majorGraduationColor = attrs.majorGraduationColor || "#B0B0B0";
+    // this.minorGraduationColor = attrs.minorGraduationColor || "#D0D0D0";
+    // this.majorGraduationTextColor = attrs.majorGraduationTextColor || "#6C6C6C";
+    // this.needleColor = attrs.needleColor || "#416094";
+    this.valueVerticalOffset = Math.round((this.width * 30) / 300);
+    this.unactiveColor = '#D7D7D7';
+    // this.majorGraduationTextSize = parseInt(attrs.majorGraduationTextSize);
+    // this.needleValueTextSize = parseInt(attrs.needleValueTextSize);
+
+
+    this.maxLimit = this.upperLimit ? this.upperLimit : 100;
+    this.minLimit = this.lowerLimit ? this.lowerLimit : 0;
+
+    this.svg.select('.majorGraduations').remove();
+    this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
+    this.svg.select('.minorGraduations').remove();
+    this.svg.select('.drawArea').append('g').attr('class', 'minorGraduations');
+
     const pie = new IccPieData(this.options);
     const piedata = pie.getPieData(data);
     super.drawChart(piedata);
   }
+
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName)
@@ -71,10 +219,22 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
 
-    this.svg.select(`${drawName}Label`)
-      .selectAll('g').data(this.data).join('g')
-      .append('text')
-      .attr('class', 'drawlabel');
+    if (drawName === `.${this.chartType}`) {
+      const majorGraduationsAngles = this.getMajorGraduationAngles();
+      const minorGraduationsAngles = this.getMinorGraduationAngles(majorGraduationsAngles);
+
+      this.svg.select('.majorGraduations').selectAll('line')
+        .data(majorGraduationsAngles).join('line')
+        .attr('class', 'drawMajorGraduations');
+      this.svg.select('.minorGraduations').selectAll('line')
+        .data(minorGraduationsAngles).join('line')
+        .attr('class', 'drawMinorGraduations');
+
+      this.svg.select(`${drawName}Label`)
+        .selectAll('g').data(majorGraduationsAngles).join('g')
+        .append('text')
+        .attr('class', 'drawlabel');
+    }
 
     this.redrawContent(drawName, scaleX, scaleY);
   }
@@ -90,27 +250,90 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       drawContents
         .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
+
+      this.drawMajorGraduations('.drawMajorGraduations', this.majorGraduationLenght, this.majorGraduationColor);
+      this.drawMajorGraduations('.drawMinorGraduations', this.minorGraduationLenght, this.minorGraduationColor);
+      this.drawMajorGraduationTexts(drawName);
     }
+  }
+
+  private drawMajorGraduationTexts(drawName: string): void {
+    const majorGraduationValues = this.getMajorGraduationValues(this.minLimit, this.maxLimit);
+    const textSize = isNaN(this.majorGraduationTextSize) ? (this.width * 7) / 300 : this.majorGraduationTextSize;
+    const fontStyle = textSize + 'px Courier';
+
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
-      .text((d: any) => this.options.x(d.data))
-      .attr('text-anchor', 'middle')
-      .attr('alignment-baseline', 'middle')
-      .attr('transform', (d: any) => {
-        const center = this.drawArc().centroid(d);
-        const avg = (d.startAngle + d.endAngle) / 2;
-        const angle = avg - 2 * Math.PI * (Math.floor(avg / (2 * Math.PI)));
-        const midAngle = angle < Math.PI ? angle : angle + Math.PI;
-        center[0] = center[0] + xt;
-        center[1] = center[1] + yt;
-        return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
+      .style('font', fontStyle)
+      .attr('text-anchor', (d: number) => {
+        if (+d.toFixed(4) === 0) {
+          return 'middle';
+        } else {
+          return d < 0 ? 'start' : 'end';
+        }
+      })
+      .attr('x', (d: number) => this.getTextPosition(d, true))
+      .attr('dy', (d: number) => this.getTextPosition(d, false))
+      .attr('fill', this.majorGraduationTextColor)
+      .text((d: any, i) => `${majorGraduationValues[i]}${this.unit}`);
+  }
+
+  private getTextPosition(d: number, isX: boolean): number {
+    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const textVerticalPadding = 5;
+    const textHorizontalPadding = 5;
+    const angle = (90 - d) * Math.PI / 180;
+    const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
+
+    const cos1Adj = Math.round(Math.cos(angle) * (dt - textHorizontalPadding));
+    const sin1Adj = Math.round(Math.sin(angle) * (dt - textVerticalPadding));
+    let sin1Factor = 1;
+    if (sin1Adj < 0) {
+      sin1Factor = 1.1;
+    }
+    if (sin1Adj > 0) {
+      sin1Factor = 0.9;
+    }
+    const x1 = centerX + cos1Adj;
+    const y1 = centerY + sin1Adj * sin1Factor * -1;
+    return isX ? x1 : y1;
+  }
+
+  private drawMajorGraduations(drawName: string, graduationLenght: number, color: string): void {
+    const dt = this.innerRadius - this.majorGraduationMarginTop;
+    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+
+    this.svg.selectAll(drawName)
+      .style('stroke', color)
+      .attr('x1', (d: number, i) => {
+        const angle = (90 - d) * Math.PI / 180;
+        const cos1Adj = Math.round(Math.cos(angle) * (dt - graduationLenght));
+        return centerX + cos1Adj;
+      })
+      .attr('y1', (d: number, i) => {
+        const angle = (90 - d) * Math.PI / 180;
+        const sin1Adj = Math.round(Math.sin(angle) * (dt - graduationLenght));
+        return centerY + sin1Adj * -1;
+      })
+      .attr('x2', (d: number, i) => {
+        const angle = (90 - d) * Math.PI / 180;
+        const cos2Adj = Math.round(Math.cos(angle) * dt);
+        return centerX + cos2Adj;
+      })
+      .attr('y2', (d: number, i) => {
+        const angle = (90 - d) * Math.PI / 180;
+        const sin2Adj = Math.round(Math.sin(angle) * dt);
+        return centerY + sin2Adj * -1;
       });
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
-    const radius = Math.min((Math.abs(this.sx) + 1) * this.options.drawWidth, (Math.abs(this.sy) + 1) * this.options.drawHeight) / 2;
+    const innerRadius = Math.round((this.width * 130) / 300);
+    const outterRadius = Math.round((this.width * 145) / 300);
     return d3Shape.arc()
-      .innerRadius(radius * Math.min(0.95, this.options.pie.donut))
-      .outerRadius(radius - 10 + grow);
+      .innerRadius(innerRadius)
+      .outerRadius(outterRadius);
   }
 
   drawMouseover(e, data, mouseover: boolean): void {
