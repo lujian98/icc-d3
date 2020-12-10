@@ -26,7 +26,7 @@ import { AppPieChartDemoComponent } from './pie-chart/pie-chart-demo.component';
 import { AppDonutChartDemoComponent } from './pie-chart/donut-chart-demo.component';
 
 import { AppCandleStickChartDemoComponent } from './candle-stick-chart/candle-stick-chart-demo.component';
-
+import { AppRadialGaugeDemoComponent } from './gauge/radial-gauge-demo.component';
 
 const routes: Routes = [
   { path: 'line-chart', component: AppLineChartDemoComponent },
@@ -50,8 +50,9 @@ const routes: Routes = [
   { path: 'pie-chart-demo', component: AppPieChartDemoComponent },
   { path: 'donut-chart-demo', component: AppDonutChartDemoComponent },
 
-
   { path: 'candle-stick-chart', component: AppCandleStickChartDemoComponent },
+
+  { path: 'radial-gauge-demo', component: AppRadialGaugeDemoComponent },
 ];
 
 @NgModule({

@@ -3,7 +3,7 @@ import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
 
-export class IccPieChart<T> extends IccAbstractDraw<T> {
+export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private sx = 0;
   private sy = 0;
   getDrawData(idx: number, data: T): IccD3Interactive[] {

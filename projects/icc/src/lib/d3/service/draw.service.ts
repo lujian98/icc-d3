@@ -13,7 +13,8 @@ import {
   IccGroupedHorizontalBarChart,
   IccStackedHorizontalBarChart,
   IccPieChart,
-  IccCandleStickBarChart
+  IccCandleStickBarChart,
+  IccRadialGauge
 } from '../chart';
 
 @Injectable()
@@ -39,6 +40,8 @@ export class IccDrawServie<T> {
     pieChart: IccPieChart,
 
     candleStickBarChart: IccCandleStickBarChart,
+
+    radialGauge: IccRadialGauge,
   };
 
   constructor() { }
