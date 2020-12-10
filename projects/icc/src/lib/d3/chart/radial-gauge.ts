@@ -1,4 +1,5 @@
 import * as d3Shape from 'd3-shape';
+import * as d3Format from 'd3-format';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
@@ -10,57 +11,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   unit = 'kW';
   precision = 2;
 
-  ranges = [
-    {
-      min: 0,
-      max: 1.5,
-      color: '#DEDEDE'
-    },
-    {
-      min: 1.5,
-      max: 2.5,
-      color: '#8DCA2F'
-    },
-    {
-      min: 2.5,
-      max: 3.5,
-      color: '#FDC702'
-    },
-    {
-      min: 3.5,
-      max: 4.5,
-      color: '#FF7700'
-    },
-    {
-      min: 4.5,
-      max: 6.0,
-      color: '#C50200'
-    }
-  ];
-
-  // value = 1.5;
-  // data = this.gaugeRanges,
-  value = 3;
-
-  gaugeRanges = [
-    {
-      From: 1.5,
-      To: 2.5,
-      Color: '#8DCB2A'
-    }, {
-      From: 2.5,
-      To: 3.5,
-      Color: '#FFC700'
-    }, {
-      From: 3.5,
-      To: 4.5,
-      Color: '#FF7A00'
-    },
-    {
-      From: 4.5,
-      To: 6,
-      Color: '#C20000'
-    }];
+  value = 3.75;
 
   innerRadius = 130;
   outterRadius = 145;
@@ -205,6 +156,12 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
     this.svg.select('.minorGraduations').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'minorGraduations');
+    this.svg.select('.graduationNeedle').remove();
+    this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedle');
+    this.svg.select('.graduationValueText').remove();
+    this.svg.select('.drawArea').append('g').attr('class', 'graduationValueText');
+    this.svg.select('.graduationNeedleCenter').remove();
+    this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedleCenter');
 
     const pie = new IccPieData(this.options);
     const piedata = pie.getPieData(data);
@@ -234,6 +191,10 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         .selectAll('g').data(majorGraduationsAngles).join('g')
         .append('text')
         .attr('class', 'drawlabel');
+
+      this.drawGraduationNeedle();
+      this.drawGraduationValueText();
+      this.drawNeedleCenter();
     }
 
     this.redrawContent(drawName, scaleX, scaleY);
@@ -255,6 +216,56 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       this.drawMajorGraduations('.drawMinorGraduations', this.minorGraduationLenght, this.minorGraduationColor);
       this.drawMajorGraduationTexts(drawName);
     }
+  }
+
+  private drawGraduationNeedle(): void { // TODO range
+    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+
+    const needleValue = ((this.value - this.minLimit) * 240 / (this.maxLimit - this.minLimit)) - 30;
+    const thetaRad = needleValue * Math.PI / 180;
+
+    const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
+    const needleRadius = (this.width * 2.5) / 300;
+    const topX = centerX - needleLen * Math.cos(thetaRad);
+    const topY = centerY - needleLen * Math.sin(thetaRad);
+    const leftX = centerX - needleRadius * Math.cos(thetaRad - Math.PI / 2);
+    const leftY = centerY - needleRadius * Math.sin(thetaRad - Math.PI / 2);
+    const rightX = centerX - needleRadius * Math.cos(thetaRad + Math.PI / 2);
+    const rightY = centerY - needleRadius * Math.sin(thetaRad + Math.PI / 2);
+    const triangle = 'M ' + leftX + ' ' + leftY + ' L ' + topX + ' ' + topY + ' L ' + rightX + ' ' + rightY;
+
+    this.svg.select('.graduationNeedle')
+      .append('path')
+      .attr('d', triangle)
+      .style('stroke-width', 1)
+      .style('stroke', 'orange')
+      .style('fill', 'orange');
+  }
+
+  private drawNeedleCenter(): void {
+    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    this.svg.select('.graduationNeedleCenter')
+      .append('circle')
+      .attr('r', (this.width * 6) / 300)
+      .attr('cx', centerX)
+      .attr('cy', centerY)
+      .attr('fill', 'orange'); // TODO range color
+  }
+
+  private drawGraduationValueText(): void {
+    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    this.svg.select('.graduationValueText')
+      .append('text')
+      .attr('fill', 'orange') // TODO range color
+      .attr('x', centerX)
+      .attr('y', centerY + this.valueVerticalOffset)
+      .attr('text-anchor', 'middle')
+      .attr('font-weight', 'bold')
+      // .style("font", fontStyle) // TODO option
+      .text(`[ ${d3Format.format(',.2f')(this.value)} ${this.unit} ]`);
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
