@@ -3,22 +3,21 @@ import * as d3Format from 'd3-format';
 import * as d3Scale from 'd3-scale';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
-import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
+import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private value: number;
-  cScale: any;
+  cScale: any; // TODO change to scaleX??
+  private sxy: IccPosition;
 
-  upperLimit = 6;
-  lowerLimit = 0;
+  upperLimit = 6; // TODO change to domain options
+  lowerLimit = 0; // TODO change to domain options
   majorGraduations = 10;
   unit = 'kW';
   precision = 2;
 
-  innerRadiusOptions = 120;
-
-  innerRadius = 130;
-  outterRadius = 145;
+  innerRadius: number;
+  outterRadius: number ;
   minorGraduations = 10;
   majorGraduationLenght = 16;
   minorGraduationLenght = 10;
@@ -31,59 +30,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   majorGraduationTextSize: number;
 
   private width: number;
-
-  private sx = 0;
-  private sy = 0;
-  getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return this.options.y0(data).filter((d) => idx > -1 && !d.disabled)
-      .map((d, i) => {
-        return {
-          key: this.options.x(d),
-          value: d,
-          color: d.color || this.getdrawColor(d, idx),
-          valueX: null,
-          valueY: this.options.y(d),
-          cy: null,
-          hovered: i === idx,
-          hasSummary: true
-        };
-      });
-  }
-
-  private setPieScaleXY(): void { // TODO move this to pie data
-    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
-    if (dAngle <= Math.PI) {
-      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
-      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
-      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
-      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
-      if (dAngle <= Math.PI / 2) {
-        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
-          this.sx = 1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
-          this.sx = -1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
-          this.sx = -1;
-          this.sy = -1;
-        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
-          this.sx = 1;
-          this.sy = -1;
-        }
-      } else {
-        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
-          this.sy = 1 / 2;
-        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
-          this.sy = - 1 / 4;
-        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
-          this.sx = -1 / 2;
-        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
-          this.sx = 1 / 2;
-        }
-      }
-    }
-  }
 
   private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
     const scaleRange = upperLimit - lowerLimit;
@@ -121,15 +67,18 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   drawChart(data: any[]): void {
+    const pie = new IccPieData(this.options);
+    this.sxy = pie.setPieScaleXY();
+
     this.cScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
       .range([this.options.pie.startAngle, this.options.pie.endAngle]);
 
     this.value = data[0].value;
 
-    this.setPieScaleXY();
-    this.width = Math.min((Math.abs(this.sx) + 1) * this.options.drawWidth, (Math.abs(this.sy) + 1) * this.options.drawHeight);
-    this.innerRadius = Math.round((this.width * this.innerRadiusOptions) / 300);
-    this.outterRadius = Math.round((this.width * 145) / 300);
+
+    this.width = Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth, (Math.abs(this.sxy.y) + 1) * this.options.drawHeight);
+    this.innerRadius = Math.round((this.width * this.options.pie.donut) / 2);
+    this.outterRadius = Math.round((this.width * 150) / 300);
 
     // this.majorGraduations = parseInt(attrs.majorGraduations - 1) || 5;
     // this.minorGraduations = parseInt(attrs.minorGraduations) || 10;
@@ -157,7 +106,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select('.graduationNeedleCenter').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedleCenter');
 
-    const pie = new IccPieData(this.options);
+
     const piedata = pie.getPieData(data);
     // console.log(' xxxx piedata =', piedata)
     super.drawChart(piedata);
@@ -195,8 +144,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const xt = (this.sx + 1) * this.options.drawWidth / 2;
-    const yt = (this.sy + 1) * this.options.drawHeight / 2;
+    const xt = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const yt = (this.sxy.y + 1) * this.options.drawHeight / 2;
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('transform', (d: any) => `translate(${xt}, ${yt})`)
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
@@ -214,8 +163,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawGraduationNeedle(): void { // TODO range
-    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
-    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const centerX = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sxy.y + 1) * this.options.drawHeight / 2;
     const needleValue = this.cScale(this.value);
     const thetaRad = needleValue + Math.PI / 2;
 
@@ -249,8 +198,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawNeedleCenter(): void {
-    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
-    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const centerX = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sxy.y + 1) * this.options.drawHeight / 2;
     this.svg.select('.graduationNeedleCenter')
       .append('circle')
       .attr('r', (this.width * 6) / 300)
@@ -260,8 +209,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawGraduationValueText(): void {
-    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
-    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const centerX = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sxy.y + 1) * this.options.drawHeight / 2;
     this.svg.select('.graduationValueText')
       .append('text')
       .attr('fill', this.getValueColor(this.value))
@@ -294,8 +243,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private getTextPosition(d: number, isX: boolean): number {
-    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
-    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const centerX = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sxy.y + 1) * this.options.drawHeight / 2;
     const textVerticalPadding = 5;
     const textHorizontalPadding = 5;
     const angle = (90 - d) * Math.PI / 180;
@@ -317,8 +266,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   private drawGraduations(drawName: string, graduationLenght: number): void {
     const dt = this.innerRadius - this.majorGraduationMarginTop;
-    const centerX = (this.sx + 1) * this.options.drawWidth / 2;
-    const centerY = (this.sy + 1) * this.options.drawHeight / 2;
+    const centerX = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const centerY = (this.sxy.y + 1) * this.options.drawHeight / 2;
 
     this.svg.selectAll(drawName)
       .style('stroke', (d: number) => this.getValueColor(d, true))
@@ -346,8 +295,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
-    const innerRadius = Math.round((this.width * this.innerRadiusOptions) / 300);
-    const outterRadius = Math.round((this.width * 145) / 300);
+    const innerRadius = Math.round((this.width  * this.options.pie.donut ) / 2);
+    const outterRadius = Math.round((this.width * 150) / 300);
     return d3Shape.arc()
       .innerRadius(innerRadius)
       .outerRadius(outterRadius)

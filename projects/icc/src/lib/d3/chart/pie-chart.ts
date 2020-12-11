@@ -1,11 +1,11 @@
 import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
-import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
+import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
 
 export class IccPieChart<T> extends IccAbstractDraw<T> {
-  private sx = 0;
-  private sy = 0;
+  private sxy: IccPosition;
+
   getDrawData(idx: number, data: T): IccD3Interactive[] {
     return this.options.y0(data).filter((d) => idx > -1 && !d.disabled)
       .map((d, i) => {
@@ -22,44 +22,9 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       });
   }
 
-  private setPieScaleXY(): void {
-    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
-    if (dAngle <= Math.PI) {
-      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
-      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
-      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
-      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
-      if (dAngle <= Math.PI / 2) {
-        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
-          this.sx = 1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
-          this.sx = -1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
-          this.sx = -1;
-          this.sy = -1;
-        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
-          this.sx = 1;
-          this.sy = -1;
-        }
-      } else {
-        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
-          this.sy = 1 / 2;
-        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
-          this.sy = - 1 / 4;
-        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
-          this.sx = -1 / 2;
-        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
-          this.sx = 1 / 2;
-        }
-      }
-    }
-  }
-
   drawChart(data: T[]): void {
-    this.setPieScaleXY();
     const pie = new IccPieData(this.options);
+    this.sxy = pie.setPieScaleXY();
     const piedata = pie.getPieData(data);
     super.drawChart(piedata);
   }
@@ -80,8 +45,8 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const xt = (this.sx + 1) * this.options.drawWidth / 2;
-    const yt = (this.sy + 1) * this.options.drawHeight / 2;
+    const xt = (this.sxy.x + 1) * this.options.drawWidth / 2;
+    const yt = (this.sxy.y + 1) * this.options.drawHeight / 2;
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('transform', (d: any) => `translate(${xt}, ${yt})`)
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
@@ -107,7 +72,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
-    const radius = Math.min((Math.abs(this.sx) + 1) * this.options.drawWidth, (Math.abs(this.sy) + 1) * this.options.drawHeight) / 2;
+    const radius = Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth, (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2;
     return d3Shape.arc()
       .innerRadius(radius * Math.min(0.95, this.options.pie.donut))
       .outerRadius(radius - 10 + grow);

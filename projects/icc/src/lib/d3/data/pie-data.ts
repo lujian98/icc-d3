@@ -1,6 +1,6 @@
 import * as d3Shape from 'd3-shape';
 import * as d3Scale from 'd3-scale';
-import { IccD3Options } from '../model';
+import { IccD3Options, IccPosition } from '../model';
 
 export class IccPieData<T> {
 
@@ -19,5 +19,77 @@ export class IccPieData<T> {
     const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
     return pie([...mdata]);
   }
+
+  setPieScaleXY(): IccPosition { // TODO move this to pie data
+    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
+    const sxy: IccPosition = { x: 0, y: 0};
+    if (dAngle <= Math.PI) {
+      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
+      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
+      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
+      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
+      if (dAngle <= Math.PI / 2) {
+        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
+          sxy.x = 1;
+          sxy.y = 1;
+        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
+          sxy.x = -1;
+          sxy.y = 1;
+        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
+          sxy.x = -1;
+          sxy.y = -1;
+        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
+          sxy.x = 1;
+          sxy.y = -1;
+        }
+      } else {
+        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
+          sxy.y = 1 / 2;
+        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
+          sxy.y = - 1 / 4;
+        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
+          sxy.x = -1 / 2;
+        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
+          sxy.x = 1 / 2;
+        }
+      }
+    }
+    return sxy;
+  }
 }
 
+/*
+  private setPieScaleXY(): void {
+    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
+    if (dAngle <= Math.PI) {
+      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
+      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
+      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
+      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
+      if (dAngle <= Math.PI / 2) {
+        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
+          this.sx = 1;
+          this.sy = 1;
+        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
+          this.sx = -1;
+          this.sy = 1;
+        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
+          this.sx = -1;
+          this.sy = -1;
+        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
+          this.sx = 1;
+          this.sy = -1;
+        }
+      } else {
+        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
+          this.sy = 1 / 2;
+        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
+          this.sy = - 1 / 4;
+        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
+          this.sx = -1 / 2;
+        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
+          this.sx = 1 / 2;
+        }
+      }
+    }
+  } */
