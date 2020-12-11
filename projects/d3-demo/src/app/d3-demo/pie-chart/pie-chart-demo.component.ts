@@ -56,33 +56,32 @@ export class AppPieChartDemoComponent implements OnInit {
 
   data = [{
     key: 'One',
-    y: 5
+    y: 1
   },
   {
     key: 'Two',
-    y: 5
+    y: 2
   },
   {
     key: 'Three',
-    y: 5
+    y: 3
   },
   {
     key: 'Four',
-    y: 5
-      /*
+    y: 4
   },
 
   {
     key: 'Five',
-    y: 4
+    y: 5
   },
   {
     key: 'Six',
-    y: 3
+    y: 6
   },
   {
     key: 'Seven',
-    y: .5 */
+    y: 7
   }];
 
   data2: any[];

@@ -163,7 +163,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     super.drawChart(piedata);
   }
 
-
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName)
       .selectAll('g').data(this.data).join('g')
