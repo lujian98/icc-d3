@@ -60,16 +60,18 @@ export class AppPieChartDemoComponent implements OnInit {
   },
   {
     key: 'Two',
-    y: 2
+    y: 5
   },
   {
     key: 'Three',
-    y: 9
+    y: 5
   },
   {
     key: 'Four',
-    y: 7
+    y: 5
+      /*
   },
+
   {
     key: 'Five',
     y: 4
@@ -80,7 +82,7 @@ export class AppPieChartDemoComponent implements OnInit {
   },
   {
     key: 'Seven',
-    y: .5
+    y: .5 */
   }];
 
   data2: any[];

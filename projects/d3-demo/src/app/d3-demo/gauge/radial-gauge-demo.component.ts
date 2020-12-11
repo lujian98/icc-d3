@@ -15,6 +15,8 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
     xScaleType: 'band',
+    x0: (d) => d.key,
+    y0: (d) => d.ranges,
     x: (d) => d.min,
     y: (d) => d.max,
     pie: {
@@ -32,35 +34,41 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   ranges = [
     {
       min: 0,
-      max: 1.5,
+      max: 1.,
       color: '#DEDEDE'
     },
     {
-      min: 1.5,
-      max: 2.5,
+      min: 1.,
+      max: 2.,
       color: '#8DCA2F'
     },
     {
-      min: 2.5,
-      max: 3.5,
+      min: 2.,
+      max: 3.,
       color: '#FDC702'
     },
     {
-      min: 3.5,
-      max: 4.5,
+      min: 3.,
+      max: 4.,
       color: '#FF7700'
     },
     {
-      min: 4.5,
-      max: 6.0,
+      min: 4.,
+      max: 5.0,
       color: '#C50200'
+    },
+    {
+      min: 5.,
+      max: 6.0,
+      color: 'red'
     }
   ];
   data: any[];
   ngOnInit(): void {
     this.data = [{
       key: 'Radial Chart',
-      values: this.ranges,
+      value: 3.4,
+      ranges: this.ranges,
     }];
   }
 }
