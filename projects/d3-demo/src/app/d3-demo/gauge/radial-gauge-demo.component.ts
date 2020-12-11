@@ -35,7 +35,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     {
       min: 0,
       max: 1.,
-      color: '#DEDEDE'
+      color: 'rgb(156, 214, 130)'
     },
     {
       min: 1.,

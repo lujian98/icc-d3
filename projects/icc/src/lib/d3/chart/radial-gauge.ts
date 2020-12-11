@@ -4,7 +4,6 @@ import * as d3Scale from 'd3-scale';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive } from '../model';
-import { denodeify } from 'q';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private value: number;
@@ -12,11 +11,11 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   upperLimit = 6;
   lowerLimit = 0;
-  majorGraduations = 10; // TODO this should be the range count???
+  majorGraduations = 10;
   unit = 'kW';
   precision = 2;
 
-  innerRadiusOptions = 130;
+  innerRadiusOptions = 120;
 
   innerRadius = 130;
   outterRadius = 145;
@@ -24,21 +23,12 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   majorGraduationLenght = 16;
   minorGraduationLenght = 10;
   majorGraduationMarginTop = 7;
-  majorGraduationColor = 'green'; // '#EAEAEA';
-  minorGraduationColor = 'blue'; // '#EAEAEA';
-  majorGraduationTextColor = '#6C6C6C';
   majorGraduationDecimals = 2;
-  needleColor = '#2DABC1';
-  valueVerticalOffset = 40;
+  valueVerticalOffset = 50;
 
   unactiveColor: string;
 
   majorGraduationTextSize: number;
-  /*
-      $scope.increase = function() {
-        $scope.value = $scope.value * 1.1;
-    }
-    */
 
   private width: number;
 
@@ -146,11 +136,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.majorGraduationLenght = Math.round((this.width * 16) / 300);
     this.minorGraduationLenght = Math.round((this.width * 10) / 300);
     this.majorGraduationMarginTop = Math.round((this.width * 7) / 300);
-    // this.majorGraduationColor = attrs.majorGraduationColor || "#B0B0B0";
-    // this.minorGraduationColor = attrs.minorGraduationColor || "#D0D0D0";
-    // this.majorGraduationTextColor = attrs.majorGraduationTextColor || "#6C6C6C";
-    // this.needleColor = attrs.needleColor || "#416094";
-    this.valueVerticalOffset = Math.round((this.width * 30) / 300);
+
+
     this.unactiveColor = '#D7D7D7';
     // this.majorGraduationTextSize = parseInt(attrs.majorGraduationTextSize);
     // this.needleValueTextSize = parseInt(attrs.needleValueTextSize);
@@ -221,17 +208,15 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
 
-      this.drawGraduations('.drawMajorGraduations', this.majorGraduationLenght, this.majorGraduationColor);
-      this.drawGraduations('.drawMinorGraduations', this.minorGraduationLenght, this.minorGraduationColor);
+      this.drawGraduations('.drawMajorGraduations', this.majorGraduationLenght);
+      this.drawGraduations('.drawMinorGraduations', this.minorGraduationLenght);
       this.drawMajorGraduationTexts(drawName);
     }
   }
 
-
   private drawGraduationNeedle(): void { // TODO range
     const centerX = (this.sx + 1) * this.options.drawWidth / 2;
     const centerY = (this.sy + 1) * this.options.drawHeight / 2;
-
     const needleValue = this.cScale(this.value);
     const thetaRad = needleValue + Math.PI / 2;
 
@@ -331,7 +316,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     return isX ? x1 : y1;
   }
 
-  private drawGraduations(drawName: string, graduationLenght: number, color: string): void {
+  private drawGraduations(drawName: string, graduationLenght: number): void {
     const dt = this.innerRadius - this.majorGraduationMarginTop;
     const centerX = (this.sx + 1) * this.options.drawWidth / 2;
     const centerY = (this.sy + 1) * this.options.drawHeight / 2;
