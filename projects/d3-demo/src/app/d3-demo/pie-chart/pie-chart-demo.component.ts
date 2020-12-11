@@ -36,7 +36,8 @@ export class AppPieChartDemoComponent implements OnInit {
     },
     pie: {
       startAngle: Math.PI * -1 / 2,
-      endAngle: Math.PI * 1 / 2
+      endAngle: Math.PI * 1 / 2,
+      centerOffsetY: -10 / 150,
     }
   };
 

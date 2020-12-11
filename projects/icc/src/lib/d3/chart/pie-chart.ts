@@ -5,6 +5,7 @@ import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../mode
 
 export class IccPieChart<T> extends IccAbstractDraw<T> {
   private sxy: IccPosition;
+  private outterRadius: number;
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
     return this.options.y0(data).filter((d) => idx > -1 && !d.disabled)
@@ -26,6 +27,8 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     const pie = new IccPieData(this.options);
     pie.pieOptions = this.options.pie;
     this.sxy = pie.setPieScaleXY();
+    this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
+      (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
     const piedata = pie.getPieData(data);
     super.drawChart(piedata);
   }
@@ -46,10 +49,10 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const xt = (this.sxy.x + 1) * this.options.drawWidth / 2;
-    const yt = (this.sxy.y + 1) * this.options.drawHeight / 2;
+    const cx = (this.sxy.x + 1) * this.options.drawWidth / 2 + this.outterRadius * this.options.pie.centerOffsetX;
+    const cy = (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.pie.centerOffsetY;
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
-      .attr('transform', (d: any) => `translate(${xt}, ${yt})`)
+      .attr('transform', (d: any) => `translate(${cx}, ${cy})`)
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .attr('d', this.drawArc());
     if (drawName === `.${this.chartType}`) {
@@ -66,17 +69,16 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         const avg = (d.startAngle + d.endAngle) / 2;
         const angle = avg - 2 * Math.PI * (Math.floor(avg / (2 * Math.PI)));
         const midAngle = angle < Math.PI ? angle : angle + Math.PI;
-        center[0] = center[0] + xt;
-        center[1] = center[1] + yt;
+        center[0] = center[0] + cx;
+        center[1] = center[1] + cy;
         return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
       });
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
-    const radius = Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth, (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2;
     return d3Shape.arc()
-      .innerRadius(radius * Math.min(0.95, this.options.pie.donut))
-      .outerRadius(radius - 10 + grow);
+      .innerRadius(this.outterRadius * Math.min(0.95, this.options.pie.donut))
+      .outerRadius(this.outterRadius - 10 + grow);
   }
 
   drawMouseover(e, data, mouseover: boolean): void {

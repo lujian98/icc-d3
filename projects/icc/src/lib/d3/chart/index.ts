@@ -9,5 +9,3 @@ export * from './stacked-area-chart';
 export * from './stacked-bar-chart';
 export * from './stacked-horizontal-bar-chart';
 export * from './pie-chart';
-
-export * from './radial-gauge';

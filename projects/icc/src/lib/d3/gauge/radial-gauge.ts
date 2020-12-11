@@ -1,5 +1,4 @@
 import * as d3Shape from 'd3-shape';
-import * as d3Format from 'd3-format';
 import * as d3Scale from 'd3-scale';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
@@ -10,23 +9,13 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   cScale: any; // TODO change to scaleX??
   private sxy: IccPosition;
   private cxy: IccPosition;
-  private innerRadius: number;
   private outterRadius: number;
-
-  upperLimit = 6; // TODO change to domain options
-  lowerLimit = 0; // TODO change to domain options
-  unit = 'kW';
-  precision = 2;
-
-  majorGraduationLenght = 16;
-  minorGraduationLenght = 10;
-  majorGraduationMarginTop = 7;
-  majorGraduationDecimals = 2;
-  valueVerticalOffset = 50;
-
-  unactiveColor: string;
-
-  majorGraduationTextSize: number;
+  private innerRadius: number;
+  private majorGraduationLenght: number;
+  private minorGraduationLenght: number;
+  private majorGraduationMarginTop: number;
+  private majorGraduationTextSize: number;
+  // private unactiveColor: string; // TODO ???
 
   private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
     const scaleRange = upperLimit - lowerLimit;
@@ -65,24 +54,22 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const pie = new IccPieData(this.options);
     pie.pieOptions = this.options.radialGauge;
     this.sxy = pie.setPieScaleXY();
-    this.cxy = {
-      x: (this.sxy.x + 1) * this.options.drawWidth / 2,
-      y: (this.sxy.y + 1) * this.options.drawHeight / 2 // TODO option to adujst x y position
-    };
     this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
       (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
     this.innerRadius = Math.round(this.outterRadius * this.options.radialGauge.donut);
+    this.cxy = {
+      x: (this.sxy.x + 1) * this.options.drawWidth / 2 + this.outterRadius * this.options.radialGauge.centerOffsetX,
+      y: (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.radialGauge.centerOffsetY
+    };
 
-    this.cScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
+    this.cScale = d3Scale.scaleLinear().domain([this.options.radialGauge.lowerLimit, this.options.radialGauge.upperLimit])
       .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
     this.value = data[0].value;
 
-    this.majorGraduationLenght = Math.round(this.outterRadius * 16 / 150);
-    this.minorGraduationLenght = Math.round(this.outterRadius * 10 / 150);
-    this.majorGraduationMarginTop = Math.round(this.outterRadius * 7 / 150);
-    this.unactiveColor = '#D7D7D7';
-    this.upperLimit = this.upperLimit ? this.upperLimit : 100; // TODO remove this
-    this.lowerLimit = this.lowerLimit ? this.lowerLimit : 0;
+    this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
+    this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
+    this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
+
     this.svg.select('.majorGraduations').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
     this.svg.select('.minorGraduations').remove();
@@ -163,7 +150,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const data: any = this.data.filter((d: any) => isAngle ? value < d.endAngle : value < d.value);
     if (data.length > 0) {
       return data[0].data.color;
-    } else if ((!isAngle && value >= this.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
+    } else if ((!isAngle && value >= this.options.radialGauge.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
       const td: any = this.data[this.data.length - 1];
       return td.data.color;
     }
@@ -179,23 +166,23 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawGraduationValueText(): void {
+    const textSize = this.outterRadius * this.options.radialGauge.valueTextSize;
     this.svg.select('.graduationValueText')
       .append('text')
       .attr('fill', this.getValueColor(this.value))
       .attr('x', this.cxy.x)
-      .attr('y', this.cxy.y + this.valueVerticalOffset)
+      .attr('y', this.cxy.y + this.options.radialGauge.valueOffsetY)
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
-      // .style("font", fontStyle) // TODO option
-      .text(`[ ${d3Format.format(',.2f')(this.value)} ${this.unit} ]`);
+      .style('font', `${textSize}px Courier`)
+      .text(`[ ${this.value.toFixed(this.options.radialGauge.valueDecimals)} ${this.options.radialGauge.valueUnit} ]`);
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
-    const majorGraduationValues = this.getMajorGraduationValues(this.lowerLimit, this.upperLimit);
-    const textSize = isNaN(this.majorGraduationTextSize) ? (this.outterRadius * 7) / 150 : this.majorGraduationTextSize;
-    const fontStyle = textSize + 'px Courier';
+    const majorGraduationValues = this.getMajorGraduationValues(this.options.radialGauge.lowerLimit, this.options.radialGauge.upperLimit);
+    const textSize = this.outterRadius * this.options.radialGauge.majorGraduationTextSize;
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
-      .style('font', fontStyle)
+      .style('font', `${textSize}px Courier`)
       .attr('text-anchor', (d: number) => {
         if (+d.toFixed(4) === 0) {
           return 'middle';
@@ -206,15 +193,14 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('x', (d: number) => this.getTextPosition(d, true))
       .attr('dy', (d: number) => this.getTextPosition(d, false))
       .attr('fill', (d: number) => this.getValueColor(d, true))
-      .text((d: any, i) => `${majorGraduationValues[i]}${this.unit}`);
+      .text((d: any, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
+        ${this.options.radialGauge.valueUnit}`);
   }
 
   private getTextPosition(d: number, isX: boolean): number {
-    const textVerticalPadding = 5;
-    const textHorizontalPadding = 5;
     const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
-    const cos1Adj = Math.round(Math.cos(Math.PI / 2 - d) * (dt - textHorizontalPadding));
-    const sin1Adj = Math.round(Math.sin(Math.PI / 2 - d) * (dt - textVerticalPadding));
+    const cos1Adj = Math.round(Math.cos(Math.PI / 2 - d) * (dt - this.options.radialGauge.textHorizontalPadding));
+    const sin1Adj = Math.round(Math.sin(Math.PI / 2 - d) * (dt - this.options.radialGauge.textVerticalPadding));
     let sin1Factor = 1;
     if (sin1Adj < 0) {
       sin1Factor = 1.1;

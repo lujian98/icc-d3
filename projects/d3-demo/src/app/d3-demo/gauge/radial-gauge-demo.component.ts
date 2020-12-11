@@ -19,6 +19,11 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     y0: (d) => d.ranges,
     x: (d) => d.min,
     y: (d) => d.max,
+    radialGauge: {
+      lowerLimit: 0,
+      upperLimit: 6,
+      valueUnit: 'kW2',
+    },
     legend: {
       position: 'top',
     }
