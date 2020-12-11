@@ -16,11 +16,12 @@ export class AppPieChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
-    axisEnabled: false,
+    axisEnabled: true,
     x: (d) => d.key,
     y: (d) => d.y,
     drawColor: (d, i) => d.key,
     legend: {
+      // enabled: false,
       position: 'top',
     }
   };
@@ -28,7 +29,7 @@ export class AppPieChartDemoComponent implements OnInit {
   options2: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
-    axisEnabled: false,
+    axisEnabled: true,
     x: (d) => d.key,
     y: (d) => d.y,
     drawColor: (d, i) => d.key,

@@ -21,6 +21,7 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
 
 export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
   y0: (d) => d.range,
+  axisEnabled: false,
   radialGauge: {
     range: [],
     startAngle: Math.PI * -2 / 3,

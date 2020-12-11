@@ -9,6 +9,7 @@ export interface IccD3PieOptions {
 }
 
 export const DEFAULT_PIE_CHART_OPTIONS: IccD3Options = {
+  axisEnabled: false,
   pie: {
     startAngle: 0,
     endAngle: Math.PI * 2,

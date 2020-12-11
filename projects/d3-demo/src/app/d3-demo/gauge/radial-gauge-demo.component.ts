@@ -13,7 +13,6 @@ import { IccD3Options } from 'icc';
 export class AppRadialGaugeDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
-    axisEnabled: false,
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
