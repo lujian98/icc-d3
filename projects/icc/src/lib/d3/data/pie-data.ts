@@ -1,9 +1,9 @@
 import * as d3Shape from 'd3-shape';
 import * as d3Scale from 'd3-scale';
-import { IccD3Options, IccPosition } from '../model';
+import { IccD3Options, IccPosition, IccD3PieOptions } from '../model';
 
 export class IccPieData<T> {
-
+  pieOptions: IccD3PieOptions;
   constructor(
     private options: IccD3Options,
   ) {
@@ -14,20 +14,20 @@ export class IccPieData<T> {
       .padAngle(0.005) // TODO options?
       .sort(null)
       .value((d: any) => this.options.y(d))
-      .startAngle(this.options.pie.startAngle)
-      .endAngle(this.options.pie.endAngle);
+      .startAngle(this.pieOptions.startAngle)
+      .endAngle(this.pieOptions.endAngle);
     const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
     return pie([...mdata]);
   }
 
   setPieScaleXY(): IccPosition { // TODO move this to pie data
-    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
-    const sxy: IccPosition = { x: 0, y: 0};
+    const dAngle = Math.abs(this.pieOptions.endAngle - this.pieOptions.startAngle);
+    const sxy: IccPosition = { x: 0, y: 0 };
     if (dAngle <= Math.PI) {
-      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
-      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
-      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
-      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
+      const sinStart = +Math.sin(this.pieOptions.startAngle).toFixed(4);
+      const sinEnd = +Math.sin(this.pieOptions.endAngle).toFixed(4);
+      const cosStart = +Math.cos(this.pieOptions.startAngle).toFixed(4);
+      const cosEnd = +Math.cos(this.pieOptions.endAngle).toFixed(4);
       if (dAngle <= Math.PI / 2) {
         if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
           sxy.x = 1;

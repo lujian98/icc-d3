@@ -1,4 +1,5 @@
 import * as d3Format from 'd3-format';
+import { IccD3RadialGaugeOptions } from './gauge.model';
 import { IccD3LegendOptions } from './legend.model';
 import { IccD3PieOptions } from './pie.model';
 import { IccD3PopoverOptions } from './popover.model';
@@ -40,6 +41,7 @@ export interface IccD3Options {
   yAxis?: IccD3AxisOptions;
   legend?: IccD3LegendOptions,
   pie?: IccD3PieOptions;
+  radialGauge?: IccD3RadialGaugeOptions;
   popover?: IccD3PopoverOptions;
   zoom?: IccD3ZoomOptions;
 

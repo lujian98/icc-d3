@@ -24,6 +24,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
 
   drawChart(data: T[]): void {
     const pie = new IccPieData(this.options);
+    pie.pieOptions = this.options.pie;
     this.sxy = pie.setPieScaleXY();
     const piedata = pie.getPieData(data);
     super.drawChart(piedata);

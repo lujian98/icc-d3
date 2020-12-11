@@ -19,16 +19,8 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     y0: (d) => d.ranges,
     x: (d) => d.min,
     y: (d) => d.max,
-    pie: {
-      startAngle: Math.PI * -2 / 3,
-      endAngle: Math.PI * 2 / 3,
-      donut: 0.8
-    },
     legend: {
       position: 'top',
-    },
-    zoom: {
-      enabled: false,
     }
   };
 

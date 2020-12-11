@@ -6,7 +6,7 @@ export interface IccD3PieOptions {
   donut?: number;  // 0 - 0.95 R innerRadius(radius * Math.min(0.95, donut)
 }
 
-export const DEFAULT_PIE_OPTIONS: IccD3Options = {
+export const DEFAULT_PIE_CHART_OPTIONS: IccD3Options = {
   pie: {
     startAngle: 0,
     endAngle: Math.PI * 2,

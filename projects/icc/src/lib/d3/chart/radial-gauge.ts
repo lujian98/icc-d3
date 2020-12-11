@@ -15,11 +15,9 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   upperLimit = 6; // TODO change to domain options
   lowerLimit = 0; // TODO change to domain options
-  majorGraduations = 10;
   unit = 'kW';
   precision = 2;
 
-  minorGraduations = 10;
   majorGraduationLenght = 16;
   minorGraduationLenght = 10;
   majorGraduationMarginTop = 7;
@@ -33,30 +31,30 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
     const scaleRange = upperLimit - lowerLimit;
     const majorGraduationValues = [];
-    for (let i = 0; i <= this.majorGraduations; i++) {
-      majorGraduationValues.push(lowerLimit + i * scaleRange / (this.majorGraduations));
+    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
+      majorGraduationValues.push(lowerLimit + i * scaleRange / (this.options.radialGauge.majorGraduations));
     }
     return majorGraduationValues;
   }
 
   private getMajorGraduationAngles(): any[] {
-    const scaleRange = (this.options.pie.endAngle - this.options.pie.startAngle);
-    const minScale = this.options.pie.startAngle;
+    const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
+    const minScale = this.options.radialGauge.startAngle;
     const graduationsAngles = [];
-    for (let i = 0; i <= this.majorGraduations; i++) {
-      graduationsAngles.push(minScale + i * scaleRange / (this.majorGraduations));
+    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
+      graduationsAngles.push(minScale + i * scaleRange / (this.options.radialGauge.majorGraduations));
     }
     return graduationsAngles;
   }
 
   private getMinorGraduationAngles(majorGraduationsAngles: any[]): any[] {
     const minorGraduationsAngles = [];
-    for (let indexMajor = 1; indexMajor <= this.majorGraduations; indexMajor++) {
+    for (let indexMajor = 1; indexMajor <= this.options.radialGauge.majorGraduations; indexMajor++) {
       const minScale = majorGraduationsAngles[indexMajor - 1];
       const maxScale = majorGraduationsAngles[indexMajor];
       const scaleRange = maxScale - minScale;
-      for (let i = 1; i < this.minorGraduations; i++) {
-        const scaleValue = minScale + i * scaleRange / this.minorGraduations;
+      for (let i = 1; i < this.options.radialGauge.minorGraduations; i++) {
+        const scaleValue = minScale + i * scaleRange / this.options.radialGauge.minorGraduations;
         minorGraduationsAngles.push(scaleValue);
       }
     }
@@ -65,6 +63,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   drawChart(data: any[]): void {
     const pie = new IccPieData(this.options);
+    pie.pieOptions = this.options.radialGauge;
     this.sxy = pie.setPieScaleXY();
     this.cxy = {
       x: (this.sxy.x + 1) * this.options.drawWidth / 2,
@@ -72,10 +71,10 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     };
     this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
       (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
-    this.innerRadius = Math.round(this.outterRadius * this.options.pie.donut);
+    this.innerRadius = Math.round(this.outterRadius * this.options.radialGauge.donut);
 
     this.cScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
-      .range([this.options.pie.startAngle, this.options.pie.endAngle]);
+      .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
     this.value = data[0].value;
 
     this.majorGraduationLenght = Math.round(this.outterRadius * 16 / 150);
@@ -164,7 +163,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const data: any = this.data.filter((d: any) => isAngle ? value < d.endAngle : value < d.value);
     if (data.length > 0) {
       return data[0].data.color;
-    } else if ((!isAngle && value >= this.upperLimit) || (value >= this.options.pie.endAngle)) {
+    } else if ((!isAngle && value >= this.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
       const td: any = this.data[this.data.length - 1];
       return td.data.color;
     }
