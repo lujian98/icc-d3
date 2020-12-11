@@ -12,16 +12,14 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   upperLimit = 6;
   lowerLimit = 0;
+  majorGraduations = 10; // TODO this should be the range count???
   unit = 'kW';
   precision = 2;
 
-
-
-  innerRadiusOptions = 120;
+  innerRadiusOptions = 130;
 
   innerRadius = 130;
   outterRadius = 145;
-  majorGraduations = 6;
   minorGraduations = 10;
   majorGraduationLenght = 16;
   minorGraduationLenght = 10;
@@ -108,8 +106,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private getMajorGraduationAngles(): any[] {
-    const scaleRange = 240;
-    const minScale = -120;
+    const scaleRange = (this.options.pie.endAngle - this.options.pie.startAngle) * 180 / Math.PI;
+    const minScale = this.options.pie.startAngle * 180 / Math.PI;
     const graduationsAngles = [];
     for (let i = 0; i <= this.majorGraduations; i++) {
       const scaleValue = minScale + i * scaleRange / (this.majorGraduations);
@@ -134,7 +132,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   drawChart(data: any[]): void {
     this.cScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
-      .range([-120 * (Math.PI / 180), 120 * (Math.PI / 180)]);
+      .range([this.options.pie.startAngle, this.options.pie.endAngle]);
 
     this.value = data[0].value;
 
@@ -234,8 +232,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const centerX = (this.sx + 1) * this.options.drawWidth / 2;
     const centerY = (this.sy + 1) * this.options.drawHeight / 2;
 
-    const needleValue = this.getValueAngle(this.value);
-    const thetaRad = needleValue * Math.PI / 180;
+    const needleValue = this.cScale(this.value);
+    const thetaRad = needleValue + Math.PI / 2;
 
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
     const needleRadius = (this.width * 2.5) / 300;
@@ -255,11 +253,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .style('stroke', needColor)
       .style('fill', needColor);
   }
-
-  private getValueAngle(value: number): number {
-    return ((this.value - this.lowerLimit) * 240 / (this.upperLimit - this.lowerLimit)) - 30;
-  }
-
 
   private getValueColor(value: number, isAngle: boolean = false): string {
     const data: any = this.data.filter((d: any) => isAngle ? value * Math.PI / 180 < d.endAngle : value < d.value);
@@ -371,7 +364,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
     const innerRadius = Math.round((this.width * this.innerRadiusOptions) / 300);
     const outterRadius = Math.round((this.width * 145) / 300);
-
     return d3Shape.arc()
       .innerRadius(innerRadius)
       .outerRadius(outterRadius)
