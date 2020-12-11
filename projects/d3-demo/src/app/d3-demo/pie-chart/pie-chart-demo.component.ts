@@ -21,13 +21,6 @@ export class AppPieChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key,
     legend: {
       position: 'top',
-    },
-    zoom: {
-      enabled: false,
-      horizontalOff: false,
-      horizontalBrushShow: true,
-      verticalOff: false,
-      verticalBrushShow: true
     }
   };
 
@@ -44,13 +37,6 @@ export class AppPieChartDemoComponent implements OnInit {
     pie: {
       startAngle: Math.PI * -1 / 2,
       endAngle: Math.PI * 1 / 2
-    },
-    zoom: {
-      enabled: false,
-      horizontalOff: false,
-      horizontalBrushShow: true,
-      verticalOff: false,
-      verticalBrushShow: true
     }
   };
 

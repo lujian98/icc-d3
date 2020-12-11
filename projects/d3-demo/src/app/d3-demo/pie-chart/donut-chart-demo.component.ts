@@ -27,9 +27,6 @@ export class AppDonutChartDemoComponent implements OnInit {
       donut: 0.66,
       startAngle: Math.PI * 0.5,
       endAngle: Math.PI * -1.0
-    },
-    zoom: {
-      enabled: false,
     }
   };
 
@@ -48,9 +45,6 @@ export class AppDonutChartDemoComponent implements OnInit {
     },
     pie: {
       donut: 0.50
-    },
-    zoom: {
-      enabled: false
     }
   };
 

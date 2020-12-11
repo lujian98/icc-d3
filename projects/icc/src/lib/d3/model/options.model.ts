@@ -5,6 +5,11 @@ import { IccD3PopoverOptions } from './popover.model';
 import { IccD3ZoomOptions } from './zoom.model';
 import { IccD3AxisOptions } from './axis.model';
 
+export interface IccPosition {
+  x: number;
+  y: number;
+}
+
 export interface IccMargin {
   top: number;
   right: number;
@@ -71,11 +76,6 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   legend: {
     position: 'top',
     align: 'right'
-  },
-  pie: {
-    startAngle: 0,
-    endAngle: Math.PI * 2,
-    donut: 0.0
   },
   popover: {
     totalLable: 'Total',
