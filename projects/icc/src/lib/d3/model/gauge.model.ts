@@ -44,6 +44,9 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     textVerticalPadding: 5,
     textHorizontalPadding: 5,
   },
+  popover: {
+    valueFormatter: null,
+  },
   legend: {
     enabled: false,
   },

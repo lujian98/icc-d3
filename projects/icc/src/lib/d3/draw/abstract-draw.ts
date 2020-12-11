@@ -86,7 +86,7 @@ export abstract class IccAbstractDraw<T> {
         value: d,
         color: this.getStackeddrawColor(data, idx),
         valueX: this.options.x(d.data),
-        valueY: d[1] - d[0],
+        valueY: `${d[1] - d[0]}`,
         cy: this.scale.y(d[1]),
         hovered: this.hoveredKey === data.key,
         hasSummary: !this.normalized,

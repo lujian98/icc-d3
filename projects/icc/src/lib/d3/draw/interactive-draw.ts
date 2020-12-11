@@ -140,7 +140,7 @@ export class IccInteractiveDraw<T> {
             svalue += ` (${this.options.popover.valueFormatter(avalue)})`;
           }
         } else {
-          svalue = this.options.popover.valueFormatter(+d.valueY);
+          svalue = this.options.popover.valueFormatter ? this.options.popover.valueFormatter(+d.valueY) : d.valueY;
         }
         return {
           key: this.options.popover.serieFormatter(d.key),

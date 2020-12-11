@@ -19,7 +19,19 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private majorGraduationMarginTop: number;
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return null; // TODO
+    return this.options.radialGauge.range
+      .map((d, i) => {
+        return {
+          key: '',
+          value: d,
+          color: d.color || this.getdrawColor(d, idx),
+          valueX: null,
+          valueY: `${this.options.x(d)} - ${this.options.y(d)}`,
+          cy: null,
+          hovered: i === idx,
+          hasSummary: false
+        };
+      });
   }
 
   drawChart(data: any[]): void {
@@ -245,7 +257,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
     return d3Shape.arc()
       .innerRadius(this.innerRadius)
-      .outerRadius(this.outterRadius)
+      .outerRadius(this.outterRadius - 10 + grow)
       .startAngle((d: any, i) => { // TODO initial data is incorrect ???
         d.startAngle = this.rangeScale(d.data.min);
         return d.startAngle;

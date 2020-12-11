@@ -17,6 +17,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     y: (d) => d.max,
     radialGauge: {
       centerOffsetY: 0,
+      majorGraduations: 10,
       valueUnit: 'kW',
       range: [
         {
