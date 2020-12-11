@@ -22,7 +22,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     pie: {
       startAngle: Math.PI * -2 / 3,
       endAngle: Math.PI * 2 / 3,
-      donut: 0.7
+      donut: 0.8
     },
     legend: {
       position: 'top',
