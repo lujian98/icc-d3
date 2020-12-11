@@ -67,7 +67,7 @@ export class IccScaleDraw<T> {
 
   setDrawDomain(data: any[]): void {
     const drawData = data.filter((d: any) => !d.disabled);
-    if (drawData.length > 0) {
+    if (drawData.length > 0 && this.options.axisEnabled) {
       this.setXDomain(drawData);
       this.setYDomain(drawData);
     }

@@ -66,7 +66,7 @@ export abstract class IccAbstractDraw<T> {
     if (idx > -1 && chartType === this.chartType) {
       if (this.isGrouped) {
         return this.getDrawData(idx, data);
-      } else if (this.options.chartType === 'pieChart') {
+      } else if (this.options.chartType === 'pieChart' || this.options.chartType === 'radialGauge') {
         return this.getDrawData(idx, data);
       } else {
         const key = this.options.x0(data);

@@ -20,7 +20,7 @@ export class IccPieData<T> {
     return pie([...mdata]);
   }
 
-  setPieScaleXY(): IccPosition { // TODO move this to pie data
+  setPieScaleXY(): IccPosition {
     const dAngle = Math.abs(this.pieOptions.endAngle - this.pieOptions.startAngle);
     const sxy: IccPosition = { x: 0, y: 0 };
     if (dAngle <= Math.PI) {
@@ -57,39 +57,3 @@ export class IccPieData<T> {
     return sxy;
   }
 }
-
-/*
-  private setPieScaleXY(): void {
-    const dAngle = Math.abs(this.options.pie.endAngle - this.options.pie.startAngle);
-    if (dAngle <= Math.PI) {
-      const sinStart = +Math.sin(this.options.pie.startAngle).toFixed(4);
-      const sinEnd = +Math.sin(this.options.pie.endAngle).toFixed(4);
-      const cosStart = +Math.cos(this.options.pie.startAngle).toFixed(4);
-      const cosEnd = +Math.cos(this.options.pie.endAngle).toFixed(4);
-      if (dAngle <= Math.PI / 2) {
-        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
-          this.sx = 1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
-          this.sx = -1;
-          this.sy = 1;
-        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
-          this.sx = -1;
-          this.sy = -1;
-        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
-          this.sx = 1;
-          this.sy = -1;
-        }
-      } else {
-        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
-          this.sy = 1 / 2;
-        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
-          this.sy = - 1 / 4;
-        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
-          this.sx = -1 / 2;
-        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
-          this.sx = 1 / 2;
-        }
-      }
-    }
-  } */

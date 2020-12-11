@@ -1,12 +1,15 @@
 import * as d3Shape from 'd3-shape';
 import * as d3Scale from 'd3-scale';
+import * as d3Array from 'd3-array';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private value: number;
-  cScale: any; // TODO change to scaleX??
+  private rangeScale: IccScaleLinear;
+  private lowerLimit = 0;
+  private upperLimit = 100;
   private sxy: IccPosition;
   private cxy: IccPosition;
   private outterRadius: number;
@@ -15,43 +18,31 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private minorGraduationLenght: number;
   private majorGraduationMarginTop: number;
 
-  private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
-    const scaleRange = upperLimit - lowerLimit;
-    const majorGraduationValues = [];
-    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
-      majorGraduationValues.push(lowerLimit + i * scaleRange / (this.options.radialGauge.majorGraduations));
-    }
-    return majorGraduationValues;
-  }
-
-  private getMajorGraduationAngles(): any[] {
-    const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
-    const minScale = this.options.radialGauge.startAngle;
-    const graduationsAngles = [];
-    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
-      graduationsAngles.push(minScale + i * scaleRange / (this.options.radialGauge.majorGraduations));
-    }
-    return graduationsAngles;
-  }
-
-  private getMinorGraduationAngles(majorGraduationsAngles: any[]): any[] {
-    const minorGraduationsAngles = [];
-    for (let indexMajor = 1; indexMajor <= this.options.radialGauge.majorGraduations; indexMajor++) {
-      const minScale = majorGraduationsAngles[indexMajor - 1];
-      const maxScale = majorGraduationsAngles[indexMajor];
-      const scaleRange = maxScale - minScale;
-      for (let i = 1; i < this.options.radialGauge.minorGraduations; i++) {
-        const scaleValue = minScale + i * scaleRange / this.options.radialGauge.minorGraduations;
-        minorGraduationsAngles.push(scaleValue);
-      }
-    }
-    return minorGraduationsAngles;
+  getDrawData(idx: number, data: T): IccD3Interactive[] {
+    return null; // TODO
   }
 
   drawChart(data: any[]): void {
-    const pie = new IccPieData(this.options);
-    pie.pieOptions = this.options.radialGauge;
-    this.sxy = pie.setPieScaleXY();
+    if (this.options.radialGauge.range.length > 0) {
+      this.setRangeScale();
+      const pie = new IccPieData(this.options);
+      pie.pieOptions = this.options.radialGauge;
+      this.sxy = pie.setPieScaleXY();
+      const piedata = pie.getPieData([this.options.radialGauge]);
+      this.value = !isNaN(data[0].value) ? data[0].value : null;
+      this.initDraw();
+      super.drawChart(piedata);
+    }
+  }
+  private setRangeScale(): void {
+    const range = this.options.y0(this.options.radialGauge);
+    this.lowerLimit = d3Array.min(range, (d) => +this.options.x(d));
+    this.upperLimit = d3Array.max(range, (d) => +this.options.y(d));
+    this.rangeScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
+      .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
+  }
+
+  private initDraw(): void {
     this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
       (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
     this.innerRadius = Math.round(this.outterRadius * this.options.radialGauge.donut);
@@ -59,15 +50,9 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       x: (this.sxy.x + 1) * this.options.drawWidth / 2 + this.outterRadius * this.options.radialGauge.centerOffsetX,
       y: (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.radialGauge.centerOffsetY
     };
-
-    this.cScale = d3Scale.scaleLinear().domain([this.options.radialGauge.lowerLimit, this.options.radialGauge.upperLimit])
-      .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
-    this.value = !isNaN(data[0].value) ? data[0].value : null;
-
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
     this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
-
     this.svg.select('.majorGraduations').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
     this.svg.select('.minorGraduations').remove();
@@ -78,8 +63,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select('.drawArea').append('g').attr('class', 'graduationValueText');
     this.svg.select('.graduationNeedleCenter').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedleCenter');
-    const piedata = pie.getPieData(data);
-    super.drawChart(piedata);
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -123,8 +106,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private drawGraduationNeedle(): void { // TODO range
-    const needleValue = this.cScale(this.value);
+  private drawGraduationNeedle(): void {
+    const needleValue = this.rangeScale(this.value);
     const thetaRad = needleValue + Math.PI / 2;
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
     const needleRadius = (this.outterRadius * 2.5) / 150;
@@ -168,7 +151,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
-    const majorGraduationValues = this.getMajorGraduationValues(this.options.radialGauge.lowerLimit, this.options.radialGauge.upperLimit);
+    const majorGraduationValues = this.getMajorGraduationValues(this.lowerLimit, this.upperLimit);
     const textSize = this.outterRadius * this.options.radialGauge.majorGraduationTextSize;
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .style('font', `${textSize}px Courier`)
@@ -186,15 +169,47 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         ${this.options.radialGauge.valueUnit}`);
   }
 
+  private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
+    const scaleRange = upperLimit - lowerLimit;
+    const majorGraduationValues = [];
+    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
+      majorGraduationValues.push(lowerLimit + i * scaleRange / (this.options.radialGauge.majorGraduations));
+    }
+    return majorGraduationValues;
+  }
+
+  private getMajorGraduationAngles(): any[] {
+    const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
+    const minScale = this.options.radialGauge.startAngle;
+    const graduationsAngles = [];
+    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
+      graduationsAngles.push(minScale + i * scaleRange / (this.options.radialGauge.majorGraduations));
+    }
+    return graduationsAngles;
+  }
+
+  private getMinorGraduationAngles(majorGraduationsAngles: any[]): any[] {
+    const minorGraduationsAngles = [];
+    for (let indexMajor = 1; indexMajor <= this.options.radialGauge.majorGraduations; indexMajor++) {
+      const minScale = majorGraduationsAngles[indexMajor - 1];
+      const maxScale = majorGraduationsAngles[indexMajor];
+      const scaleRange = maxScale - minScale;
+      for (let i = 1; i < this.options.radialGauge.minorGraduations; i++) {
+        const scaleValue = minScale + i * scaleRange / this.options.radialGauge.minorGraduations;
+        minorGraduationsAngles.push(scaleValue);
+      }
+    }
+    return minorGraduationsAngles;
+  }
+
   private getValueColor(value: number, isAngle: boolean = false): string {
-    if (!isAngle && (value === null || value < this.options.radialGauge.lowerLimit ||
-      value > this.options.radialGauge.upperLimit)) {
+    if (!isAngle && (value === null || value < this.lowerLimit || value > this.upperLimit)) {
       return this.options.radialGauge.valueNullColor;
     }
     const data: any = this.data.filter((d: any) => isAngle ? value < d.endAngle : value < d.value);
     if (data.length > 0) {
       return data[0].data.color;
-    } else if ((!isAngle && value >= this.options.radialGauge.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
+    } else if ((!isAngle && value >= this.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
       const td: any = this.data[this.data.length - 1];
       return td.data.color;
     }
@@ -232,11 +247,11 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .innerRadius(this.innerRadius)
       .outerRadius(this.outterRadius)
       .startAngle((d: any, i) => { // TODO initial data is incorrect ???
-        d.startAngle = this.cScale(d.data.min);
+        d.startAngle = this.rangeScale(d.data.min);
         return d.startAngle;
       })
       .endAngle((d: any) => {
-        d.endAngle = this.cScale(d.data.max);
+        d.endAngle = this.rangeScale(d.data.max);
         return d.endAngle;
       });
   }
