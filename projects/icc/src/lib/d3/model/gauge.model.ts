@@ -12,6 +12,7 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
   majorGraduationDecimals?: number;
   majorGraduationTextSize?: number;
   valueUnit?: string;
+  valueNullColor?: string;
   valueOffsetY?: number;
   valueDecimals?: number;
   valueTextSize?: number;
@@ -37,6 +38,7 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     majorGraduationMarginTop: 7 / 150,
     majorGraduationTextSize: 7 / 150,
     valueUnit: '',
+    valueNullColor: 'gray',
     valueOffsetY: 50,
     valueDecimals: 2,
     valueTextSize: 7 / 150,

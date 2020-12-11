@@ -14,8 +14,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private majorGraduationLenght: number;
   private minorGraduationLenght: number;
   private majorGraduationMarginTop: number;
-  private majorGraduationTextSize: number;
-  // private unactiveColor: string; // TODO ???
 
   private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
     const scaleRange = upperLimit - lowerLimit;
@@ -64,7 +62,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
     this.cScale = d3Scale.scaleLinear().domain([this.options.radialGauge.lowerLimit, this.options.radialGauge.upperLimit])
       .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
-    this.value = data[0].value;
+    this.value = !isNaN(data[0].value) ? data[0].value : null;
 
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
@@ -146,16 +144,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .style('fill', needColor);
   }
 
-  private getValueColor(value: number, isAngle: boolean = false): string {
-    const data: any = this.data.filter((d: any) => isAngle ? value < d.endAngle : value < d.value);
-    if (data.length > 0) {
-      return data[0].data.color;
-    } else if ((!isAngle && value >= this.options.radialGauge.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
-      const td: any = this.data[this.data.length - 1];
-      return td.data.color;
-    }
-  }
-
   private drawNeedleCenter(): void {
     this.svg.select('.graduationNeedleCenter')
       .append('circle')
@@ -167,6 +155,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   private drawGraduationValueText(): void {
     const textSize = this.outterRadius * this.options.radialGauge.valueTextSize;
+    const text = this.value ? this.value.toFixed(this.options.radialGauge.valueDecimals) : '';
     this.svg.select('.graduationValueText')
       .append('text')
       .attr('fill', this.getValueColor(this.value))
@@ -175,7 +164,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
       .style('font', `${textSize}px Courier`)
-      .text(`[ ${this.value.toFixed(this.options.radialGauge.valueDecimals)} ${this.options.radialGauge.valueUnit} ]`);
+      .text(`[ ${text} ${this.options.radialGauge.valueUnit} ]`);
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
@@ -195,6 +184,20 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('fill', (d: number) => this.getValueColor(d, true))
       .text((d: any, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
         ${this.options.radialGauge.valueUnit}`);
+  }
+
+  private getValueColor(value: number, isAngle: boolean = false): string {
+    if (!isAngle && (value === null || value < this.options.radialGauge.lowerLimit ||
+      value > this.options.radialGauge.upperLimit)) {
+      return this.options.radialGauge.valueNullColor;
+    }
+    const data: any = this.data.filter((d: any) => isAngle ? value < d.endAngle : value < d.value);
+    if (data.length > 0) {
+      return data[0].data.color;
+    } else if ((!isAngle && value >= this.options.radialGauge.upperLimit) || (value >= this.options.radialGauge.endAngle)) {
+      const td: any = this.data[this.data.length - 1];
+      return td.data.color;
+    }
   }
 
   private getTextPosition(d: number, isX: boolean): number {
@@ -257,11 +260,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('d', mouseover ? this.drawArc(7) : this.drawArc());
   }
 
-  legendMouseover(e, data, mouseover: boolean): void {
-    this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      .filter((d: any) => [d.data].indexOf(data) !== -1)
-      .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75)
-      .attr('d', mouseover ? this.drawArc(5) : this.drawArc());
-  }
+  legendMouseover(): void { }
 }
 

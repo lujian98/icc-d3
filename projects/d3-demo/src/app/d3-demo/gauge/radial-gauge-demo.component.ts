@@ -67,7 +67,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   ngOnInit(): void {
     this.data = [{
       key: 'Radial Chart',
-      value: 3.5,
+      value: 4.3,
       ranges: this.ranges,
     }];
   }
