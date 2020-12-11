@@ -15,6 +15,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
     xScaleType: 'band',
+    axisEnabled: false,
     x0: (d) => d.key,
     y0: (d) => d.ranges,
     x: (d) => d.min,
@@ -22,9 +23,10 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     radialGauge: {
       lowerLimit: 0,
       upperLimit: 6,
-      valueUnit: 'kW2',
+      valueUnit: 'kW',
     },
     legend: {
+      enabled: false,
       position: 'top',
     }
   };
@@ -65,7 +67,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   ngOnInit(): void {
     this.data = [{
       key: 'Radial Chart',
-      value: 2.5,
+      value: 3.5,
       ranges: this.ranges,
     }];
   }

@@ -37,6 +37,7 @@ export interface IccD3Options {
   barColor?: Function;
   duration?: number;
 
+  axisEnabled?: boolean;
   xAxis?: IccD3AxisOptions;
   yAxis?: IccD3AxisOptions;
   legend?: IccD3LegendOptions,
@@ -69,6 +70,7 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.y,
   drawColor: (d, i) => d.key,
   duration: 0,
+  axisEnabled: true,
   xAxis: {
     axisLabelDistance: 0
   },
@@ -76,6 +78,7 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
     axisLabelDistance: 0
   },
   legend: {
+    enabled: true,
     position: 'top',
     align: 'right'
   },

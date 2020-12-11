@@ -17,6 +17,7 @@ export class AppDonutChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: false,
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
@@ -33,6 +34,7 @@ export class AppDonutChartDemoComponent implements OnInit {
   options2: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: false,
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
