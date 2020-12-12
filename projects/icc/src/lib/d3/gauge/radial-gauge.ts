@@ -8,8 +8,8 @@ import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../mode
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private value: number;
   private rangeScale: IccScaleLinear;
-  private lowerLimit = 0;
-  private upperLimit = 100;
+  private lowerLimit: number;
+  private upperLimit: number;
   private sxy: IccPosition;
   private cxy: IccPosition;
   private outterRadius: number;
@@ -40,16 +40,16 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      const piedata = pie.getPieData([this.options.radialGauge]);
-      this.value = !isNaN(data[0].value) ? data[0].value : null;
+      const piedata = pie.getPieData(this.options.radialGauge.range);
+      this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
       this.initDraw();
       super.drawChart(piedata);
     }
   }
+
   private setRangeScale(): void {
-    const range = this.options.y0(this.options.radialGauge);
-    this.lowerLimit = d3Array.min(range, (d) => +this.options.x(d));
-    this.upperLimit = d3Array.max(range, (d) => +this.options.y(d));
+    this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => +this.options.x(d));
+    this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
     this.rangeScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
       .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
   }
@@ -172,7 +172,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .style('font', `${textSize}px Courier`)
       .attr('text-anchor', (d: number) => {
-        if (+d.toFixed(4) === 0 || d === - Math.PI) {
+        if (+d.toFixed(4) === 0 || d === -Math.PI) {
           return 'middle';
         } else {
           return d < 0 ? 'start' : 'end';
@@ -181,7 +181,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('x', (d: number, i) => this.getTextPositionX(d, i))
       .attr('dy', (d: number, i) => this.getTextPositionDy(d, i))
       .attr('fill', (d: number) => this.getValueColor(d, true))
-      .text((d: any, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
+      .text((d, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
         ${this.options.radialGauge.valueUnit}`);
   }
 

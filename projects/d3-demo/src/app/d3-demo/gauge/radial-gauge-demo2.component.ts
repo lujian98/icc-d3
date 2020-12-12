@@ -18,6 +18,7 @@ import { IccD3Options } from 'icc';
 export class AppRadialGaugeDemo2Component implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
+    y0: (d) => d.value,
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
@@ -62,6 +63,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options2: IccD3Options = {
     chartType: 'radialGauge',
+    y0: (d) => d.value,
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
@@ -107,6 +109,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options3: IccD3Options = {
     chartType: 'radialGauge',
+    y0: (d) => d.value,
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
@@ -152,6 +155,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options4: IccD3Options = {
     chartType: 'radialGauge',
+    y0: (d) => d.value,
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {

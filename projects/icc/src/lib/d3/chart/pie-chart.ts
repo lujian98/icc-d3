@@ -29,7 +29,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     this.sxy = pie.setPieScaleXY();
     this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
       (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
-    const piedata = pie.getPieData(data);
+    const piedata = pie.getPieData(this.options.y0(data[0]));
     super.drawChart(piedata);
   }
 

@@ -1,22 +1,20 @@
 import * as d3Shape from 'd3-shape';
-import * as d3Scale from 'd3-scale';
 import { IccD3Options, IccPosition, IccD3PieOptions } from '../model';
 
-export class IccPieData<T> {
+export class IccPieData {
   pieOptions: IccD3PieOptions;
   constructor(
     private options: IccD3Options,
-  ) {
-  }
+  ) { }
 
-  getPieData(data: T[]): any[] {
+  getPieData(data: any[]): any[] {
     const pie = d3Shape.pie()
-      .padAngle(0.005) // TODO options?
+      .padAngle(this.pieOptions.padAngle)
       .sort(null)
       .value((d: any) => this.options.y(d))
       .startAngle(this.pieOptions.startAngle)
       .endAngle(this.pieOptions.endAngle);
-    const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
+    const mdata = data.filter((d) => !d.disabled);
     return pie([...mdata]);
   }
 
