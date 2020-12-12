@@ -84,16 +84,20 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
     if (drawName === `.${this.chartType}`) {
-      const majorGraduationsAngles = this.getMajorGraduationAngles();
-      const minorGraduationsAngles = this.getMinorGraduationAngles(majorGraduationsAngles);
+      let majorAngles = this.getMajorGraduationAngles();
+      const minorGraduationsAngles = this.getMinorGraduationAngles(majorAngles);
+      const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
+      if (scaleRange === 2 * Math.PI) {
+        majorAngles = majorAngles.filter((d, i) => i < this.options.radialGauge.majorGraduations);
+      }
       this.svg.select('.majorGraduations').selectAll('line')
-        .data(majorGraduationsAngles).join('line')
+        .data(majorAngles).join('line')
         .attr('class', 'drawMajorGraduations');
       this.svg.select('.minorGraduations').selectAll('line')
         .data(minorGraduationsAngles).join('line')
         .attr('class', 'drawMinorGraduations');
       this.svg.select(`${drawName}Label`)
-        .selectAll('g').data(majorGraduationsAngles).join('g')
+        .selectAll('g').data(majorAngles).join('g')
         .append('text')
         .attr('class', 'drawlabel');
       this.drawGraduationNeedle();
@@ -168,14 +172,14 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .style('font', `${textSize}px Courier`)
       .attr('text-anchor', (d: number) => {
-        if (+d.toFixed(4) === 0) {
+        if (+d.toFixed(4) === 0 || d === - Math.PI) {
           return 'middle';
         } else {
           return d < 0 ? 'start' : 'end';
         }
       })
-      .attr('x', (d: number) => this.getTextPosition(d, true))
-      .attr('dy', (d: number) => this.getTextPosition(d, false))
+      .attr('x', (d: number, i) => this.getTextPosition(d, i, true))
+      .attr('dy', (d: number, i) => this.getTextPosition(d, i, false))
       .attr('fill', (d: number) => this.getValueColor(d, true))
       .text((d: any, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
         ${this.options.radialGauge.valueUnit}`);
@@ -227,19 +231,24 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private getTextPosition(d: number, isX: boolean): number {
+  private getTextPosition(d: number, i: number, isX: boolean): number {
     const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
     const cos1Adj = Math.round(Math.cos(Math.PI / 2 - d) * (dt - this.options.radialGauge.textHorizontalPadding));
     const sin1Adj = Math.round(Math.sin(Math.PI / 2 - d) * (dt - this.options.radialGauge.textVerticalPadding));
-    let sin1Factor = 1;
+    let sin1Factor = -1;
     if (sin1Adj < 0) {
-      sin1Factor = 1.1;
+      sin1Factor = -1.1;
     }
     if (sin1Adj > 0) {
-      sin1Factor = 0.9;
+      sin1Factor = -0.9;
     }
-    const x1 = this.cxy.x + cos1Adj;
-    const y1 = this.cxy.y + sin1Adj * sin1Factor * -1;
+    let cos1Factor = 1;
+    if (this.options.radialGauge.startAngle === - Math.PI && i === 0) {
+      sin1Factor = -1;
+      cos1Factor = 0;
+    }
+    const x1 = this.cxy.x + cos1Adj * cos1Factor;
+    const y1 = this.cxy.y + sin1Adj * sin1Factor;
     return isX ? x1 : y1;
   }
 
