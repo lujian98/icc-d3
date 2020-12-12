@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { IccD3Options } from 'icc';
 
 @Component({
@@ -100,12 +100,35 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   data: any[];
 
   data2: any[];
+
+  constructor(
+    protected cd: ChangeDetectorRef,
+  ) { }
+
   ngOnInit(): void {
     this.data = [{
       values: 3.75,
     }];
     this.data2 = [{
-      values: 1.52,
+      values: 0,
     }];
+    let v = 0.0;
+    setInterval(() => {
+      v += 0.05;
+      if (v > 6) {
+        v = 0;
+      }
+      this.data2 = [{
+        values: v
+      }];
+      this.cd.detectChanges();
+    }, 500);
+
+    setInterval(() => {
+      this.data = [{
+        values: Math.floor(Math.random() * 7)
+      }];
+      this.cd.detectChanges();
+    }, 2000);
   }
 }
