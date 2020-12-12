@@ -17,6 +17,8 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
   valueTextSize?: number;
   textVerticalPadding?: number;
   textHorizontalPadding?: number;
+  needleEndRadius?: number;
+  needleCenterRadius?: number;
 }
 
 export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
@@ -29,7 +31,7 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     donut: 0.8,
     centerOffsetX: 0,
     centerOffsetY: 30 / 150,
-    majorGraduations: 6,
+    majorGraduations: 8,
     minorGraduations: 10,
     majorGraduationDecimals: 1,
     majorGraduationLenght: 16 / 150,
@@ -43,6 +45,8 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     valueTextSize: 7 / 150,
     textVerticalPadding: 5,
     textHorizontalPadding: 5,
+    needleEndRadius: 2.5 / 150,
+    needleCenterRadius: 6 / 150
   },
   popover: {
     valueFormatter: null,

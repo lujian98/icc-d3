@@ -16,10 +16,8 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
-      startAngle: Math.PI * -1 / 1,
-      endAngle: Math.PI * 1 / 1,
-      centerOffsetY: 0,
-      majorGraduations: 8,
+      // centerOffsetY: 0,
+      // majorGraduations: 8,
       valueUnit: 'kW',
       range: [
         {

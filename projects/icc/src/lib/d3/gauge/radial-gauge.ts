@@ -126,7 +126,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const needleValue = this.rangeScale(this.value);
     const thetaRad = needleValue + Math.PI / 2;
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
-    const needleRadius = (this.outterRadius * 2.5) / 150;
+    const needleRadius = this.outterRadius * this.options.radialGauge.needleEndRadius;
     const topX = this.cxy.x - needleLen * Math.cos(thetaRad);
     const topY = this.cxy.y - needleLen * Math.sin(thetaRad);
     const leftX = this.cxy.x - needleRadius * Math.cos(thetaRad - Math.PI / 2);
@@ -146,7 +146,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private drawNeedleCenter(): void {
     this.svg.select('.graduationNeedleCenter')
       .append('circle')
-      .attr('r', (this.outterRadius * 6) / 150)
+      .attr('r', this.outterRadius * this.options.radialGauge.needleCenterRadius)
       .attr('cx', this.cxy.x)
       .attr('cy', this.cxy.y)
       .attr('fill', this.getValueColor(this.value));
@@ -178,8 +178,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
           return d < 0 ? 'start' : 'end';
         }
       })
-      .attr('x', (d: number, i) => this.getTextPosition(d, i, true))
-      .attr('dy', (d: number, i) => this.getTextPosition(d, i, false))
+      .attr('x', (d: number, i) => this.getTextPositionX(d, i))
+      .attr('dy', (d: number, i) => this.getTextPositionDy(d, i))
       .attr('fill', (d: number) => this.getValueColor(d, true))
       .text((d: any, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
         ${this.options.radialGauge.valueUnit}`);
@@ -231,25 +231,21 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private getTextPosition(d: number, i: number, isX: boolean): number {
+  private getTextPositionX(d: number, i: number): number {
     const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
     const cos1Adj = Math.round(Math.cos(Math.PI / 2 - d) * (dt - this.options.radialGauge.textHorizontalPadding));
+    const cos1Factor = this.options.radialGauge.startAngle === - Math.PI && i === 0 ? 0 : 1;
+    return this.cxy.x + cos1Adj * cos1Factor;
+  }
+
+  private getTextPositionDy(d: number, i: number): number {
+    const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
     const sin1Adj = Math.round(Math.sin(Math.PI / 2 - d) * (dt - this.options.radialGauge.textVerticalPadding));
     let sin1Factor = -1;
-    if (sin1Adj < 0) {
-      sin1Factor = -1.1;
+    if (this.options.radialGauge.startAngle !== - Math.PI || i !== 0) {
+      sin1Factor = sin1Adj < 0 ? -1.1 : -0.9;
     }
-    if (sin1Adj > 0) {
-      sin1Factor = -0.9;
-    }
-    let cos1Factor = 1;
-    if (this.options.radialGauge.startAngle === - Math.PI && i === 0) {
-      sin1Factor = -1;
-      cos1Factor = 0;
-    }
-    const x1 = this.cxy.x + cos1Adj * cos1Factor;
-    const y1 = this.cxy.y + sin1Adj * sin1Factor;
-    return isX ? x1 : y1;
+    return this.cxy.y + sin1Adj * sin1Factor;
   }
 
   private drawGraduations(drawName: string, graduationLenght: number): void {
