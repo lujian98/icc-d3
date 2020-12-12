@@ -60,8 +60,10 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
     }
+    const textSize = this.outterRadius * this.options.pie.labelTextSize;
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .text((d: any) => this.options.x(d.data))
+      .style('font', `${textSize}px Courier`)
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .attr('transform', (d: any) => {

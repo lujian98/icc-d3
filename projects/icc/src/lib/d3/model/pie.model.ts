@@ -5,6 +5,7 @@ export interface IccD3PieOptions {
   endAngle?: number;
   padAngle?: number;
   donut?: number;  // 0 - 0.95 R innerRadius(radius * Math.min(0.95, donut)
+  labelTextSize?: number;
   centerOffsetX?: number;
   centerOffsetY?: number;
 }
@@ -16,6 +17,7 @@ export const DEFAULT_PIE_CHART_OPTIONS: IccD3Options = {
     endAngle: Math.PI * 2,
     padAngle: 0.005,
     donut: 0.0,
+    labelTextSize: 8 / 150,
     centerOffsetX: 0,
     centerOffsetY: 0
   },
