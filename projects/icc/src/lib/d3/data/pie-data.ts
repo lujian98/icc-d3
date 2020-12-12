@@ -7,11 +7,11 @@ export class IccPieData {
     private options: IccD3Options,
   ) { }
 
-  getPieData(data: any[]): any[] {
+  getPieData(data: any[], withRange: boolean = false): any[] {
     const pie = d3Shape.pie()
       .padAngle(this.pieOptions.padAngle)
       .sort(null)
-      .value((d: any) => this.options.y(d))
+      .value((d) => withRange ? this.options.y(d) - this.options.x(d) : this.options.y(d))
       .startAngle(this.pieOptions.startAngle)
       .endAngle(this.pieOptions.endAngle);
     const mdata = data.filter((d) => !d.disabled);

@@ -102,7 +102,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
   data2: any[];
   ngOnInit(): void {
     this.data = [{
-      values: 4.3,
+      values: 3.75,
     }];
     this.data2 = [{
       values: 1.52,

@@ -10,8 +10,8 @@ import { IccD3Options } from 'icc';
     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
   </div>
   <div style="height: 100%; display: flex; margin-top: 20px;">
-    <icc-d3 [options]="options3" [data]="data3"></icc-d3>
     <icc-d3 [options]="options4" [data]="data4"></icc-d3>
+    <icc-d3 [options]="options3" [data]="data3"></icc-d3>
   </div>
   `,
 })
@@ -201,8 +201,8 @@ export class AppRadialGaugeDemo2Component implements OnInit {
   };
 
   data = [{ value: 4.3, }];
-  data2 = [{ value: 2.0, }];
-  data3 = [{ value: 4.52 }]
+  data2 = [{ value: 1.2, }];
+  data3 = [{ value: 2.72 }]
   data4 = [3.4];
   ngOnInit(): void {
     // this.data = [{ value: 4.3, }];
