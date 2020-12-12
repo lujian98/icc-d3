@@ -11,8 +11,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private lowerLimit: number;
   private upperLimit: number;
   private sxy: IccPosition;
-  private cxy: IccPosition;
-  private outterRadius: number;
+  private cxy: IccPosition = { x: -1, y: -1 };
+  private outterRadius = 0;
   private innerRadius: number;
   private majorGraduationLenght: number;
   private minorGraduationLenght: number;
@@ -40,10 +40,31 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      const piedata = pie.getPieData(this.options.radialGauge.range, true);
       this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
-      this.initDraw();
-      super.drawChart(piedata);
+      if (this.isDataChangeOnly()) {
+        this.inintCenterNeedle();
+        this.drawCenterNeedle();
+      } else {
+        const piedata = pie.getPieData(this.options.radialGauge.range, true);
+        this.initDraw();
+        super.drawChart(piedata);
+      }
+    }
+  }
+
+  private isDataChangeOnly(): boolean {
+    const outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
+      (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
+    this.innerRadius = Math.round(outterRadius * this.options.radialGauge.donut);
+    const cxy = {
+      x: (this.sxy.x + 1) * this.options.drawWidth / 2 + outterRadius * this.options.radialGauge.centerOffsetX,
+      y: (this.sxy.y + 1) * this.options.drawHeight / 2 + outterRadius * this.options.radialGauge.centerOffsetY
+    };
+    if (this.outterRadius === outterRadius && cxy.x === this.cxy.x && cxy.y === this.cxy.y) {
+      return true;
+    } else {
+      this.outterRadius = outterRadius;
+      this.cxy = cxy;
     }
   }
 
@@ -55,13 +76,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private initDraw(): void {
-    this.outterRadius = Math.round(Math.min((Math.abs(this.sxy.x) + 1) * this.options.drawWidth,
-      (Math.abs(this.sxy.y) + 1) * this.options.drawHeight) / 2);
-    this.innerRadius = Math.round(this.outterRadius * this.options.radialGauge.donut);
-    this.cxy = {
-      x: (this.sxy.x + 1) * this.options.drawWidth / 2 + this.outterRadius * this.options.radialGauge.centerOffsetX,
-      y: (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.radialGauge.centerOffsetY
-    };
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
     this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
@@ -69,12 +83,22 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
     this.svg.select('.minorGraduations').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'minorGraduations');
+    this.inintCenterNeedle();
+  }
+
+  private inintCenterNeedle(): void {
     this.svg.select('.graduationNeedle').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedle');
     this.svg.select('.graduationValueText').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'graduationValueText');
     this.svg.select('.graduationNeedleCenter').remove();
     this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedleCenter');
+  }
+
+  private drawCenterNeedle(): void {
+    this.drawGraduationNeedle();
+    this.drawGraduationValueText();
+    this.drawNeedleCenter();
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -100,9 +124,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         .selectAll('g').data(majorAngles).join('g')
         .append('text')
         .attr('class', 'drawlabel');
-      this.drawGraduationNeedle();
-      this.drawGraduationValueText();
-      this.drawNeedleCenter();
+      this.drawCenterNeedle();
     }
     this.redrawContent(drawName, scaleX, scaleY);
   }
