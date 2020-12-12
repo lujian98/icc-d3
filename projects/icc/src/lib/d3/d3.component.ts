@@ -109,7 +109,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.config.setViewDimension();
     this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.config.options);
-    this.view = new IccView(this.elementRef, this.chartTypes);
+    this.view = new IccView(this.elementRef, this.chartTypes, this.config.options);
     this.view.update(this.config.options);
     this.svg = this.view.svg;
     this.scale.buildScales(this.config.options);
