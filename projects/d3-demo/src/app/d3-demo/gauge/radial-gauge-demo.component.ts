@@ -58,39 +58,39 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
-      startAngle: Math.PI * -1,
-      endAngle: Math.PI * 1,
+      startAngle: Math.PI * 0,
+      endAngle: Math.PI * 2,
       majorGraduations: 12,
       centerOffsetY: 0,
       range: [
         {
           min: 0,
-          max: 1.,
+          max: 2.,
           color: 'rgb(156, 214, 130)'
         },
         {
-          min: 1.,
-          max: 2.,
+          min: 2.,
+          max: 4.,
           color: '#8DCA2F'
         },
         {
-          min: 2.,
-          max: 3.,
+          min: 4.,
+          max: 6.,
           color: '#FDC702'
         },
         {
-          min: 3.,
-          max: 4.,
+          min: 6.,
+          max: 8.,
           color: '#FF7700'
         },
         {
-          min: 4.,
-          max: 5.0,
+          min: 8.,
+          max: 10.0,
           color: '#C50200'
         },
         {
-          min: 5.,
-          max: 6.0,
+          min: 10.,
+          max: 12.0,
           color: 'red'
         }
       ]
@@ -115,7 +115,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     let v = 0.0;
     setInterval(() => {
       v += 0.05;
-      if (v > 6) {
+      if (v > 12) {
         v = 0;
       }
       this.data2 = [{

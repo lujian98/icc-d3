@@ -193,11 +193,12 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const textSize = this.outterRadius * this.options.radialGauge.majorGraduationTextSize;
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .style('font', `${textSize}px Courier`)
-      .attr('text-anchor', (d: number) => {
-        if (+d.toFixed(4) === 0 || d === -Math.PI) {
+      .attr('text-anchor', (d: number, i) => {
+        const sind = Math.sin(d);
+        if (Math.abs(sind) < 0.001) {
           return 'middle';
         } else {
-          return d < 0 ? 'start' : 'end';
+          return sind < 0 ? 'start' : 'end';
         }
       })
       .attr('x', (d: number, i) => this.getTextPositionX(d, i))
@@ -262,7 +263,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
     const sin1Adj = Math.round(Math.sin(Math.PI / 2 - d) * (dt - this.options.radialGauge.textVerticalPadding));
     let sin1Factor = -1;
-    if (this.options.radialGauge.startAngle !== - Math.PI || i !== 0) {
+    if (Math.abs(Math.cos(d) + 1) > 0.001) {
       sin1Factor = sin1Adj < 0 ? -1.1 : -0.9;
     }
     return this.cxy.y + sin1Adj * sin1Factor;
