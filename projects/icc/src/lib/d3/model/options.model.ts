@@ -12,10 +12,10 @@ export interface IccPosition {
 }
 
 export interface IccMargin {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
 }
 
 export interface IccD3Options {
@@ -56,7 +56,7 @@ export interface IccD3Options {
 export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   chartType: 'lineChart',
   useInteractiveGuideline: false,
-  margin: { top: 0, right: 10, bottom: 40, left: 50 },
+  margin: { top: 10, right: 10, bottom: 40, left: 50 },
   width: '100%',
   // height: 500, // TODO not used yet
   brushYWidth: 50,

@@ -16,7 +16,7 @@ export class AppHistoricalBarChartComponent implements OnInit {
     // chartType: 'lineChart',
     chartType: 'barChart',
     xScaleType: 'time',
-    margin: { top: 10, right: 50, bottom: 20, left: 50 },
+    margin: { right: 50 },
     x0: (d) => d.key,
     y0: (d) => d.values,
     x: (d) => d[0],
@@ -32,7 +32,6 @@ export class AppHistoricalBarChartComponent implements OnInit {
   options2: IccD3Options = {
     chartType: 'barChart',
     xScaleType: 'linear',
-    margin: { top: 10, right: 50, bottom: 20, left: 50 },
     x0: (d) => d.key,
     y0: (d) => d.values,
     x: (d) => d.x,

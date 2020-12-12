@@ -66,15 +66,14 @@ export class IccView {
   }
 
   updateViewDimension(): void {
-    // this.options.margin.top + 10 10 for the clip issue
-    this.svg.attr('transform', `translate(${this.options.margin.left},${this.options.margin.top + 10})`);
+    this.svg.attr('transform', `translate(${this.options.margin.left},${this.options.margin.top})`);
     const drawArea = this.svg.select('.drawArea');
     drawArea.select('clipPath').select('rect')
       .attr('width', this.options.drawWidth).attr('height', this.options.drawHeight)
       .attr('x', 0).attr('y', 0);
     drawArea.select('.zoom').attr('width', this.options.drawWidth).attr('height', this.options.drawHeight);
-    const top = this.height - this.options.margin.top - 80; // TODO 80 drawHeight2 is 50 + 30 ?
-    const yBrushPos = this.options.drawWidth + 10;
+    const top = this.height - this.options.drawHeight2 - this.options.margin.bottom;
+    const yBrushPos = this.options.drawWidth + 10; // 10 for the gap
     const brushDraw = this.svg.select('.brushDraw');
     this.chartTypes.forEach((type) => {
       brushDraw.select(`.${type}Brush`).attr('transform', `translate(0, ${top})`);
