@@ -17,6 +17,7 @@ export class AppDonutChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: false,
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
@@ -27,15 +28,13 @@ export class AppDonutChartDemoComponent implements OnInit {
       donut: 0.66,
       startAngle: Math.PI * 0.5,
       endAngle: Math.PI * -1.0
-    },
-    zoom: {
-      enabled: false,
     }
   };
 
   options2: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: false,
     x: (d) => d.name,
     y: (d) => d.value,
     drawColor: (d, i) => d.name,
@@ -48,9 +47,6 @@ export class AppDonutChartDemoComponent implements OnInit {
     },
     pie: {
       donut: 0.50
-    },
-    zoom: {
-      enabled: false
     }
   };
 

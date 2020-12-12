@@ -16,24 +16,20 @@ export class AppPieChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: true,
     x: (d) => d.key,
     y: (d) => d.y,
     drawColor: (d, i) => d.key,
     legend: {
+      // enabled: false,
       position: 'top',
-    },
-    zoom: {
-      enabled: false,
-      horizontalOff: false,
-      horizontalBrushShow: true,
-      verticalOff: false,
-      verticalBrushShow: true
     }
   };
 
   options2: IccD3Options = {
     chartType: 'pieChart',
     xScaleType: 'band',
+    axisEnabled: true,
     x: (d) => d.key,
     y: (d) => d.y,
     drawColor: (d, i) => d.key,
@@ -43,20 +39,14 @@ export class AppPieChartDemoComponent implements OnInit {
     },
     pie: {
       startAngle: Math.PI * -1 / 2,
-      endAngle: Math.PI * 1 / 2
-    },
-    zoom: {
-      enabled: false,
-      horizontalOff: false,
-      horizontalBrushShow: true,
-      verticalOff: false,
-      verticalBrushShow: true
+      endAngle: Math.PI * 1 / 2,
+      centerOffsetY: -10 / 150,
     }
   };
 
   data = [{
     key: 'One',
-    y: 5
+    y: 1
   },
   {
     key: 'Two',
@@ -64,23 +54,24 @@ export class AppPieChartDemoComponent implements OnInit {
   },
   {
     key: 'Three',
-    y: 9
-  },
-  {
-    key: 'Four',
-    y: 7
-  },
-  {
-    key: 'Five',
-    y: 4
-  },
-  {
-    key: 'Six',
     y: 3
   },
   {
+    key: 'Four',
+    y: 4
+  },
+
+  {
+    key: 'Five',
+    y: 5
+  },
+  {
+    key: 'Six',
+    y: 6
+  },
+  {
     key: 'Seven',
-    y: .5
+    y: 7
   }];
 
   data2: any[];

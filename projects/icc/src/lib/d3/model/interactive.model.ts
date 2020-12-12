@@ -3,7 +3,7 @@ export interface IccD3Interactive {
   value: any;
   color: string;
   valueX: string;
-  valueY: number;
+  valueY: string;
   cy: number;
   hovered: boolean;
   hasSummary: boolean;

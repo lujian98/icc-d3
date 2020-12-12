@@ -63,7 +63,7 @@ export class IccInteractiveDraw<T> {
     } else if (this.options.yScaleType === 'band') {
       const yScale = this.scale.y as IccScaleBand;
       idx = this.scaleBandInvert(yScale, pxy[1]);
-    } else { // TODO yScale linear ???
+    } else if (this.options.chartType !== 'radialGauge') { // TODO yScale linear ???
       const xScale = this.scale.x as IccScaleLinear;
       const bisect = d3Array.bisector((d) => this.options.x(d)).right;
       const x0 = xScale.invert(pxy[0]);
@@ -140,7 +140,7 @@ export class IccInteractiveDraw<T> {
             svalue += ` (${this.options.popover.valueFormatter(avalue)})`;
           }
         } else {
-          svalue = this.options.popover.valueFormatter(+d.valueY);
+          svalue = this.options.popover.valueFormatter ? this.options.popover.valueFormatter(+d.valueY) : d.valueY;
         }
         return {
           key: this.options.popover.serieFormatter(d.key),

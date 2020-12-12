@@ -1,22 +1,57 @@
 import * as d3Shape from 'd3-shape';
-import { IccD3Options } from '../model';
+import { IccD3Options, IccPosition, IccD3PieOptions } from '../model';
 
-export class IccPieData<T> {
-
+export class IccPieData {
+  pieOptions: IccD3PieOptions;
   constructor(
     private options: IccD3Options,
-  ) {
-  }
+  ) { }
 
-  getPieData(data: T[]): any[] {
+  getPieData(data: any[]): any[] {
     const pie = d3Shape.pie()
-      .padAngle(0.005) // TODO options?
+      .padAngle(this.pieOptions.padAngle)
       .sort(null)
       .value((d: any) => this.options.y(d))
-      .startAngle(this.options.pie.startAngle)
-      .endAngle(this.options.pie.endAngle);
-    const mdata = this.options.y0(data[0]).filter((d) => !d.disabled);
+      .startAngle(this.pieOptions.startAngle)
+      .endAngle(this.pieOptions.endAngle);
+    const mdata = data.filter((d) => !d.disabled);
     return pie([...mdata]);
   }
-}
 
+  setPieScaleXY(): IccPosition {
+    const dAngle = Math.abs(this.pieOptions.endAngle - this.pieOptions.startAngle);
+    const sxy: IccPosition = { x: 0, y: 0 };
+    if (dAngle <= Math.PI) {
+      const sinStart = +Math.sin(this.pieOptions.startAngle).toFixed(4);
+      const sinEnd = +Math.sin(this.pieOptions.endAngle).toFixed(4);
+      const cosStart = +Math.cos(this.pieOptions.startAngle).toFixed(4);
+      const cosEnd = +Math.cos(this.pieOptions.endAngle).toFixed(4);
+      if (dAngle <= Math.PI / 2) {
+        if (sinStart <= 0 && cosStart >= 0 && sinEnd <= 0 && cosEnd >= 0) {
+          sxy.x = 1;
+          sxy.y = 1;
+        } else if (sinStart >= 0 && cosStart >= 0 && sinEnd >= 0 && cosEnd >= 0) {
+          sxy.x = -1;
+          sxy.y = 1;
+        } else if (sinStart >= 0 && cosStart <= 0 && sinEnd >= 0 && cosEnd <= 0) {
+          sxy.x = -1;
+          sxy.y = -1;
+        } else if (sinStart <= 0 && cosStart <= 0 && sinEnd <= 0 && cosEnd <= 0) {
+          sxy.x = 1;
+          sxy.y = -1;
+        }
+      } else {
+        if (cosStart >= 0 && cosEnd >= 0 && sinEnd > sinStart) {
+          sxy.y = 1 / 2;
+        } else if (cosStart <= 0 && cosEnd <= 0 && sinEnd < sinStart) {
+          sxy.y = - 1 / 4;
+        } else if (sinStart >= 0 && sinEnd >= 0 && cosEnd < cosStart) {
+          sxy.x = -1 / 2;
+        } else if (sinStart <= 0 && sinEnd <= 0 && cosEnd > cosStart) {
+          sxy.x = 1 / 2;
+        }
+      }
+    }
+    return sxy;
+  }
+}

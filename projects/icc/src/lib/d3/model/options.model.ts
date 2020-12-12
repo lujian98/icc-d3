@@ -1,15 +1,21 @@
 import * as d3Format from 'd3-format';
+import { IccD3RadialGaugeOptions } from './gauge.model';
 import { IccD3LegendOptions } from './legend.model';
 import { IccD3PieOptions } from './pie.model';
 import { IccD3PopoverOptions } from './popover.model';
 import { IccD3ZoomOptions } from './zoom.model';
 import { IccD3AxisOptions } from './axis.model';
 
+export interface IccPosition {
+  x: number;
+  y: number;
+}
+
 export interface IccMargin {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
+  top?: number;
+  right?: number;
+  bottom?: number;
+  left?: number;
 }
 
 export interface IccD3Options {
@@ -31,10 +37,12 @@ export interface IccD3Options {
   barColor?: Function;
   duration?: number;
 
+  axisEnabled?: boolean;
   xAxis?: IccD3AxisOptions;
   yAxis?: IccD3AxisOptions;
   legend?: IccD3LegendOptions,
   pie?: IccD3PieOptions;
+  radialGauge?: IccD3RadialGaugeOptions;
   popover?: IccD3PopoverOptions;
   zoom?: IccD3ZoomOptions;
 
@@ -48,7 +56,7 @@ export interface IccD3Options {
 export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   chartType: 'lineChart',
   useInteractiveGuideline: false,
-  margin: { top: 0, right: 10, bottom: 40, left: 50 },
+  margin: { top: 10, right: 10, bottom: 40, left: 50 },
   width: '100%',
   // height: 500, // TODO not used yet
   brushYWidth: 50,
@@ -62,6 +70,7 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.y,
   drawColor: (d, i) => d.key,
   duration: 0,
+  axisEnabled: true,
   xAxis: {
     axisLabelDistance: 0
   },
@@ -69,13 +78,9 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
     axisLabelDistance: 0
   },
   legend: {
+    enabled: true,
     position: 'top',
     align: 'right'
-  },
-  pie: {
-    startAngle: 0,
-    endAngle: Math.PI * 2,
-    donut: 0.0
   },
   popover: {
     totalLable: 'Total',

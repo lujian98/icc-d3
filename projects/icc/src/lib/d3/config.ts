@@ -1,5 +1,5 @@
 import { ElementRef } from '@angular/core';
-import { DEFAULT_CHART_OPTIONS, IccD3Options } from './model';
+import { DEFAULT_CHART_OPTIONS, DEFAULT_PIE_CHART_OPTIONS, DEFAULT_RADIAL_GAUGE_OPTIONS, IccD3Options } from './model';
 
 export class IccD3Config {
   private _options: IccD3Options;
@@ -46,12 +46,22 @@ export class IccD3Config {
   }
 
   private init(): void {
-    for (const [key, value] of Object.entries(this.options)) {
-      if (typeof value === 'object' && value !== null && DEFAULT_CHART_OPTIONS[key]) {
-        this.options[key] = { ...DEFAULT_CHART_OPTIONS[key], ...this.options[key] };
+    let options = DEFAULT_CHART_OPTIONS;
+    if (this.options.chartType === 'pieChart') {
+      options = this.getOptions(DEFAULT_PIE_CHART_OPTIONS, options);
+    } else if (this.options.chartType === 'radialGauge') {
+      options = this.getOptions(DEFAULT_RADIAL_GAUGE_OPTIONS, options);
+    }
+    this.options = this.getOptions(this.options, options);
+  }
+
+  private getOptions(option1: IccD3Options, option2: IccD3Options): IccD3Options {
+    for (const [key, value] of Object.entries(option1)) {
+      if (typeof value === 'object' && value !== null && option2[key]) {
+        option1[key] = { ...option2[key], ...option1[key] };
       }
     }
-    this.options = { ...DEFAULT_CHART_OPTIONS, ...this.options };
+    return { ...option2, ...option1 };
   }
 
   private setZoomOptions(): void {
