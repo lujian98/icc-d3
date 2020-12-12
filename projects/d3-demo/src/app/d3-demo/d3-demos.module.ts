@@ -31,6 +31,7 @@ import { AppDonutChartDemoComponent } from './pie-chart/donut-chart-demo.compone
 import { AppCandleStickChartDemoComponent } from './candle-stick-chart/candle-stick-chart-demo.component';
 
 import { AppRadialGaugeDemoComponent } from './gauge/radial-gauge-demo.component';
+import { AppRadialGaugeDemo2Component } from './gauge/radial-gauge-demo2.component';
 
 const components = [
   AppD3DemosComponent,
@@ -58,7 +59,8 @@ const components = [
 
   AppCandleStickChartDemoComponent,
 
-  AppRadialGaugeDemoComponent
+  AppRadialGaugeDemoComponent,
+  AppRadialGaugeDemo2Component
 ];
 
 @NgModule({
