@@ -71,7 +71,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     }
   }
 
-  cloneData = (data: T[]) => data && data.map((d) => Object.assign({}, d));
+  cloneData = (data: T[]) => data && data.map((d) => typeof d === 'object' ? Object.assign({}, d) : d);
 
   public updateChart(data: T[]): void {
     this.config.initOptions(this.options);
