@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { IccD3Options } from 'icc';
+import { IccD3Options, IccUtils } from 'icc';
 
 @Component({
   selector: 'app-pie-chart-demo',
@@ -10,7 +10,7 @@ import { IccD3Options } from 'icc';
     <icc-d3 [options]="options2" [data]="data2"></icc-d3>
   </div>
   `,
-}) //     <icc-d3 [options]="options" [data]="data"></icc-d3>
+})
 export class AppPieChartDemoComponent implements OnInit {
 
   options: IccD3Options = {
@@ -21,7 +21,6 @@ export class AppPieChartDemoComponent implements OnInit {
     y: (d) => d.y,
     drawColor: (d, i) => d.key,
     legend: {
-      // enabled: false,
       position: 'top',
     }
   };
@@ -40,7 +39,6 @@ export class AppPieChartDemoComponent implements OnInit {
     pie: {
       startAngle: Math.PI * -1 / 2,
       endAngle: Math.PI * 1 / 2,
-      centerOffsetY: -10 / 150,
     }
   };
 
@@ -84,27 +82,28 @@ export class AppPieChartDemoComponent implements OnInit {
   ngOnInit(): void {
     this.data = [{
       key: 'Pie Chart',
-      values: this.data0,
+      values: IccUtils.clone(this.data0),
     }];
     this.data2 = [{
       key: 'Pie Chart',
-      values: this.data0,
+      values: IccUtils.clone(this.data0),
     }];
+
     const ndata = this.data0;
     setInterval(() => {
       ndata.forEach((d) => {
-        d.y = Math.floor(Math.random() * 7);
+        d.y = 1 + Math.floor(Math.random() * 10);
       });
       this.data = [{
         key: 'Pie Chart',
-        values: ndata,
+        values: IccUtils.clone(ndata),
       }];
       this.data2 = [{
         key: 'Pie Chart',
-        values: ndata,
+        values: IccUtils.clone(ndata),
       }];
-      this.cd.detectChanges();
-    }, 2000);
+      // this.cd.detectChanges();
+    }, 10000);
   }
 }
 

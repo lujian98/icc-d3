@@ -110,10 +110,10 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     this.data = [{
       values: 3.75,
     }];
+    let v = 3.0;
     this.data2 = [{
-      values: 0,
+      values: v,
     }];
-    let v = 0.0;
     setInterval(() => {
       v += 0.05;
       if (v > 12) {
