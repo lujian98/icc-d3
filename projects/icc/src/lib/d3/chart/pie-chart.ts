@@ -13,7 +13,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         return {
           key: this.options.x(d),
           value: d,
-          color: d.color || this.getdrawColor(d, idx),
+          color: d.color || this.getdrawColor(d, i),
           valueX: null,
           valueY: this.options.y(d),
           cy: null,
@@ -34,17 +34,11 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const drawContents = this.svg.select(drawName)
-      .selectAll('g').data(this.data).join('g')
-      .append('path')
+    this.svg.select(drawName).selectAll('g').data(this.data).join('g').append('path')
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
-
-    this.svg.select(`${drawName}Label`)
-      .selectAll('g').data(this.data).join('g')
-      .append('text')
+    this.svg.select(`${drawName}Label`).selectAll('g').data(this.data).join('g').append('text')
       .attr('class', 'drawlabel');
-
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
@@ -56,8 +50,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .attr('d', this.drawArc());
     if (drawName === `.${this.chartType}`) {
-      drawContents
-        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+      drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
     }
     const textSize = this.outterRadius * this.options.pie.labelTextSize;
@@ -68,11 +61,11 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       .attr('alignment-baseline', 'middle')
       .attr('transform', (d: any) => {
         const center = this.drawArc().centroid(d);
+        center[0] = center[0] + cx;
+        center[1] = center[1] + cy;
         const avg = (d.startAngle + d.endAngle) / 2;
         const angle = avg - 2 * Math.PI * (Math.floor(avg / (2 * Math.PI)));
         const midAngle = angle < Math.PI ? angle : angle + Math.PI;
-        center[0] = center[0] + cx;
-        center[1] = center[1] + cy;
         return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
       });
   }

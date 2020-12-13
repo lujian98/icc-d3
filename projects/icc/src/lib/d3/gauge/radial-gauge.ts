@@ -1,5 +1,4 @@
 import * as d3Shape from 'd3-shape';
-import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
@@ -7,7 +6,6 @@ import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../mode
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private value: number;
-  private rangeScale: IccScaleLinear;
   private lowerLimit: number;
   private upperLimit: number;
   private sxy: IccPosition;
@@ -71,8 +69,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private setRangeScale(): void {
     this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => +this.options.x(d));
     this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
-    this.rangeScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
-      .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
+    this.scale.y.range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle])
+    this.scale.y.domain([this.lowerLimit, this.upperLimit]);
     this.scale.setColorDomain(this.options.radialGauge.range);
   }
 
@@ -97,30 +95,27 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawCenterNeedle(): void {
-    this.drawGraduationNeedle();
-    this.drawGraduationValueText();
-    this.drawNeedleCenter();
+    const scale = this.scale.y as IccScaleLinear;
+    const value = scale(this.value);
+    const color = this.getValueColor(value);
+    this.drawGraduationNeedle(value, color);
+    this.drawGraduationValueText(value, color);
+    this.drawNeedleCenter(value, color);
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
-    const drawContents = this.svg.select(drawName)
-      .selectAll('g').data(this.data).join('g')
-      .append('path')
+    this.svg.select(drawName).selectAll('g').data(this.data).join('g').append('path')
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
     if (drawName === `.${this.chartType}`) {
       const options = this.options.radialGauge;
       const majorAngles = this.getMajorValues(options.startAngle, options.endAngle, options.majorGraduations);
       const minorAngles = this.getMinorAngles(majorAngles);
-      this.svg.select('.majorGraduations').selectAll('line')
-        .data(majorAngles).join('line')
+      this.svg.select('.majorGraduations').selectAll('line').data(majorAngles).join('line')
         .attr('class', 'drawMajorGraduations');
-      this.svg.select('.minorGraduations').selectAll('line')
-        .data(minorAngles).join('line')
+      this.svg.select('.minorGraduations').selectAll('line').data(minorAngles).join('line')
         .attr('class', 'drawMinorGraduations');
-      this.svg.select(`${drawName}Label`)
-        .selectAll('g').data(majorAngles).join('g')
-        .append('text')
+      this.svg.select(`${drawName}Label`).selectAll('g').data(majorAngles).join('g').append('text')
         .attr('class', 'drawlabel');
       this.drawCenterNeedle();
     }
@@ -133,8 +128,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
       .attr('d', this.drawArc());
     if (drawName === `.${this.chartType}`) {
-      drawContents
-        .on('mouseover', (e, d) => this.drawMouseover(e, d, true))
+      drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
       this.drawGraduations('.drawMajorGraduations', this.majorGraduationLenght);
       this.drawGraduations('.drawMinorGraduations', this.minorGraduationLenght);
@@ -142,9 +136,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private drawGraduationNeedle(): void {
-    const needleValue = this.rangeScale(this.value);
-    const thetaRad = needleValue + Math.PI / 2;
+  private drawGraduationNeedle(value: number, color: string): void {
+    const thetaRad = value + Math.PI / 2;
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
     const needleRadius = this.outterRadius * this.options.radialGauge.needleEndRadius;
     const topX = this.cxy.x - needleLen * Math.cos(thetaRad);
@@ -153,31 +146,27 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const leftY = this.cxy.y - needleRadius * Math.sin(thetaRad - Math.PI / 2);
     const rightX = this.cxy.x - needleRadius * Math.cos(thetaRad + Math.PI / 2);
     const rightY = this.cxy.y - needleRadius * Math.sin(thetaRad + Math.PI / 2);
-    const triangle = 'M ' + leftX + ' ' + leftY + ' L ' + topX + ' ' + topY + ' L ' + rightX + ' ' + rightY;
-    const needColor = this.getValueColor(needleValue);
-    this.svg.select('.graduationNeedle')
-      .append('path')
+    const triangle = `M ${leftX} ${leftY} L ${topX} ${topY} L ${rightX} ${rightY}`;
+    this.svg.select('.graduationNeedle').append('path')
       .attr('d', triangle)
       .style('stroke-width', 1)
-      .style('stroke', needColor)
-      .style('fill', needColor);
+      .style('stroke', color)
+      .style('fill', color);
   }
 
-  private drawNeedleCenter(): void {
-    this.svg.select('.graduationNeedleCenter')
-      .append('circle')
+  private drawNeedleCenter(value: number, color: string): void {
+    this.svg.select('.graduationNeedleCenter').append('circle')
       .attr('r', this.outterRadius * this.options.radialGauge.needleCenterRadius)
       .attr('cx', this.cxy.x)
       .attr('cy', this.cxy.y)
-      .attr('fill', this.getValueColor(this.rangeScale(this.value)));
+      .attr('fill', color);
   }
 
-  private drawGraduationValueText(): void {
+  private drawGraduationValueText(value: number, color: string): void {
     const textSize = this.outterRadius * this.options.radialGauge.valueTextSize;
     const text = this.value || this.value === 0 ? this.value.toFixed(this.options.radialGauge.valueDecimals) : '';
-    this.svg.select('.graduationValueText')
-      .append('text')
-      .attr('fill', this.getValueColor(this.rangeScale(this.value)))
+    this.svg.select('.graduationValueText').append('text')
+      .attr('fill', color)
       .attr('x', this.cxy.x)
       .attr('y', this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY))
       .attr('text-anchor', 'middle')
