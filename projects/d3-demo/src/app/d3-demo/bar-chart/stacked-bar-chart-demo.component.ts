@@ -16,7 +16,7 @@ export class AppStackedBarChartDemoComponent implements OnInit {
   options1: IccD3Options = {
     chartType: 'stackedBarChart',
     xScaleType: 'band',
-    margin: { top: 10, right: 50, bottom: 20, left: 60 },
+    margin: { right: 50, left: 60 },
     x0: (d) => d.label,
     y0: (d) => d.values,
     x: (d) => d.State,

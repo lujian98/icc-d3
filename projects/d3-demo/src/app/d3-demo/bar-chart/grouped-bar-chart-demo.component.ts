@@ -75,7 +75,7 @@ export class AppGroupedBarChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'groupedBarChart',
     xScaleType: 'band',
-    margin: { top: 10, right: 50, bottom: 20, left: 60 },
+    margin: { right: 50, left: 60 },
     x0: (d) => d.label,
     y0: (d) => d.values,
     x: (d) => d.State,

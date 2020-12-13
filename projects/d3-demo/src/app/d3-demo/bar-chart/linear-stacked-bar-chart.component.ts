@@ -14,8 +14,6 @@ export class AppLinearStackedBarChartComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'stackedBarChart',
     xScaleType: 'linear',
-    margin: { top: 10, right: 50, bottom: 20, left: 50 },
-    // useInteractiveGuideline: true,
     x0: (d) => d.key,
     y0: (d) => d.values,
     x: (d) => d.x,
@@ -32,8 +30,6 @@ export class AppLinearStackedBarChartComponent implements OnInit {
   options2: IccD3Options = {
     chartType: 'groupedBarChart',
     xScaleType: 'band',
-    margin: { top: 10, right: 50, bottom: 20, left: 50 },
-    // useInteractiveGuideline: true,
     x0: (d) => d.key,
     y0: (d) => d.values,
     x: (d) => d.x,
