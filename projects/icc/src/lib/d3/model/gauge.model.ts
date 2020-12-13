@@ -24,6 +24,7 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
 export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
   margin: { top: 10, right: 10, bottom: 10, left: 10 },
   axisEnabled: false,
+  drawColor: (d, i) => i, // use default colors or defined colors if range colors are not defined
   radialGauge: {
     range: [],
     startAngle: Math.PI * -2 / 3,

@@ -22,12 +22,13 @@ export class AppRadialGaugeDemoComponent implements OnInit {
         {
           min: 0,
           max: 1.,
-          color: 'rgb(156, 214, 130)'
+          // color: 'blue'
+          // color: 'rgb(156, 214, 130)'
         },
         {
           min: 1.,
           max: 2.,
-          color: '#8DCA2F'
+          // color: '#8DCA2F'
         },
         {
           min: 2.,
@@ -37,17 +38,17 @@ export class AppRadialGaugeDemoComponent implements OnInit {
         {
           min: 3.,
           max: 4.,
-          color: '#FF7700'
+         //  color: '#FF7700'
         },
         {
           min: 4.,
           max: 5.0,
-          color: '#C50200'
+         //  color: '#C50200'
         },
         {
           min: 5.,
           max: 6.0,
-          color: 'red'
+          // color: 'red'
         }
       ]
     }

@@ -24,7 +24,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         return {
           key: '',
           value: d,
-          color: d.color || this.getdrawColor(d, idx),
+          color: d.color || this.getdrawColor(d, i),
           valueX: null,
           valueY: `${this.options.x(d)} - ${this.options.y(d)}`,
           cy: null,
@@ -73,6 +73,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
     this.rangeScale = d3Scale.scaleLinear().domain([this.lowerLimit, this.upperLimit])
       .range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
+    this.scale.setColorDomain(this.options.radialGauge.range);
   }
 
   private initDraw(): void {
@@ -232,7 +233,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const data: any = this.data.filter((d: any, i) => value < d.endAngle
       || i === this.data.length - 1 && value === this.options.radialGauge.endAngle);
     if (data.length > 0) {
-      return data[0].data.color;
+      return this.getdrawColor(data[0].data, data[0].index);
     }
   }
 

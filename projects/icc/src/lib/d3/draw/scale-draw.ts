@@ -194,10 +194,10 @@ export class IccScaleDraw<T> {
   }
 
   public setColorDomain(data: T[]): void {
-    let keys = data.map((d) => this.options.drawColor(d));
+    let keys = data.map((d, i) => this.options.drawColor(d, i));
     if (this.options.chartType === 'barChart' || this.options.chartType === 'pieChart') {
       const values = this.options.y0(data[0]);
-      keys = values.map((d) => this.options.drawColor(d));
+      keys = values.map((d, i) => this.options.drawColor(d, i));
     }
     this.colors.domain(keys);
   }
