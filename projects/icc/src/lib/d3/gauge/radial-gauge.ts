@@ -108,17 +108,14 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('class', 'arc draw')
       .style('fill-opacity', 0.75);
     if (drawName === `.${this.chartType}`) {
-      let majorAngles = this.getMajorGraduationAngles();
-      const minorGraduationsAngles = this.getMinorGraduationAngles(majorAngles);
-      const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
-      if (scaleRange === 2 * Math.PI) {
-        majorAngles = majorAngles.filter((d, i) => i < this.options.radialGauge.majorGraduations);
-      }
+      const options = this.options.radialGauge;
+      const majorAngles = this.getMajorValues(options.startAngle, options.endAngle, options.majorGraduations);
+      const minorAngles = this.getMinorAngles(majorAngles);
       this.svg.select('.majorGraduations').selectAll('line')
         .data(majorAngles).join('line')
         .attr('class', 'drawMajorGraduations');
       this.svg.select('.minorGraduations').selectAll('line')
-        .data(minorGraduationsAngles).join('line')
+        .data(minorAngles).join('line')
         .attr('class', 'drawMinorGraduations');
       this.svg.select(`${drawName}Label`)
         .selectAll('g').data(majorAngles).join('g')
@@ -189,11 +186,12 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
-    const majorGraduationValues = this.getMajorGraduationValues(this.lowerLimit, this.upperLimit);
+    const majorValues = this.getMajorValues(this.lowerLimit, this.upperLimit, this.options.radialGauge.majorGraduations);
     const textSize = this.outterRadius * this.options.radialGauge.majorGraduationTextSize;
+    const range = this.options.radialGauge.endAngle - this.options.radialGauge.startAngle;
     this.svg.select(`${drawName}Label`).selectAll('g').select('.drawlabel')
       .style('font', `${textSize}px Courier`)
-      .attr('text-anchor', (d: number, i) => {
+      .attr('text-anchor', (d: number) => {
         const sind = Math.sin(d);
         if (Math.abs(sind) < 0.001) {
           return 'middle';
@@ -204,41 +202,27 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('x', (d: number, i) => this.getTextPositionX(d, i))
       .attr('dy', (d: number, i) => this.getTextPositionDy(d, i))
       .attr('fill', (d: number) => this.getValueColor(d))
-      .text((d, i) => `${majorGraduationValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
+      .style('fill-opacity', (d, i) => i === 0 && range === 2 * Math.PI ? 0 : 1)
+      .text((d, i) => `${majorValues[i].toFixed(this.options.radialGauge.majorGraduationDecimals)}
         ${this.options.radialGauge.valueUnit}`);
   }
 
-  private getMajorGraduationValues(lowerLimit, upperLimit): any[] {
+  private getMajorValues(lowerLimit, upperLimit, graduations: number, j = 0): any[] {
     const scaleRange = upperLimit - lowerLimit;
-    const majorGraduationValues = [];
-    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
-      majorGraduationValues.push(lowerLimit + i * scaleRange / (this.options.radialGauge.majorGraduations));
+    const majorValues = [];
+    for (let i = j; i <= graduations - j; i++) {
+      majorValues.push(lowerLimit + i * scaleRange / graduations);
     }
-    return majorGraduationValues;
+    return majorValues;
   }
 
-  private getMajorGraduationAngles(): any[] {
-    const scaleRange = (this.options.radialGauge.endAngle - this.options.radialGauge.startAngle);
-    const minScale = this.options.radialGauge.startAngle;
-    const graduationsAngles = [];
-    for (let i = 0; i <= this.options.radialGauge.majorGraduations; i++) {
-      graduationsAngles.push(minScale + i * scaleRange / (this.options.radialGauge.majorGraduations));
+  private getMinorAngles(majorAngles: any[]): any[] {
+    let minorAngles = [];
+    for (let i = 1; i <= this.options.radialGauge.majorGraduations; i++) {
+      const angles = this.getMajorValues(majorAngles[i - 1], majorAngles[i], this.options.radialGauge.minorGraduations, 1);
+      minorAngles = [...minorAngles, ...angles];
     }
-    return graduationsAngles;
-  }
-
-  private getMinorGraduationAngles(majorGraduationsAngles: any[]): any[] {
-    const minorGraduationsAngles = [];
-    for (let indexMajor = 1; indexMajor <= this.options.radialGauge.majorGraduations; indexMajor++) {
-      const minScale = majorGraduationsAngles[indexMajor - 1];
-      const maxScale = majorGraduationsAngles[indexMajor];
-      const scaleRange = maxScale - minScale;
-      for (let i = 1; i < this.options.radialGauge.minorGraduations; i++) {
-        const scaleValue = minScale + i * scaleRange / this.options.radialGauge.minorGraduations;
-        minorGraduationsAngles.push(scaleValue);
-      }
-    }
-    return minorGraduationsAngles;
+    return minorAngles;
   }
 
   private getValueColor(value: number): string {
@@ -255,8 +239,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private getTextPositionX(d: number, i: number): number {
     const dt = this.innerRadius - this.majorGraduationMarginTop - this.majorGraduationLenght;
     const cos1Adj = Math.round(Math.cos(Math.PI / 2 - d) * (dt - this.options.radialGauge.textHorizontalPadding));
-    const cos1Factor = this.options.radialGauge.startAngle === - Math.PI && i === 0 ? 0 : 1;
-    return this.cxy.x + cos1Adj * cos1Factor;
+    return this.cxy.x + cos1Adj;
   }
 
   private getTextPositionDy(d: number, i: number): number {
@@ -271,9 +254,10 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   private drawGraduations(drawName: string, graduationLenght: number): void {
     const dt = this.innerRadius - this.majorGraduationMarginTop;
+    const range = this.options.radialGauge.endAngle - this.options.radialGauge.startAngle;
     this.svg.selectAll(drawName)
       .style('stroke', (d: number) => this.getValueColor(d))
-      .style('stroke-opacity', 1)
+      .style('stroke-opacity', (d, i) => i === 0 && range === 2 * Math.PI && drawName === '.drawMajorGraduations' ? 0 : 1)
       .attr('x1', (d: number) => this.cxy.x + Math.round(Math.cos(Math.PI / 2 - d) * (dt - graduationLenght)))
       .attr('y1', (d: number) => this.cxy.y - Math.round(Math.sin(Math.PI / 2 - d) * (dt - graduationLenght)))
       .attr('x2', (d: number) => this.cxy.x + Math.round(Math.cos(Math.PI / 2 - d) * dt))

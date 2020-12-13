@@ -58,10 +58,11 @@ export class AppRadialGaugeDemoComponent implements OnInit {
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
-      startAngle: Math.PI * 0,
+      startAngle: Math.PI * -0,
       endAngle: Math.PI * 2,
       majorGraduations: 12,
       centerOffsetY: 0,
+      valueUnit: 'kW',
       range: [
         {
           min: 0,
@@ -126,7 +127,7 @@ export class AppRadialGaugeDemoComponent implements OnInit {
 
     setInterval(() => {
       this.data = [{
-        values: Math.floor(Math.random() * 7)
+        values: Math.floor(Math.random() * 70) / 10
       }];
       this.cd.detectChanges();
     }, 2000);
