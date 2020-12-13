@@ -11,6 +11,7 @@ export interface IccD3PieOptions {
 }
 
 export const DEFAULT_PIE_CHART_OPTIONS: IccD3Options = {
+  margin: { top: 10, right: 10, bottom: 10, left: 10 },
   axisEnabled: false,
   pie: {
     startAngle: 0,

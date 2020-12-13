@@ -22,6 +22,7 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
 }
 
 export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
+  margin: { top: 10, right: 10, bottom: 10, left: 10 },
   axisEnabled: false,
   radialGauge: {
     range: [],
@@ -30,7 +31,7 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     padAngle: 0.000,
     donut: 0.8,
     centerOffsetX: 0,
-    centerOffsetY: 30 / 150,
+    centerOffsetY: 0,
     majorGraduations: 8,
     minorGraduations: 10,
     majorGraduationDecimals: 1,
@@ -40,7 +41,7 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     majorGraduationTextSize: 7 / 150,
     valueUnit: '',
     valueNullColor: 'gray',
-    valueOffsetY: 50,
+    valueOffsetY: 20 / 150,
     valueDecimals: 2,
     valueTextSize: 7 / 150,
     textVerticalPadding: 5,

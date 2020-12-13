@@ -66,6 +66,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       this.outterRadius = outterRadius;
       this.cxy = cxy;
     }
+    console.log(' gauge R = ', this.outterRadius)
   }
 
   private setRangeScale(): void {
@@ -178,7 +179,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .append('text')
       .attr('fill', this.getValueColor(this.rangeScale(this.value)))
       .attr('x', this.cxy.x)
-      .attr('y', this.cxy.y + this.options.radialGauge.valueOffsetY)
+      .attr('y', this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY))
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
       .style('font', `${textSize}px Courier`)
@@ -207,7 +208,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         ${this.options.radialGauge.valueUnit}`);
   }
 
-  private getMajorValues(lowerLimit, upperLimit, graduations: number, j = 0): any[] {
+  private getMajorValues(lowerLimit, upperLimit, graduations: number, j = 0): number[] {
     const scaleRange = upperLimit - lowerLimit;
     const majorValues = [];
     for (let i = j; i <= graduations - j; i++) {
@@ -216,7 +217,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     return majorValues;
   }
 
-  private getMinorAngles(majorAngles: any[]): any[] {
+  private getMinorAngles(majorAngles: number[]): number[] {
     let minorAngles = [];
     for (let i = 1; i <= this.options.radialGauge.majorGraduations; i++) {
       const angles = this.getMajorValues(majorAngles[i - 1], majorAngles[i], this.options.radialGauge.minorGraduations, 1);
