@@ -66,7 +66,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       this.outterRadius = outterRadius;
       this.cxy = cxy;
     }
-    console.log(' gauge R = ', this.outterRadius)
   }
 
   private setRangeScale(): void {
