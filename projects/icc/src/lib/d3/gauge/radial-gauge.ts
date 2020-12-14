@@ -78,20 +78,15 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
     this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
-    this.svg.select('.majorGraduations').remove();
-    this.svg.select('.drawArea').append('g').attr('class', 'majorGraduations');
-    this.svg.select('.minorGraduations').remove();
-    this.svg.select('.drawArea').append('g').attr('class', 'minorGraduations');
+    this.createDrawElement('majorGraduations');
+    this.createDrawElement('minorGraduations');
     this.inintCenterNeedle();
   }
 
   private inintCenterNeedle(): void {
-    this.svg.select('.graduationNeedle').remove();
-    this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedle');
-    this.svg.select('.graduationValueText').remove();
-    this.svg.select('.drawArea').append('g').attr('class', 'graduationValueText');
-    this.svg.select('.graduationNeedleCenter').remove();
-    this.svg.select('.drawArea').append('g').attr('class', 'graduationNeedleCenter');
+    this.createDrawElement('graduationNeedle');
+    this.createDrawElement('graduationValueText');
+    this.createDrawElement('graduationNeedleCenter');
   }
 
   private drawCenterNeedle(): void {

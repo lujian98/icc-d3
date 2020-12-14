@@ -33,6 +33,11 @@ export abstract class IccAbstractDraw<T> {
     this.options = options;
   }
 
+  createDrawElement(name: string): void {
+    this.svg.select(`.${name}`).remove();
+    this.svg.select('.drawArea').append('g').attr('class', name);
+  }
+
   drawChart(data: T[]): void {
     this.prevData = this.data;
     this.data = data;
