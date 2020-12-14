@@ -25,6 +25,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       startAngle: Math.PI * -1 / 2,
       endAngle: Math.PI * 1 / 2,
       donut: 0.8,
+      enableGradients: true,
       valueUnit: 'kW',
       range: [
         {

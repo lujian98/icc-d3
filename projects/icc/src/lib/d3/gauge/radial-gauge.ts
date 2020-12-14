@@ -1,5 +1,9 @@
 import * as d3Shape from 'd3-shape';
 import * as d3Array from 'd3-array';
+import * as d3Scale from 'd3-scale';
+import * as d3Interpolate from 'd3-interpolate';
+import * as d3Color from 'd3-color';
+import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
@@ -15,6 +19,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private majorGraduationLenght: number;
   private minorGraduationLenght: number;
   private majorGraduationMarginTop: number;
+  private colors: any;
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
     return this.options.radialGauge.range
@@ -44,6 +49,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         this.drawCenterNeedle();
       } else {
         const piedata = pie.getPieData(this.options.radialGauge.range, true);
+        this.setColorScale(piedata);
         this.initDraw();
         super.drawChart(piedata);
       }
@@ -74,7 +80,24 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.scale.setColorDomain(this.options.radialGauge.range);
   }
 
+  private setColorScale(data: any[]): void {
+    const range = [];
+    const domain = [];
+    data.forEach((d: any, i) => {
+      if (domain.length === 0) {
+        domain.push(d.startAngle);
+        range.push('green'); // TODO start color for gradient
+      }
+      domain.push(d.endAngle);
+      range.push(this.getdrawColor(d.data, i));
+    });
+    const y: any = d3Interpolate.interpolateRgb;
+    this.colors = d3Scale.scaleLinear()
+      .domain(domain).range(range).interpolate(y);
+  }
+
   private initDraw(): void {
+    this.createDrawElement('gradients');
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
     this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
@@ -120,8 +143,9 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('transform', (d: any) => `translate(${this.cxy.x}, ${this.cxy.y})`)
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
-      .attr('d', this.drawArc());
+      .attr('d', this.drawArc())
+      .attr('fill', (d: any, i) => this.options.radialGauge.enableGradients ? this.setGradients(d) : this.getdrawColor(d.data, i));
+
     if (drawName === `.${this.chartType}`) {
       drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
@@ -247,6 +271,27 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('y1', (d: number) => this.cxy.y - Math.round(Math.sin(Math.PI / 2 - d) * (dt - graduationLenght)))
       .attr('x2', (d: number) => this.cxy.x + Math.round(Math.cos(Math.PI / 2 - d) * dt))
       .attr('y2', (d: number) => this.cxy.y - Math.round(Math.sin(Math.PI / 2 - d) * dt));
+  }
+
+  private setGradients(data): string {
+    const arcs = [];
+    const dAngle = data.endAngle - data.startAngle;
+    const noOfArcs = dAngle * 75;  // seems like a good number
+    const angle = dAngle / noOfArcs;
+    for (let j = 0; j < noOfArcs; j++) {
+      const arc: any = {};
+      arc.startAngle = data.startAngle + angle * j;
+      arc.endAngle = arc.startAngle + angle + 0.01; // 0.01 so the colours overlap slightly, so there's no funny artefacts.
+      arc.endAngle = arc.endAngle > data.endAngle ? data.endAngle : arc.endAngle;
+      arcs.push(arc);
+    }
+    this.svg.select('.gradients')
+      .attr('transform', () => `translate(${this.cxy.x}, ${this.cxy.y})`)
+      .selectAll().data(arcs).enter().append('g').append('path')
+      .attr('class', 'gradient-arc')
+      .attr('d', this.drawArc())
+      .style('fill', (d) => this.colors((d.startAngle + d.endAngle) / 2));
+    return 'none';
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
