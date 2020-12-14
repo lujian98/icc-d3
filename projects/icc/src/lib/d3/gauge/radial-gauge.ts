@@ -75,7 +75,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private setRangeScale(): void {
     this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => +this.options.x(d));
     this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
-    this.scale.y.range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle])
+    this.scale.y.range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
     this.scale.y.domain([this.lowerLimit, this.upperLimit]);
     this.scale.setColorDomain(this.options.radialGauge.range);
   }
@@ -86,14 +86,20 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     data.forEach((d: any, i) => {
       if (domain.length === 0) {
         domain.push(d.startAngle);
-        range.push('green'); // TODO start color for gradient
+        range.push(this.options.radialGauge.startColor);
       }
       domain.push(d.endAngle);
       range.push(this.getdrawColor(d.data, i));
     });
-    const y: any = d3Interpolate.interpolateRgb;
-    this.colors = d3Scale.scaleLinear()
-      .domain(domain).range(range).interpolate(y);
+    const y: any = d3Interpolate.interpolateRgb; // .gamma(2.2); interpolateHsl
+    this.colors = d3Scale.scaleLinear().domain(domain).range(range).interpolate(y);
+
+    /* // TODO use defined color range
+    const y: any = d3Interpolate.interpolateHsl;
+    const domain2: any = [this.options.radialGauge.startAngle, this.options.radialGauge.endAngle];
+    const range2: any = ['red', 'blue'];
+    this.colors = d3Scale.scaleLinear().domain(domain2).range(range2).interpolate(y);
+*/
   }
 
   private initDraw(): void {
@@ -237,6 +243,9 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private getValueColor(value: number): string {
     if (value === null || value < this.options.radialGauge.startAngle || value > this.options.radialGauge.endAngle) {
       return this.options.radialGauge.valueNullColor;
+    }
+    if (this.options.radialGauge.enableGradients) {
+      return this.colors(value);
     }
     const data: any = this.data.filter((d: any, i) => value < d.endAngle
       || i === this.data.length - 1 && value === this.options.radialGauge.endAngle);
