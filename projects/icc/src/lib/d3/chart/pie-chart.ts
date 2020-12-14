@@ -1,4 +1,6 @@
 import * as d3Shape from 'd3-shape';
+import * as d3Scale from 'd3-scale';
+import * as d3Interpolate from 'd3-interpolate';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
@@ -39,6 +41,7 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', 0.75);
     this.svg.select(`${drawName}Label`).selectAll('g').data(this.data).join('g').append('text')
       .attr('class', 'drawlabel');
+    this.createDrawElement('gradients');
     this.redrawContent(drawName, scaleX, scaleY);
   }
 
@@ -47,8 +50,10 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     const cy = (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.pie.centerOffsetY;
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('transform', (d: any) => `translate(${cx}, ${cy})`)
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
-      .attr('d', this.drawArc());
+      .attr('d', this.drawArc())
+      .attr('fill', (d: any, i) => this.createGradient(d, i));
+      // .attr('fill', (d: any, i) => this.getdrawColor(d.data, i));
+
     if (drawName === `.${this.chartType}`) {
       drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
@@ -68,6 +73,54 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
         const midAngle = angle < Math.PI ? angle : angle + Math.PI;
         return `translate(${center}) rotate(-90) rotate(${midAngle * 180 / Math.PI})`;
       });
+  }
+
+  private createGradient(d, i): string {
+    const miniArcs = [];
+    const angleExtent = d.endAngle - d.startAngle;
+    const noOfArcs = angleExtent * 75;  // seems like a good number
+    const j = i + 1 > this.data.length - 1 ? 0 : i + 1;
+    const nextData: any = this.data[j];
+    const startColor = this.getdrawColor(d.data, i);
+    const endColor = this.getdrawColor(nextData.data, j)
+    const colors = d3Scale.scaleSequential()
+      .domain([0, noOfArcs])
+      .interpolator(d3Interpolate.interpolate(startColor, endColor));
+
+    const miniArcAngle = angleExtent / noOfArcs;
+
+    for (let j = 0; j < noOfArcs; j++) {
+      const miniArc: any = {};
+      miniArc.startAngle = d.startAngle + (miniArcAngle * j);
+
+      miniArc.endAngle = miniArc.startAngle + miniArcAngle + 0.01; // 0.01 so the colours overlap slightly, so there's no funny artefacts.
+      // unless it goes beyond the end of the parent arc
+      miniArc.endAngle = miniArc.endAngle > d.endAngle ? d.endAngle : miniArc.endAngle;
+      miniArcs.push(miniArc);
+    }
+
+    const cx = (this.sxy.x + 1) * this.options.drawWidth / 2 + this.outterRadius * this.options.pie.centerOffsetX;
+    const cy = (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.pie.centerOffsetY;
+    /*
+    const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
+      .attr('transform', (d: any) => `translate(${cx}, ${cy})`)
+      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i)) */
+
+    this.svg.select('.gradients')
+      .attr('transform', () => `translate(${cx}, ${cy})`)
+      .selectAll('.mini-arc')
+      .data(miniArcs)
+      .enter()
+      .append('g')
+      .append('path')
+      .attr('class', 'arc')
+      .attr('d', this.drawArc())
+      .style('fill', (d, i) => {
+        // console.log( ' i =', i, ' a= ', a, ' color =', color(i));
+        return colors(i);
+      });
+    return 'none';
+
   }
 
   drawArc(grow: number = 0): d3Shape.Arc<any, d3Shape.DefaultArcObject> {
