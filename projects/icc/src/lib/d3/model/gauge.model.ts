@@ -1,10 +1,12 @@
 import { IccD3Options } from './options.model';
 import { IccD3PieOptions, } from './pie.model';
+import { IccScaleLinear } from './scale.model';
 
 export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
   range?: any[];
   enableGradients?: boolean;
   startColor?: string; // used when enableGradients is true
+  colorScale?: IccScaleLinear;  // used when enableGradients is true if use want custom define color scalle
   majorGraduations?: number;
   minorGraduations?: number;
   majorGraduationLenght?: number;

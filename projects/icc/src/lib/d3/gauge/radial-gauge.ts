@@ -81,25 +81,23 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private setColorScale(data: any[]): void {
-    const range = [];
-    const domain = [];
-    data.forEach((d: any, i) => {
-      if (domain.length === 0) {
-        domain.push(d.startAngle);
-        range.push(this.options.radialGauge.startColor);
-      }
-      domain.push(d.endAngle);
-      range.push(this.getdrawColor(d.data, i));
-    });
-    const y: any = d3Interpolate.interpolateRgb; // .gamma(2.2); interpolateHsl
-    this.colors = d3Scale.scaleLinear().domain(domain).range(range).interpolate(y);
-
-    /* // TODO use defined color range
-    const y: any = d3Interpolate.interpolateHsl;
-    const domain2: any = [this.options.radialGauge.startAngle, this.options.radialGauge.endAngle];
-    const range2: any = ['red', 'blue'];
-    this.colors = d3Scale.scaleLinear().domain(domain2).range(range2).interpolate(y);
-*/
+    if (this.options.radialGauge.colorScale) {
+      const domain = [this.options.radialGauge.startAngle, this.options.radialGauge.endAngle];
+      this.colors = this.options.radialGauge.colorScale.domain(domain);
+    } else {
+      const range = [];
+      const domain = [];
+      data.forEach((d: any, i) => {
+        if (domain.length === 0) {
+          domain.push(d.startAngle);
+          range.push(this.options.radialGauge.startColor);
+        }
+        domain.push(d.endAngle);
+        range.push(this.getdrawColor(d.data, i));
+      });
+      const y: any = d3Interpolate.interpolateRgb;
+      this.colors = d3Scale.scaleLinear().domain(domain).interpolate(y).range(range);
+    }
   }
 
   private initDraw(): void {

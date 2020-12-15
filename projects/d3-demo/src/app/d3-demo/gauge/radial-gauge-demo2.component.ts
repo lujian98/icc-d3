@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import * as d3Scale from 'd3-scale';
+import * as d3Interpolate from 'd3-interpolate';
 import { IccD3Options } from 'icc';
 
 @Component({
@@ -16,6 +18,9 @@ import { IccD3Options } from 'icc';
   `,
 })
 export class AppRadialGaugeDemo2Component implements OnInit {
+
+  colorRange: any = ['green', 'orange'];
+  interpolate: any = d3Interpolate.interpolateRgb;
   options: IccD3Options = {
     chartType: 'radialGauge',
     y0: (d) => d.value,
@@ -26,13 +31,16 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       endAngle: Math.PI * 1 / 2,
       donut: 0.8,
       enableGradients: true,
+      colorScale: d3Scale.scaleLinear().range(this.colorRange).interpolate(this.interpolate),
       valueUnit: 'kW',
       range: [
         {
           min: 0,
-          max: 1.,
-          color: 'rgb(156, 214, 130)'
+          max: 6.,
+         //  color: 'red'
+          // color: 'rgb(156, 214, 130)'
         },
+        /*
         {
           min: 1.,
           max: 2.,
@@ -54,10 +62,10 @@ export class AppRadialGaugeDemo2Component implements OnInit {
           color: '#C50200'
         },
         {
-          min: 5.,
+          // min: 5.,
           max: 6.0,
-          color: 'red'
-        }
+         //  color: 'red'
+        } */
       ]
     }
   };
