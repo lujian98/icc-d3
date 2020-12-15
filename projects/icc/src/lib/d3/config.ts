@@ -34,6 +34,9 @@ export class IccD3Config {
       drawHeight: height - margin.top - margin.bottom
         - (zoom.horizontalBrushShow ? this.options.drawHeight2 + 30 : 0)
     };
+    if (this.options.maxDrawHeight && drawDimension.drawHeight > this.options.maxDrawHeight) {
+      drawDimension.drawHeight = this.options.maxDrawHeight;
+    }
     this.options = { ...this.options, ...drawDimension };
   }
 
