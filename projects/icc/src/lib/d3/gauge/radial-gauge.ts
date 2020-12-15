@@ -81,22 +81,21 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private setColorScale(data: any[]): void {
+    const range = [];
+    const domain = [];
+    data.forEach((d: any, i) => {
+      if (domain.length === 0) {
+        domain.push(d.startAngle);
+        range.push(this.options.radialGauge.startColor);
+      }
+      domain.push(d.endAngle);
+      range.push(this.getdrawColor(d.data, i));
+    });
     if (this.options.radialGauge.colorScale) {
-      const domain = [this.options.radialGauge.startAngle, this.options.radialGauge.endAngle];
       this.colors = this.options.radialGauge.colorScale.domain(domain);
     } else {
-      const range = [];
-      const domain = [];
-      data.forEach((d: any, i) => {
-        if (domain.length === 0) {
-          domain.push(d.startAngle);
-          range.push(this.options.radialGauge.startColor);
-        }
-        domain.push(d.endAngle);
-        range.push(this.getdrawColor(d.data, i));
-      });
       const y: any = d3Interpolate.interpolateRgb;
-      this.colors = d3Scale.scaleLinear().domain(domain).interpolate(y).range(range);
+      this.colors = d3Scale.scaleLinear().range(range).interpolate(y).domain(domain);
     }
   }
 

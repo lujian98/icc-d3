@@ -36,36 +36,12 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       range: [
         {
           min: 0,
-          max: 6.,
-         //  color: 'red'
-          // color: 'rgb(156, 214, 130)'
-        },
-        /*
-        {
-          min: 1.,
-          max: 2.,
-          color: '#8DCA2F'
-        },
-        {
-          min: 2.,
-          max: 3.,
-          color: '#FDC702'
+          max: 3.
         },
         {
           min: 3.,
-          max: 4.,
-          color: '#FF7700'
-        },
-        {
-          min: 4.,
-          max: 5.0,
-          color: '#C50200'
-        },
-        {
-          // min: 5.,
-          max: 6.0,
-         //  color: 'red'
-        } */
+          max: 6.,
+        }
       ]
     }
   };
@@ -76,6 +52,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
     x: (d) => d.min,
     y: (d) => d.max,
     radialGauge: {
+      enableGradients: true,
       majorGraduations: 4,
       donut: 0.6,
       startAngle: Math.PI * -1 / 8,
