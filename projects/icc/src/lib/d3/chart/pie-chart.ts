@@ -47,8 +47,9 @@ export class IccPieChart<T> extends IccAbstractDraw<T> {
     const cy = (this.sxy.y + 1) * this.options.drawHeight / 2 + this.outterRadius * this.options.pie.centerOffsetY;
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('transform', (d: any) => `translate(${cx}, ${cy})`)
-      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i))
-      .attr('d', this.drawArc());
+      .attr('d', this.drawArc())
+      .attr('fill', (d: any, i) => this.getdrawColor(d.data, i));
+
     if (drawName === `.${this.chartType}`) {
       drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
