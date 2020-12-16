@@ -35,7 +35,9 @@ export abstract class IccAbstractDraw<T> {
 
   createDrawElement(name: string): void {
     this.svg.select(`.${name}`).remove();
-    this.svg.select('.drawArea').append('g').attr('class', name);
+    const clipPath = this.svg.select('.drawArea').select('clipPath');
+    this.svg.select('.drawArea').append('g').attr('class', name)
+      .attr('clip-path', `url(#${clipPath.property('id')})`);
   }
 
   drawChart(data: T[]): void {

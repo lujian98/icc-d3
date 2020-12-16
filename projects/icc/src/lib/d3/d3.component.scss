@@ -30,6 +30,10 @@ icc-d3 {
     stroke: #bfbfbf;
     shape-rendering: crispEdges;
   }
+
+  .bulletChartSvg .xAxisDraw .domain {
+    stroke-opacity: 0;
+  }
 }
 
 

@@ -36,7 +36,8 @@ export class IccView {
 
   private initSvg(): void {
     const drawID = Math.floor(Math.random() * 100000);
-    this.svg = d3.select(this.elementRef.nativeElement).select('svg').append('g');
+    this.svg = d3.select(this.elementRef.nativeElement).select('svg')
+      .attr('class', `${this.options.chartType}Svg`).append('g');
     if (this.options.axisEnabled) {
       const xAxisDraw = this.svg.append('g').attr('class', 'xAxisDraw');
       const yAxisDraw = this.svg.append('g').attr('class', 'yAxisDraw');
