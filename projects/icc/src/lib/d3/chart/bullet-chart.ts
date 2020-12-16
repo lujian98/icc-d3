@@ -13,9 +13,9 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScaleLinear): void {
     this.setRangeScale(this.data);
-    this.createDrawElement('bulletMeasures');
-    this.createDrawElement('bulletMarkers');
-    this.createDrawElement('bulletMarkerLines');
+    this.createDrawElement('bulletMeasures', true);
+    this.createDrawElement('bulletMarkers', true);
+    this.createDrawElement('bulletMarkerLines', true);
     const drawContents = this.svg.select(drawName).selectAll('g').data(this.data).join('g');
     this.redrawContent(drawName, scaleX, scaleY);
   }

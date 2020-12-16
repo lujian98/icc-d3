@@ -104,6 +104,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.majorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationLenght);
     this.minorGraduationLenght = Math.round(this.outterRadius * this.options.radialGauge.minorGraduationLenght);
     this.majorGraduationMarginTop = Math.round(this.outterRadius * this.options.radialGauge.majorGraduationMarginTop);
+    this.createDrawElement('radialGaugeLabel');
     this.createDrawElement('majorGraduations');
     this.createDrawElement('minorGraduations');
     this.inintCenterNeedle();
