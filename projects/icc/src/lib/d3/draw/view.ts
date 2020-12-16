@@ -36,7 +36,8 @@ export class IccView {
 
   private initSvg(): void {
     const drawID = Math.floor(Math.random() * 100000);
-    this.svg = d3.select(this.elementRef.nativeElement).select('svg').append('g');
+    this.svg = d3.select(this.elementRef.nativeElement).select('svg')
+      .attr('class', `${this.options.chartType}Svg`).append('g');
     if (this.options.axisEnabled) {
       const xAxisDraw = this.svg.append('g').attr('class', 'xAxisDraw');
       const yAxisDraw = this.svg.append('g').attr('class', 'yAxisDraw');
@@ -52,7 +53,7 @@ export class IccView {
     }
     this.chartTypes.forEach((type) => {
       drawArea.append('g').attr('class', type).attr('clip-path', `url(#clip${drawID})`);
-      drawArea.append('g').attr('class', `${type}Label`).attr('clip-path', `url(#clip${drawID})`);
+      // drawArea.append('g').attr('class', `${type}Label`).attr('clip-path', `url(#clip${drawID})`); // pie and gauge
       if (this.options.zoom.enabled) {
         brushDraw.append('g').attr('class', `${type}Brush`);
         brushDraw.append('g').attr('class', `${type}BrushY`);

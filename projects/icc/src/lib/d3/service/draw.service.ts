@@ -5,6 +5,7 @@ import { IccScaleDraw, IccAbstractDraw } from '../draw';
 import {
   IccLineChart,
   IccAreaChart,
+  IccbulletChart,
   IccStackedAreaChart,
   IccBarChart,
   IccGroupedBarChart,
@@ -24,6 +25,7 @@ export class IccDrawServie<T> {
   componentMapper = {
     lineChart: IccLineChart,
     areaChart: IccAreaChart,
+    bulletChart: IccbulletChart,
     stackedAreaChart: IccStackedAreaChart,
     stackedNormalizedAreaChart: IccStackedAreaChart,
     stackedStreamAreaChart: IccStackedAreaChart,

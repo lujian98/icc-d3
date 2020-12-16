@@ -1,5 +1,6 @@
 export * from './area-chart';
 export * from './bar-chart';
+export * from './bullet-chart';
 export * from './candle-stick-bar-chart';
 export * from './grouped-bar-chart';
 export * from './grouped-horizontal-bar-chart';
