@@ -4,10 +4,9 @@ import { IccD3Options } from 'icc';
 
 @Component({
   selector: 'd3-bullet-chart-demo',
-  styles: [':host { height: 120px; display: flex; flex-direction: column;'],
   template: `
-    <icc-d3 [options]="options" [data]="data"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data2"></icc-d3>
+    <icc-d3 [options]="options" [data]="data" style="height: 60px"></icc-d3>
+    <icc-d3 [options]="options2" [data]="data2" style="height: 60px"></icc-d3>
   `,
 })
 export class AppBulletChartDemoComponent implements OnInit {
