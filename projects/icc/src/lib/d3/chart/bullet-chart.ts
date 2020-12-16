@@ -1,6 +1,5 @@
-import * as d3Shape from 'd3-shape';
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScale, IccScaleLinear } from '../model';
+import { IccScaleLinear } from '../model';
 
 export class IccbulletChart<T> extends IccAbstractDraw<T> {
   measures = [250, 215, 145, 142, 140];

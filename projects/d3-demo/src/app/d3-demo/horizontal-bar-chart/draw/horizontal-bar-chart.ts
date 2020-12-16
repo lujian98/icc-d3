@@ -45,7 +45,7 @@ export class AppHorizontalBarChart<T> extends IccHorizontalBarChart<T> {
 
       this.svg.select(drawName).selectAll('g').selectAll('tspan')
         .transition()
-        .duration(200)
+        .duration(500)
         .ease(d3Ease.easeLinear)
         .tween('text', (d: any, i) => {
           let start = 0;

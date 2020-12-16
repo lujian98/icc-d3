@@ -103,7 +103,7 @@ export class AppPieChartDemoComponent implements OnInit {
         values: IccUtils.clone(ndata),
       }];
       // this.cd.detectChanges();
-    }, 10000);
+    }, 3000);
   }
 }
 
