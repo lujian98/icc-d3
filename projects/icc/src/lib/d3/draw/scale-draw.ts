@@ -193,12 +193,13 @@ export class IccScaleDraw<T> {
     this.colors = d3Scale.scaleOrdinal(colors);
   }
 
-  public setColorDomain(data: T[]): void {
+  public setColorDomain(data: any[]): void {
     let keys = data.map((d, i) => this.options.drawColor(d, i));
     if (this.options.chartType === 'barChart' || this.options.chartType === 'pieChart') {
       const values = this.options.y0(data[0]);
       keys = values.map((d, i) => this.options.drawColor(d, i));
     }
+    // console.log( ' keys =', keys)
     this.colors.domain(keys);
   }
 }

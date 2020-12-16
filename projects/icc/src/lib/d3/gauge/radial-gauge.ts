@@ -2,8 +2,6 @@ import * as d3Shape from 'd3-shape';
 import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Interpolate from 'd3-interpolate';
-import * as d3Color from 'd3-color';
-import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
@@ -19,22 +17,22 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private majorGraduationLenght: number;
   private minorGraduationLenght: number;
   private majorGraduationMarginTop: number;
+  private startColor: string;
   private colors: any;
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return this.options.radialGauge.range
-      .map((d, i) => {
-        return {
-          key: '',
-          value: d,
-          color: d.color || this.getdrawColor(d, i),
-          valueX: null,
-          valueY: `${this.options.x(d)} - ${this.options.y(d)}`,
-          cy: null,
-          hovered: i === idx,
-          hasSummary: false
-        };
-      });
+    return this.data.map((d: any, i) => {
+      return {
+        key: '',
+        value: d,
+        color: d.data.color || this.getdrawColor(d.data, i),
+        valueX: null,
+        valueY: `${d.data.minv} - ${d.data.maxv}`,
+        cy: null,
+        hovered: i === idx,
+        hasSummary: false
+      };
+    });
   }
 
   drawChart(data: any[]): void {
@@ -48,12 +46,27 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         this.inintCenterNeedle();
         this.drawCenterNeedle();
       } else {
-        const piedata = pie.getPieData(this.options.radialGauge.range, true);
+        const piedata = pie.getPieData(this.getPieRangeData(), true);
         this.setColorScale(piedata);
         this.initDraw();
         super.drawChart(piedata);
       }
     }
+  }
+
+  private getPieRangeData(): any[] {
+    const range = this.options.radialGauge.range;
+    return range.filter((d, i) => i > 0)
+      .map((d, i) => {
+        if (i === 0) {
+          this.startColor = range[0].color || 'green';
+        }
+        return {
+          minv: range[i].value,
+          maxv: d.value,
+          color: d.color
+        };
+      });
   }
 
   private isDataChangeOnly(): boolean {
@@ -73,8 +86,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private setRangeScale(): void {
-    this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => +this.options.x(d));
-    this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
+    this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => d.value);
+    this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => d.value);
     this.scale.y.range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
     this.scale.y.domain([this.lowerLimit, this.upperLimit]);
     this.scale.setColorDomain(this.options.radialGauge.range);
@@ -86,7 +99,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     data.forEach((d: any, i) => {
       if (domain.length === 0) {
         domain.push(d.startAngle);
-        range.push(this.options.radialGauge.startColor);
+        range.push(this.startColor);
       }
       domain.push(d.endAngle);
       range.push(this.getdrawColor(d.data, i));

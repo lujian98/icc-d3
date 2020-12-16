@@ -14,41 +14,29 @@ import { IccD3Options } from 'icc';
 export class AppRadialGaugeDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
-    x: (d) => d.min,
-    y: (d) => d.max,
     radialGauge: {
       valueUnit: 'kW',
       range: [
         {
-          min: 0,
-          max: 1.,
-          // color: 'blue'
-          // color: 'rgb(156, 214, 130)'
+          value: 0,
         },
         {
-          min: 1.,
-          max: 2.,
-          // color: '#8DCA2F'
+          value: 1,
         },
         {
-          min: 2.,
-          max: 3.,
-          // color: '#FDC702'
+          value: 2.,
         },
         {
-          min: 3.,
-          max: 4.,
-         //  color: '#FF7700'
+          value: 3.,
         },
         {
-          min: 4.,
-          max: 5.0,
-         //  color: '#C50200'
+          value: 4.,
         },
         {
-          min: 5.,
-          max: 6.0,
-          // color: 'red'
+          value: 5.0,
+        },
+        {
+          value: 6.0,
         }
       ]
     }
@@ -56,8 +44,6 @@ export class AppRadialGaugeDemoComponent implements OnInit {
 
   options2: IccD3Options = {
     chartType: 'radialGauge',
-    x: (d) => d.min,
-    y: (d) => d.max,
     radialGauge: {
       startAngle: Math.PI * -0,
       endAngle: Math.PI * 2,
@@ -66,33 +52,31 @@ export class AppRadialGaugeDemoComponent implements OnInit {
       valueUnit: 'kW',
       range: [
         {
-          min: 0,
-          max: 2.,
+          value: 0,
+          color: 'green'
+        },
+        {
+          value: 2,
           color: 'rgb(156, 214, 130)'
         },
         {
-          min: 2.,
-          max: 4.,
+          value: 4.,
           color: '#8DCA2F'
         },
         {
-          min: 4.,
-          max: 6.,
+          value: 6.,
           color: '#FDC702'
         },
         {
-          min: 6.,
-          max: 8.,
+          value: 8.,
           color: '#FF7700'
         },
         {
-          min: 8.,
-          max: 10.0,
+          value: 10.0,
           color: '#C50200'
         },
         {
-          min: 10.,
-          max: 12.0,
+          value: 12.0,
           color: 'red'
         }
       ]
