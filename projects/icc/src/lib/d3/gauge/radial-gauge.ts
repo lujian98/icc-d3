@@ -41,6 +41,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
+      // TODO support mutilple value display on the gauge???
       this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
