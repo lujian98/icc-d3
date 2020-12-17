@@ -14,6 +14,8 @@ import { IccD3Options } from 'icc';
 export class AppRadialGaugeDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'radialGauge',
+    // y0: (d) => d.values,
+    y: (d) => d,
     radialGauge: {
       valueUnit: 'kW',
       range: [
@@ -44,6 +46,8 @@ export class AppRadialGaugeDemoComponent implements OnInit {
 
   options2: IccD3Options = {
     chartType: 'radialGauge',
+    // y0: (d) => d.values,
+    y: (d) => d,
     radialGauge: {
       startAngle: Math.PI * -0,
       endAngle: Math.PI * 2,
@@ -93,11 +97,11 @@ export class AppRadialGaugeDemoComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = [{
-      values: 3.75,
+      values: [3.75]
     }];
     let v = 3.0;
     this.data2 = [{
-      values: v,
+      values: [v],
     }];
     setInterval(() => {
       v += 0.05;
@@ -105,14 +109,14 @@ export class AppRadialGaugeDemoComponent implements OnInit {
         v = 0;
       }
       this.data2 = [{
-        values: v
+        values: [v]
       }];
       this.cd.detectChanges();
     }, 500);
 
     setInterval(() => {
       this.data = [{
-        values: Math.floor(Math.random() * 70) / 10
+        values: [Math.floor(Math.random() * 70) / 10]
       }];
       this.cd.detectChanges();
     }, 2000);

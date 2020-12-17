@@ -42,7 +42,11 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
       // TODO support mutilple value display on the gauge???
-      this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
+      // this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
+      const pdata = this.options.y0(data[0]);
+      console.log( ' pdata =', pdata)
+      this.value = this.options.y(pdata[0]);
+      console.log( ' this.value =', this.value)
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
         this.drawCenterNeedle();
@@ -153,6 +157,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         .attr('class', 'drawMinorGraduations');
       this.svg.select(`${drawName}Label`).selectAll('g').data(majorAngles).join('g').append('text')
         .attr('class', 'drawlabel');
+
+      // this.svg.select('.graduationNeedle').selectAll('g').data(this.data).join('g').append('path')
       this.drawCenterNeedle();
     }
     this.redrawContent(drawName, scaleX, scaleY);
