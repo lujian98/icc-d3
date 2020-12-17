@@ -1,4 +1,5 @@
 export * from './axis.model';
+export * from './bullet.model';
 export * from './gauge.model';
 export * from './interactive.model';
 export * from './legend.model';

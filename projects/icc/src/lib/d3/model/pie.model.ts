@@ -1,6 +1,6 @@
 import { IccD3Options } from './options.model';
 
-export interface IccD3PieOptions {
+export interface IccD3PieChartOptions {
   startAngle?: number;
   endAngle?: number;
   padAngle?: number;

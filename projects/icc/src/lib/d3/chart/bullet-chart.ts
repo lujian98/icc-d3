@@ -1,18 +1,18 @@
 import * as d3Array from 'd3-array';
 import { IccAbstractDraw } from '../draw/abstract-draw';
-import { IccScaleLinear } from '../model';
+import { IccScaleLinear, IccD3Range } from '../model';
 
-export class IccbulletChart<T> extends IccAbstractDraw<T> {
-  setRangeScale(data: any[]): void {
-    const minv = d3Array.min(data[0].range, (d: any) => +d.value);
-    const maxv = d3Array.max(data[0].range, (d: any) => +d.value);
+export class IccbulletChart<IccD3BulletChartData> extends IccAbstractDraw<IccD3BulletChartData> {
+  setRangeScale(data: IccD3BulletChartData[]): void {
+    const minv = d3Array.min(data, (c: any) => d3Array.min(c.range, (d: IccD3Range) => d.value));
+    const maxv = d3Array.max(data, (c: any) => d3Array.max(c.range, (d: IccD3Range) => d.value));
     this.scale.x.domain([minv, maxv]);
     this.scale.x2.domain([minv, maxv]);
     this.svg.select('.axis--x').call(this.scale.xAxis);
   }
 
   drawContents(drawName: string, scaleX: IccScaleLinear, scaleY: IccScaleLinear): void {
-    this.setRangeScale(this.data);
+    this.setRangeScale(this.data as IccD3BulletChartData[]);
     this.createDrawElement('bulletMeasures', true);
     this.createDrawElement('bulletMarkers', true);
     this.createDrawElement('bulletMarkerLines', true);
@@ -22,17 +22,18 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
 
   redrawContent(drawName: string, scaleX: IccScaleLinear, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
-      .data((d: any) => d.range).join('rect')
+      .data((d: any) => d.range).join('rect') // TODO range here with minv to maxv order from small to large
       .attr('fill', (d, i) => this.getdrawColor(d, i))
       .style('fill-opacity', (d) => 1)
       .attr('width', (d: any) => {
-        const width = scaleX(this.options.x(d)) - scaleX(scaleX.domain()[0]);
+        const width = scaleX(d.value) - scaleX(scaleX.domain()[0]);
         return width > 0 ? width : 0;
       })
       .attr('height', this.options.drawHeight)
       .attr('x', 0);
 
-    const measures = this.options.y0(this.data[0]); // TODO sort in the bullet chart
+    const data = this.data[0] as IccD3BulletChartData;
+    const measures = this.options.y0(data); // TODO sort in the bullet chart
     this.svg.select('.bulletMeasures').selectAll('rect').data(measures).join('rect')
       .attr('fill', (d, i) => 'blue')
       .style('fill-opacity', (d) => 0.1)
@@ -50,7 +51,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .attr('transform', (d) => `translate(${scaleX(this.options.x(d))}, ${this.options.drawHeight / 2})`)
       .attr('d', `M0,${h3}L${h3},${-h3} ${-h3},${-h3}Z`);
 
-    const markerLines = this.data[0]['markerLines'];
+    const markerLines = data['markerLines'];
     this.svg.select('.bulletMarkerLines').selectAll('line.markerLine').data(markerLines).join('line')
       .attr('class', 'markerLine')
       .attr('stroke', (d, i) => 'black')
@@ -69,7 +70,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .style('font', `${textSize}px Courier`)
       .attr('y', this.options.drawHeight / 3 + 2)
       .attr('dx', -5)
-      .text((d) => this.options.x0(this.data[0]));
+      .text((d) => this.options.x0(data));
 
     const textSize2 = Math.round(this.options.drawHeight * 1 / 4);
     yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label-unit')
@@ -77,7 +78,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .style('font', `${textSize2}px Courier`)
       .attr('y', this.options.drawHeight * 2 / 3 + 2)
       .attr('dx', -5)
-      .text(() => this.data[0]['unit']);
+      .text(() => `(${data['unit']})`);
   }
 
   legendMouseover(e, data, mouseover: boolean): void { }

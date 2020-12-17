@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3TimeFormat from 'd3-time-format';
-import { IccD3Options } from 'icc';
+import { IccD3Options, IccD3BulletChartData } from 'icc';
 
 @Component({
   selector: 'd3-bullet-chart-demo',
@@ -11,58 +11,17 @@ import { IccD3Options } from 'icc';
 })
 export class AppBulletChartDemoComponent implements OnInit {
   options: IccD3Options = {
-    chartType: 'bulletChart',
-    xScaleType: 'linear',
-    maxDrawHeight: 40,
-    margin: { top: 0, right: 20, bottom: 0, left: 60 },
-    x0: (d) => d.key,
-    y0: (d) => d.measures,
-    x: (d) => d.value,
-    y: (d) => d.label,
-    drawColor: (d, i) => d.key,
-    legend: {
-      enabled: false,
-    },
-    zoom: {
-      enabled: true,
-      horizontalOff: false,
-      horizontalBrushShow: false,
-      verticalOff: true,
-      verticalBrushShow: false
-    },
-    popover: {
-      // enabled: false,
-    },
+    chartType: 'bulletChart'
   };
 
   options2: IccD3Options = {
     chartType: 'bulletChart',
-    xScaleType: 'linear',
-    maxDrawHeight: 40,
-    margin: { top: 0, right: 20, bottom: 0, left: 100 },
-    x0: (d) => d.key,
-    y0: (d) => d.measures,
-    x: (d) => d.value,
-    y: (d) => d.label,
-    drawColor: (d, i) => d.key,
-    legend: {
-      enabled: false,
-    },
-    zoom: {
-      enabled: true,
-      horizontalOff: false,
-      horizontalBrushShow: false,
-      verticalOff: true,
-      verticalBrushShow: false
-    },
-    popover: {
-      // enabled: false,
-    },
+    margin: { left: 100 },
   };
 
-  data = [{
-    key: 'Power',
-    unit: '(kw)',
+  data: IccD3BulletChartData[] = [{
+    label: 'Power',
+    unit: 'kw',
     range: [{
       label: 'Group A',
       color: 'red',
@@ -84,36 +43,36 @@ export class AppBulletChartDemoComponent implements OnInit {
       value: 2000
     }],
     measures: [{
-      label: 'Group B',
+      name: 'Group B',
       color: 'red',
-      value: 2500
+      x: 2500
     },
     {
-      label: 'Group B',
+      name: 'Group C',
       color: 'orange',
-      value: 2150
+      x: 2150
     },
     {
-      label: 'Group B',
+      name: 'Group B',
       color: 'orange',
-      value: 1450
+      x: 1450
     },
     {
-      label: 'Group B',
+      name: 'Group B',
       color: 'orange',
-      value: 1000
+      x: 1000
     },
     {
-      label: 'Group I',
+      name: 'Group I',
       color: 'green',
-      value: 500
+      x: 500
     }],
     markerLines: [1000, 1750, 2300]
   }];
 
-  data2 = [{
-    key: 'Temperature',
-    unit: '(F)',
+  data2: IccD3BulletChartData[] = [{
+    label: 'Temperature',
+    unit: 'F',
     range: [{
       label: 'Group A',
       color: 'red',
@@ -135,29 +94,29 @@ export class AppBulletChartDemoComponent implements OnInit {
       value: 200
     }],
     measures: [{
-      label: 'Group B',
+      name: 'Group B',
       color: 'red',
-      value: 250
+      x: 250
     },
     {
-      label: 'Group B',
+      name: 'Group B',
       color: 'orange',
-      value: 215
+      x: 215
     },
     {
-      label: 'Group B',
+      name: 'Group B',
       color: 'orange',
-      value: 145
+      x: 145
     },
     {
-      label: 'Group B',
+      name: 'Group B',
       color: 'orange',
-      value: 142
+      x: 142
     },
     {
-      label: 'Group I',
+      name: 'Group I',
       color: 'green',
-      value: 140
+      x: 140
     }],
     markerLines: [100, 175, 230]
   }];
