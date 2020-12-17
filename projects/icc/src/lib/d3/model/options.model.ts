@@ -1,4 +1,5 @@
 import * as d3Format from 'd3-format';
+import { IccD3BulletChartOptions } from './bullet.model';
 import { IccD3RadialGaugeOptions } from './gauge.model';
 import { IccD3LegendOptions } from './legend.model';
 import { IccD3PieChartOptions } from './pie.model';
@@ -41,6 +42,7 @@ export interface IccD3Options {
   xAxis?: IccD3AxisOptions;
   yAxis?: IccD3AxisOptions;
   legend?: IccD3LegendOptions,
+  bullet?: IccD3BulletChartOptions,
   pie?: IccD3PieChartOptions;
   radialGauge?: IccD3RadialGaugeOptions;
   popover?: IccD3PopoverOptions;

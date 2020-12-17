@@ -11,17 +11,23 @@ import { IccD3Options, IccD3BulletChartData } from 'icc';
 })
 export class AppBulletChartDemoComponent implements OnInit {
   options: IccD3Options = {
-    chartType: 'bulletChart'
+    chartType: 'bulletChart',
+    bullet: {
+      label: 'Power',
+      unit: 'kw',
+    },
   };
 
   options2: IccD3Options = {
     chartType: 'bulletChart',
     margin: { left: 100 },
+    bullet: {
+      label: 'Temperature',
+      unit: 'F',
+    },
   };
 
   data: IccD3BulletChartData[] = [{
-    label: 'Power',
-    unit: 'kw',
     range: [{
       label: 'Group A',
       color: 'red',
@@ -71,8 +77,6 @@ export class AppBulletChartDemoComponent implements OnInit {
   }];
 
   data2: IccD3BulletChartData[] = [{
-    label: 'Temperature',
-    unit: 'F',
     range: [{
       label: 'Group A',
       color: 'red',
@@ -106,7 +110,7 @@ export class AppBulletChartDemoComponent implements OnInit {
     {
       name: 'Group B',
       color: 'orange',
-      x: 145
+      x: 142
     },
     {
       name: 'Group B',
@@ -116,7 +120,7 @@ export class AppBulletChartDemoComponent implements OnInit {
     {
       name: 'Group I',
       color: 'green',
-      x: 140
+      x: 142
     }],
     markerLines: [100, 175, 230]
   }];
