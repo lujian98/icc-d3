@@ -69,7 +69,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
     const h3 = this.options.drawHeight / 6;
     this.svg.select('.bulletMarkers').selectAll('path.markerTriangle').data(measures).join('path')
       .attr('class', 'markerTriangle')
-      .attr('fill', this.options.bullet.valueMarkerColor) // TODO shall be different colors
+      .attr('fill',  (d) => d.color)
       .attr('d', `M0,${h3}L${h3},${-h3} ${-h3},${-h3}Z`)
       .attr('transform', (d, i) => {
         const dy = i % 2 === 0 ? this.options.bullet.valueMarkerDy : -this.options.bullet.valueMarkerDy;
