@@ -41,7 +41,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      this.values = this.options.y0(data[0]); // TODO null values
+      this.values = this.options.y0(data[0]) || []; // TODO null values
+      console.log('this.values =', this.values)
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
         this.drawCenterNeedle();
@@ -131,7 +132,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   private drawCenterNeedle(): void {
     this.svg.select('.graduationNeedle').selectAll('g').data(this.values).join('g').append('path');
-    this.svg.select('.graduationValueText').selectAll('g').data(this.values).join('g').append('text');
+    this.svg.select('.graduationValueText').selectAll('g')
+      .data(this.values.length > 0 ? this.values : [null]).join('g').append('text');
     this.svg.select('.graduationNeedleCenter').selectAll('g').data(this.values).join('g').append('circle');
     this.drawGraduationNeedles();
     this.drawGraduationValueText();
@@ -180,7 +182,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private getNeddleColor(d: number): string {
-    d = this.options.y(d);
+    d = d !== null ? this.options.y(d) : null;
     const scale = this.scale.y as IccScaleLinear;
     const value = !isNaN(d) && d !== null ? scale(d) : null;
     return this.getValueColor(value);
@@ -223,8 +225,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private getValueText(d: number): string {
-    const label = this.options.x(d) ? `${this.options.x(d)} ` : '';
-    const y = this.options.y(d);
+    const label = d !== null && this.options.x(d) ? `${this.options.x(d)} ` : '';
+    const y = d !== null ? this.options.y(d) : null;
     const text = y || y === 0 ? y.toFixed(this.options.radialGauge.valueDecimals) : '';
     return `[ ${label}${text} ${this.options.radialGauge.valueUnit} ]`;
   }
