@@ -7,6 +7,7 @@ import { IccD3Options, IccD3BulletChartData } from 'icc';
   template: `
     <icc-d3 [options]="options" [data]="data" style="height: 60px"></icc-d3>
     <icc-d3 [options]="options2" [data]="data2" style="height: 60px"></icc-d3>
+    <icc-d3 [options]="options3" [data]="data3" style="height: 60px"></icc-d3>
   `,
 })
 export class AppBulletChartDemoComponent implements OnInit {
@@ -19,6 +20,15 @@ export class AppBulletChartDemoComponent implements OnInit {
   };
 
   options2: IccD3Options = {
+    chartType: 'bulletChart',
+    margin: { left: 100 },
+    bullet: {
+      label: 'Temperature',
+      unit: 'F',
+    },
+  };
+
+  options3: IccD3Options = {
     chartType: 'bulletChart',
     margin: { left: 100 },
     bullet: {
@@ -50,27 +60,27 @@ export class AppBulletChartDemoComponent implements OnInit {
     }],
     measures: [{
       name: 'Group B',
-      color: 'red',
+      color: 'deepskyblue',
       x: 2500
     },
     {
       name: 'Group C',
-      color: 'orange',
+      color: 'dodgerblue',
       x: 2150
     },
     {
       name: 'Group B',
-      color: 'orange',
+      color: 'steelblue',
       x: 1450
     },
     {
       name: 'Group B',
-      color: 'orange',
+      color: 'royalblue',
       x: 1000
     },
     {
       name: 'Group I',
-      color: 'green',
+      color: 'blue',
       x: 500
     }],
     markerLines: [1000, 1750, 2300]
@@ -99,28 +109,76 @@ export class AppBulletChartDemoComponent implements OnInit {
     }],
     measures: [{
       name: 'Group B',
+      color: 'lightskyblue',
+      x: 250
+    },
+    {
+      name: 'Group B',
+      color: 'dodgerblue',
+      x: 215
+    },
+    {
+      name: 'Group B',
+      color: 'blue',
+      x: 140
+    },
+    {
+      name: 'Group B',
+      color: 'steelblue',
+      x: 142
+    },
+    {
+      name: 'Group I',
+      color: 'deepskyblue',
+      x: 146
+    }],
+    markerLines: [100, 175, 230]
+  }];
+
+  data3: IccD3BulletChartData[] = [{
+    range: [{
+      label: 'Group A',
+      value: 40
+    },
+    {
+      label: 'Group B',
+      color: '#eee',
+      value: 260
+    },
+    {
+      label: 'Group B',
+      color: '#ddd',
+      value: 240
+    },
+    {
+      label: 'Group I',
+      color: '#ccc',
+      value: 200
+    }],
+    measures: [{
+      name: 'Group B',
       color: 'red',
       x: 250
     },
     {
       name: 'Group B',
-      color: 'orange',
+      color: 'blue',
       x: 215
     },
     {
       name: 'Group B',
-      color: 'orange',
-      x: 142
+      color: 'lightsteelblue',
+      x: 180
     },
     {
       name: 'Group B',
       color: 'orange',
-      x: 142
+      x: 182
     },
     {
       name: 'Group I',
-      color: 'green',
-      x: 142
+      color: 'steelblue',
+      x: 120
     }],
     markerLines: [100, 175, 230]
   }];

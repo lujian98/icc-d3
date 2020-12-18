@@ -10,7 +10,6 @@ export interface IccD3BulletChartData {
 export interface IccD3BulletChartOptions {
   label?: string;
   unit?: string;
-  valueBarColor?: string;
   valueMarkerColor?: string;
   valueMarkerDy?: number;
   markerLineColor?: string;
@@ -26,7 +25,6 @@ export const DEFAULT_BULLET_CHART_OPTIONS: IccD3Options = {
   bullet: {
     label: '',
     unit: '',
-    valueBarColor: 'blue',
     valueMarkerColor: 'yellow',
     valueMarkerDy: 12,
     markerLineColor: 'black'
