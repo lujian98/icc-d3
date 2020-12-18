@@ -25,15 +25,18 @@ export class AppBulletChartDemoComponent implements OnInit {
     bullet: {
       label: 'Temperature',
       unit: 'F',
+      markerLineWidth: 4
     },
   };
 
   options3: IccD3Options = {
     chartType: 'bulletChart',
+    x: (d) => d.value,
     margin: { left: 100 },
     bullet: {
       label: 'Temperature',
       unit: 'F',
+      markerLineWidth: 8
     },
   };
 
@@ -83,7 +86,11 @@ export class AppBulletChartDemoComponent implements OnInit {
       color: 'blue',
       x: 500
     }],
-    markerLines: [1000, 1750, 2300]
+    markerLines: [
+      { x: 1000, color: 'red' },
+      { x: 1750, color: 'orange' },
+      { x: 2300, color: 'black' }
+    ]
   }];
 
   data2: IccD3BulletChartData[] = [{
@@ -132,7 +139,11 @@ export class AppBulletChartDemoComponent implements OnInit {
       color: 'deepskyblue',
       x: 146
     }],
-    markerLines: [100, 175, 230]
+    markerLines: [
+      { x: 100, color: 'red' },
+      { x: 175, color: 'orange' },
+      { x: 230, color: 'black' }
+    ]
   }];
 
   data3: IccD3BulletChartData[] = [{
@@ -158,29 +169,33 @@ export class AppBulletChartDemoComponent implements OnInit {
     measures: [{
       name: 'Group B',
       color: 'red',
-      x: 250
+      value: 250
     },
     {
       name: 'Group B',
       color: 'blue',
-      x: 215
+      value: 215
     },
     {
       name: 'Group B',
       color: 'lightsteelblue',
-      x: 180
+      value: 180
     },
     {
       name: 'Group B',
       color: 'orange',
-      x: 182
+      value: 182
     },
     {
       name: 'Group I',
       color: 'steelblue',
-      x: 120
+      value: 120
     }],
-    markerLines: [100, 175, 230]
+    markerLines: [
+      { value: 100, color: 'green' },
+      { value: 175, color: 'orange' },
+      { value: 230, color: 'blue' }
+    ]
   }];
 
   ngOnInit() {

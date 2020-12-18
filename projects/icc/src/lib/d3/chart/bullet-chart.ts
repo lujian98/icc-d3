@@ -48,23 +48,23 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
     const range = this.getRangeData(data.range);
     this.svg.select(drawName).selectAll('rect').data(range).join('rect')
       .attr('fill', (d, i) => this.getdrawColor(d, i))
-      .attr('width', (d: IccD3Range) => {
+      .attr('width', (d) => {
         const w = scaleX(d.maxv) - scaleX(d.minv);
         return w > 0 ? w : 0;
       })
       .attr('height', this.options.drawHeight)
       .attr('x', (d) => scaleX(d.minv));
 
-    const measures = this.getMeasuredRange(this.options.y0(data));
+    const measures = this.getMeasuredRange(this.options.y0(data)) || [];
     this.svg.select('.bulletMeasures').selectAll('rect').data(measures).join('rect')
-      .attr('fill', (d: IccD3Range) => d.color)
-      .attr('width', (d: IccD3Range) => {
+      .attr('fill', (d) => d.color)
+      .attr('width', (d) => {
         const w = scaleX(this.options.x(d)) - scaleX(d.minv);
         return w > 0 ? w : 0;
       })
       .attr('height', this.options.drawHeight / 3)
       .attr('y', this.options.drawHeight / 3)
-      .attr('x', (d: IccD3Range) => scaleX(d.minv));
+      .attr('x', (d) => scaleX(d.minv));
 
     const h3 = this.options.drawHeight / 6;
     this.svg.select('.bulletMarkers').selectAll('path.markerTriangle').data(measures).join('path')
@@ -77,14 +77,14 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
         return `translate(${scaleX(this.options.x(d))}, ${dy + this.options.drawHeight / 2}) rotate(${r})`;
       });
 
-    this.svg.select('.bulletMarkerLines').selectAll('line.markerLine').data(data.markerLines).join('line')
+    this.svg.select('.bulletMarkerLines').selectAll('line.markerLine')
+      .data(data.markerLines || []).join('line')
       .attr('class', 'markerLine')
-      .attr('stroke', this.options.bullet.markerLineColor) // TODO shall be different colors
-      .attr('cursor', '')
-      .attr('stroke-width', 2)
-      .attr('x1', (d) => scaleX(d))
+      .attr('stroke', (d) => d.color)
+      .attr('stroke-width', this.options.bullet.markerLineWidth)
+      .attr('x1', (d) => scaleX(this.options.x(d)))
       .attr('y1', 2)
-      .attr('x2', (d) => scaleX(d))
+      .attr('x2', (d) => scaleX(this.options.x(d)))
       .attr('y2', this.options.drawHeight - 2);
 
     const yAxisDraw = this.svg.select('.yAxisDraw');

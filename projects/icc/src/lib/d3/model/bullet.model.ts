@@ -12,7 +12,7 @@ export interface IccD3BulletChartOptions {
   unit?: string;
   valueMarkerColor?: string;
   valueMarkerDy?: number;
-  markerLineColor?: string;
+  markerLineWidth?: number;
 }
 
 export const DEFAULT_BULLET_CHART_OPTIONS: IccD3Options = {
@@ -27,7 +27,7 @@ export const DEFAULT_BULLET_CHART_OPTIONS: IccD3Options = {
     unit: '',
     valueMarkerColor: 'yellow',
     valueMarkerDy: 12,
-    markerLineColor: 'black'
+    markerLineWidth: 2,
   },
   legend: {
     enabled: false,
