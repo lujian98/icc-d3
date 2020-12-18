@@ -7,7 +7,7 @@ import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
-  private value: number;
+  private values: T[];
   private lowerLimit: number;
   private upperLimit: number;
   private sxy: IccPosition;
@@ -41,12 +41,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      // TODO support mutilple value display on the gauge???
-      // this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
-      const pdata = this.options.y0(data[0]);
-      console.log( ' pdata =', pdata)
-      this.value = this.options.y(pdata[0]);
-      console.log( ' this.value =', this.value)
+      this.values = this.options.y0(data[0]); // TODO null values
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
         this.drawCenterNeedle();
@@ -135,12 +130,12 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawCenterNeedle(): void {
-    const scale = this.scale.y as IccScaleLinear;
-    const value = scale(this.value);
-    const color = this.getValueColor(value);
-    this.drawGraduationNeedle(value, color);
-    this.drawGraduationValueText(value, color);
-    this.drawNeedleCenter(value, color);
+    this.svg.select('.graduationNeedle').selectAll('g').data(this.values).join('g').append('path');
+    this.svg.select('.graduationValueText').selectAll('g').data(this.values).join('g').append('text');
+    this.svg.select('.graduationNeedleCenter').selectAll('g').data(this.values).join('g').append('circle');
+    this.drawGraduationNeedles();
+    this.drawGraduationValueText();
+    this.drawNeedleCenters();
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -157,8 +152,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
         .attr('class', 'drawMinorGraduations');
       this.svg.select(`${drawName}Label`).selectAll('g').data(majorAngles).join('g').append('text')
         .attr('class', 'drawlabel');
-
-      // this.svg.select('.graduationNeedle').selectAll('g').data(this.data).join('g').append('path')
       this.drawCenterNeedle();
     }
     this.redrawContent(drawName, scaleX, scaleY);
@@ -169,7 +162,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('transform', (d: any) => `translate(${this.cxy.x}, ${this.cxy.y})`)
       .attr('d', this.drawArc())
       .attr('fill', (d: any, i) => this.options.radialGauge.enableGradients ? this.setGradients(d) : this.getdrawColor(d.data, i));
-
     if (drawName === `.${this.chartType}`) {
       drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
@@ -179,8 +171,24 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private drawGraduationNeedle(value: number, color: string): void {
-    const thetaRad = value + Math.PI / 2;
+  private drawGraduationNeedles(): void {
+    this.svg.select('.graduationNeedle').selectAll('g').select('path')
+      .attr('d', (d: number) => this.getTriangle(this.options.y(d)))
+      .style('stroke-width', 1)
+      .style('stroke', (d: number) => this.getNeddleColor(d))
+      .style('fill', (d: number) => this.getNeddleColor(d));
+  }
+
+  private getNeddleColor(d: number): string {
+    d = this.options.y(d);
+    const scale = this.scale.y as IccScaleLinear;
+    const value = !isNaN(d) && d !== null ? scale(d) : null;
+    return this.getValueColor(value);
+  }
+
+  private getTriangle(d: number): string {
+    const scale = this.scale.y as IccScaleLinear;
+    const thetaRad = scale(d) + Math.PI / 2;
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
     const needleRadius = this.outterRadius * this.options.radialGauge.needleEndRadius;
     const topX = this.cxy.x - needleLen * Math.cos(thetaRad);
@@ -190,32 +198,35 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const rightX = this.cxy.x - needleRadius * Math.cos(thetaRad + Math.PI / 2);
     const rightY = this.cxy.y - needleRadius * Math.sin(thetaRad + Math.PI / 2);
     const triangle = `M ${leftX} ${leftY} L ${topX} ${topY} L ${rightX} ${rightY}`;
-    this.svg.select('.graduationNeedle').append('path')
-      .attr('d', triangle)
-      .style('stroke-width', 1)
-      .style('stroke', color)
-      .style('fill', color);
+    return triangle;
   }
 
-  private drawNeedleCenter(value: number, color: string): void {
-    this.svg.select('.graduationNeedleCenter').append('circle')
+  private drawNeedleCenters(): void {
+    this.svg.select('.graduationNeedleCenter').selectAll('g').select('circle')
       .attr('r', this.outterRadius * this.options.radialGauge.needleCenterRadius)
       .attr('cx', this.cxy.x)
       .attr('cy', this.cxy.y)
-      .attr('fill', color);
+      .attr('fill', (d: number) => this.getNeddleColor(d));
   }
 
-  private drawGraduationValueText(value: number, color: string): void {
+  private drawGraduationValueText(): void {
     const textSize = this.outterRadius * this.options.radialGauge.valueTextSize;
-    const text = this.value || this.value === 0 ? this.value.toFixed(this.options.radialGauge.valueDecimals) : '';
-    this.svg.select('.graduationValueText').append('text')
-      .attr('fill', color)
+    const y = this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY);
+    this.svg.select('.graduationValueText').selectAll('g').select('text')
+      .attr('fill', (d: number) => this.getNeddleColor(d))
       .attr('x', this.cxy.x)
-      .attr('y', this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY))
+      .attr('y', (d, i) => y + i * (textSize + 2))
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
       .style('font', `${textSize}px Courier`)
-      .text(`[ ${text} ${this.options.radialGauge.valueUnit} ]`);
+      .text((d: number) => this.getValueText(d));
+  }
+
+  private getValueText(d: number): string {
+    const label = this.options.x(d) ? `${this.options.x(d)} ` : '';
+    const y = this.options.y(d);
+    const text = y || y === 0 ? y.toFixed(this.options.radialGauge.valueDecimals) : '';
+    return `[ ${label}${text} ${this.options.radialGauge.valueUnit} ]`;
   }
 
   private drawMajorGraduationTexts(drawName: string): void {

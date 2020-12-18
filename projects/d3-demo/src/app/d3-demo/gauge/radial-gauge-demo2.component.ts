@@ -176,7 +176,7 @@ export class AppRadialGaugeDemo2Component implements OnInit {
     },
   };
 
-  data = [{ values: [4.3] }];
+  data = [{ values: [9.3, 2.3, 5.6] }];
   data2 = [{ values: [1.2] }];
   data3 = [{ values: [2.72] }]
   data4 = [{ values: [3.4] }];
