@@ -1,11 +1,11 @@
 import { IccD3Options } from './options.model';
-import { IccD3PieOptions, } from './pie.model';
+import { IccD3PieChartOptions, } from './pie.model';
+import { IccD3Range } from './range.model';
 import { IccScaleLinear } from './scale.model';
 
-export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
-  range?: any[];
+export interface IccD3RadialGaugeOptions extends IccD3PieChartOptions {
+  range?: IccD3Range[];
   enableGradients?: boolean;
-  startColor?: string; // used when enableGradients is true
   colorScale?: IccScaleLinear;  // used when enableGradients is true if use want custom define color scalle
   majorGraduations?: number;
   minorGraduations?: number;
@@ -26,6 +26,10 @@ export interface IccD3RadialGaugeOptions extends IccD3PieOptions {
 }
 
 export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
+  // x0: (d) => d.key,
+  y0: (d) => d.values,
+  // x: (d) => d.x,
+  // y: (d) => d.y,
   margin: { top: 10, right: 10, bottom: 10, left: 10 },
   axisEnabled: false,
   drawColor: (d, i) => i, // use default colors or defined colors if range colors are not defined
@@ -36,7 +40,6 @@ export const DEFAULT_RADIAL_GAUGE_OPTIONS: IccD3Options = {
     padAngle: 0.000,
     donut: 0.8,
     enableGradients: false,
-    startColor: 'green',
     centerOffsetX: 0,
     centerOffsetY: 0,
     majorGraduations: 8,

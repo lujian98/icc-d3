@@ -23,9 +23,8 @@ export class AppRadialGaugeDemo2Component implements OnInit {
   interpolate: any = d3Interpolate.interpolateRgb;
   options: IccD3Options = {
     chartType: 'radialGauge',
-    y0: (d) => d.value,
-    x: (d) => d.min,
-    y: (d) => d.max,
+    // y0: (d) => d.values,
+    y: (d) => d,
     radialGauge: {
       startAngle: Math.PI * -1 / 2,
       endAngle: Math.PI * 1 / 2,
@@ -35,12 +34,13 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       valueUnit: 'kW',
       range: [
         {
-          min: 0,
-          max: 3.
+          value: 0,
         },
         {
-          min: 3.,
-          max: 6.,
+          value: 5,
+        },
+        {
+          value: 10,
         }
       ]
     }
@@ -48,9 +48,8 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options2: IccD3Options = {
     chartType: 'radialGauge',
-    y0: (d) => d.value,
-    x: (d) => d.min,
-    y: (d) => d.max,
+    // y0: (d) => d.value2,
+    y: (d) => d,
     radialGauge: {
       enableGradients: true,
       majorGraduations: 4,
@@ -60,33 +59,31 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       centerOffsetY: 0 / 150,
       range: [
         {
-          min: 0,
-          max: 1.,
+          value: 0,
+          color: 'green'
+        },
+        {
+          value: 1,
           color: 'rgb(156, 214, 130)'
         },
         {
-          min: 1.,
-          max: 2.,
+          value: 2.,
           color: '#8DCA2F'
         },
         {
-          min: 2.,
-          max: 3.,
+          value: 3.,
           color: '#FDC702'
         },
         {
-          min: 3.,
-          max: 4.,
+          value: 4.,
           color: '#FF7700'
         },
         {
-          min: 4.,
-          max: 5.0,
+          value: 5.0,
           color: '#C50200'
         },
         {
-          min: 5.,
-          max: 6.0,
+          value: 6.0,
           color: 'red'
         }
       ]
@@ -95,9 +92,8 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options3: IccD3Options = {
     chartType: 'radialGauge',
-    y0: (d) => d.value,
-    x: (d) => d.min,
-    y: (d) => d.max,
+    // y0: (d) => d.value2,
+    y: (d) => d,
     radialGauge: {
       majorGraduations: 6,
       startAngle: Math.PI * 1 / 2,
@@ -106,33 +102,31 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       valueUnit: 'kW',
       range: [
         {
-          min: 0,
-          max: 1.,
+          value: 0,
+          color: 'green'
+        },
+        {
+          value: 1,
           color: 'rgb(156, 214, 130)'
         },
         {
-          min: 1.,
-          max: 2.,
+          value: 2.,
           color: '#8DCA2F'
         },
         {
-          min: 2.,
-          max: 3.,
+          value: 3.,
           color: '#FDC702'
         },
         {
-          min: 3.,
-          max: 4.,
+          value: 4.,
           color: '#FF7700'
         },
         {
-          min: 4.,
-          max: 5.0,
+          value: 5.0,
           color: '#C50200'
         },
         {
-          min: 5.,
-          max: 6.0,
+          value: 6.0,
           color: 'red'
         }
       ]
@@ -141,8 +135,8 @@ export class AppRadialGaugeDemo2Component implements OnInit {
 
   options4: IccD3Options = {
     chartType: 'radialGauge',
-    x: (d) => d.min,
-    y: (d) => d.max,
+    // y0: (d) => d.value2,
+    y: (d) => d,
     radialGauge: {
       majorGraduations: 6,
       startAngle: Math.PI * 0,
@@ -151,45 +145,41 @@ export class AppRadialGaugeDemo2Component implements OnInit {
       valueUnit: 'kW',
       range: [
         {
-          min: 0,
-          max: 1.,
+          value: 0,
+          color: 'green'
+        },
+        {
+          value: 1,
           color: 'rgb(156, 214, 130)'
         },
         {
-          min: 1.,
-          max: 2.,
+          value: 2.,
           color: '#8DCA2F'
         },
         {
-          min: 2.,
-          max: 3.,
+          value: 3.,
           color: '#FDC702'
         },
         {
-          min: 3.,
-          max: 4.,
+          value: 4.,
           color: '#FF7700'
         },
         {
-          min: 4.,
-          max: 5.0,
+          value: 5.0,
           color: '#C50200'
         },
         {
-          min: 5.,
-          max: 6.0,
+          value: 6.0,
           color: 'red'
         }
-      ],
+      ]
     },
-    y0: (d) => d,
-    // y0: (d) => d.value,
   };
 
-  data = [{ value: 4.3, }];
-  data2 = [{ value: 1.2, }];
-  data3 = [{ value: 2.72 }]
-  data4 = [3.4];
+  data = [{ values: [9.3, 2.3, 5.6] }];
+  data2 = [{ values: [1.2] }];
+  data3 = [{ values: [2.72] }]
+  data4 = [{ values: [3.4] }];
   ngOnInit(): void {
     // this.data = [{ value: 4.3, }];
     // this.data2 = [{ value: 2.0, }];

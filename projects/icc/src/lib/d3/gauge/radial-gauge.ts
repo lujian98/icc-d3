@@ -2,14 +2,12 @@ import * as d3Shape from 'd3-shape';
 import * as d3Array from 'd3-array';
 import * as d3Scale from 'd3-scale';
 import * as d3Interpolate from 'd3-interpolate';
-import * as d3Color from 'd3-color';
-import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccAbstractDraw } from '../draw/abstract-draw';
 import { IccPieData } from '../data/pie-data';
 import { IccScale, IccScaleLinear, IccD3Interactive, IccPosition } from '../model';
 
 export class IccRadialGauge<T> extends IccAbstractDraw<T> {
-  private value: number;
+  private values: T[];
   private lowerLimit: number;
   private upperLimit: number;
   private sxy: IccPosition;
@@ -19,22 +17,22 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   private majorGraduationLenght: number;
   private minorGraduationLenght: number;
   private majorGraduationMarginTop: number;
+  private startColor: string;
   private colors: any;
 
   getDrawData(idx: number, data: T): IccD3Interactive[] {
-    return this.options.radialGauge.range
-      .map((d, i) => {
-        return {
-          key: '',
-          value: d,
-          color: d.color || this.getdrawColor(d, i),
-          valueX: null,
-          valueY: `${this.options.x(d)} - ${this.options.y(d)}`,
-          cy: null,
-          hovered: i === idx,
-          hasSummary: false
-        };
-      });
+    return this.data.map((d: any, i) => {
+      return {
+        key: '',
+        value: d,
+        color: d.data.color || this.getdrawColor(d.data, i),
+        valueX: null,
+        valueY: `${d.data.minv} - ${d.data.maxv}`,
+        cy: null,
+        hovered: i === idx,
+        hasSummary: false
+      };
+    });
   }
 
   drawChart(data: any[]): void {
@@ -43,17 +41,33 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      this.value = data[0] && !isNaN(this.options.y0(data[0])) ? this.options.y0(data[0]) : null;
+      this.values = this.options.y0(data[0]) || []; // TODO null values
+      console.log('this.values =', this.values)
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
         this.drawCenterNeedle();
       } else {
-        const piedata = pie.getPieData(this.options.radialGauge.range, true);
+        const piedata = pie.getPieData(this.getPieRangeData(), true);
         this.setColorScale(piedata);
         this.initDraw();
         super.drawChart(piedata);
       }
     }
+  }
+
+  private getPieRangeData(): any[] {
+    const range = this.options.radialGauge.range;
+    return range.filter((d, i) => i > 0)
+      .map((d, i) => {
+        if (i === 0) {
+          this.startColor = range[0].color || 'green';
+        }
+        return {
+          minv: range[i].value,
+          maxv: d.value,
+          color: d.color
+        };
+      });
   }
 
   private isDataChangeOnly(): boolean {
@@ -73,8 +87,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private setRangeScale(): void {
-    this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => +this.options.x(d));
-    this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => +this.options.y(d));
+    this.lowerLimit = d3Array.min(this.options.radialGauge.range, (d) => d.value);
+    this.upperLimit = d3Array.max(this.options.radialGauge.range, (d) => d.value);
     this.scale.y.range([this.options.radialGauge.startAngle, this.options.radialGauge.endAngle]);
     this.scale.y.domain([this.lowerLimit, this.upperLimit]);
     this.scale.setColorDomain(this.options.radialGauge.range);
@@ -86,7 +100,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     data.forEach((d: any, i) => {
       if (domain.length === 0) {
         domain.push(d.startAngle);
-        range.push(this.options.radialGauge.startColor);
+        range.push(this.startColor);
       }
       domain.push(d.endAngle);
       range.push(this.getdrawColor(d.data, i));
@@ -117,12 +131,13 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
   }
 
   private drawCenterNeedle(): void {
-    const scale = this.scale.y as IccScaleLinear;
-    const value = scale(this.value);
-    const color = this.getValueColor(value);
-    this.drawGraduationNeedle(value, color);
-    this.drawGraduationValueText(value, color);
-    this.drawNeedleCenter(value, color);
+    this.svg.select('.graduationNeedle').selectAll('g').data(this.values).join('g').append('path');
+    this.svg.select('.graduationValueText').selectAll('g')
+      .data(this.values.length > 0 ? this.values : [null]).join('g').append('text');
+    this.svg.select('.graduationNeedleCenter').selectAll('g').data(this.values).join('g').append('circle');
+    this.drawGraduationNeedles();
+    this.drawGraduationValueText();
+    this.drawNeedleCenters();
   }
 
   drawContents(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
@@ -149,7 +164,6 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       .attr('transform', (d: any) => `translate(${this.cxy.x}, ${this.cxy.y})`)
       .attr('d', this.drawArc())
       .attr('fill', (d: any, i) => this.options.radialGauge.enableGradients ? this.setGradients(d) : this.getdrawColor(d.data, i));
-
     if (drawName === `.${this.chartType}`) {
       drawContents.on('mouseover', (e, d) => this.drawMouseover(e, d, true))
         .on('mouseout', (e, d) => this.drawMouseover(e, d, false));
@@ -159,8 +173,24 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     }
   }
 
-  private drawGraduationNeedle(value: number, color: string): void {
-    const thetaRad = value + Math.PI / 2;
+  private drawGraduationNeedles(): void {
+    this.svg.select('.graduationNeedle').selectAll('g').select('path')
+      .attr('d', (d: number) => this.getTriangle(this.options.y(d)))
+      .style('stroke-width', 1)
+      .style('stroke', (d: number) => this.getNeddleColor(d))
+      .style('fill', (d: number) => this.getNeddleColor(d));
+  }
+
+  private getNeddleColor(d: number): string {
+    d = d !== null ? this.options.y(d) : null;
+    const scale = this.scale.y as IccScaleLinear;
+    const value = !isNaN(d) && d !== null ? scale(d) : null;
+    return this.getValueColor(value);
+  }
+
+  private getTriangle(d: number): string {
+    const scale = this.scale.y as IccScaleLinear;
+    const thetaRad = scale(d) + Math.PI / 2;
     const needleLen = this.innerRadius - this.majorGraduationLenght - this.majorGraduationMarginTop;
     const needleRadius = this.outterRadius * this.options.radialGauge.needleEndRadius;
     const topX = this.cxy.x - needleLen * Math.cos(thetaRad);
@@ -170,32 +200,35 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     const rightX = this.cxy.x - needleRadius * Math.cos(thetaRad + Math.PI / 2);
     const rightY = this.cxy.y - needleRadius * Math.sin(thetaRad + Math.PI / 2);
     const triangle = `M ${leftX} ${leftY} L ${topX} ${topY} L ${rightX} ${rightY}`;
-    this.svg.select('.graduationNeedle').append('path')
-      .attr('d', triangle)
-      .style('stroke-width', 1)
-      .style('stroke', color)
-      .style('fill', color);
+    return triangle;
   }
 
-  private drawNeedleCenter(value: number, color: string): void {
-    this.svg.select('.graduationNeedleCenter').append('circle')
+  private drawNeedleCenters(): void {
+    this.svg.select('.graduationNeedleCenter').selectAll('g').select('circle')
       .attr('r', this.outterRadius * this.options.radialGauge.needleCenterRadius)
       .attr('cx', this.cxy.x)
       .attr('cy', this.cxy.y)
-      .attr('fill', color);
+      .attr('fill', (d: number) => this.getNeddleColor(d));
   }
 
-  private drawGraduationValueText(value: number, color: string): void {
+  private drawGraduationValueText(): void {
     const textSize = this.outterRadius * this.options.radialGauge.valueTextSize;
-    const text = this.value || this.value === 0 ? this.value.toFixed(this.options.radialGauge.valueDecimals) : '';
-    this.svg.select('.graduationValueText').append('text')
-      .attr('fill', color)
+    const y = this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY);
+    this.svg.select('.graduationValueText').selectAll('g').select('text')
+      .attr('fill', (d: number) => this.getNeddleColor(d))
       .attr('x', this.cxy.x)
-      .attr('y', this.cxy.y + Math.round(this.outterRadius * this.options.radialGauge.valueOffsetY))
+      .attr('y', (d, i) => y + i * (textSize + 2))
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
       .style('font', `${textSize}px Courier`)
-      .text(`[ ${text} ${this.options.radialGauge.valueUnit} ]`);
+      .text((d: number) => this.getValueText(d));
+  }
+
+  private getValueText(d: number): string {
+    const label = d !== null && this.options.x(d) ? `${this.options.x(d)} ` : '';
+    const y = d !== null ? this.options.y(d) : null;
+    const text = y || y === 0 ? y.toFixed(this.options.radialGauge.valueDecimals) : '';
+    return `[ ${label}${text} ${this.options.radialGauge.valueUnit} ]`;
   }
 
   private drawMajorGraduationTexts(drawName: string): void {
