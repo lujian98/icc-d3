@@ -1,6 +1,28 @@
 {
   "name": "icc-d3",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "description": "Angular 11 d6 reusable charting library",
+  "keywords": [
+    "angular2+",
+    "d3 v6",
+    "nvd3 like",
+    "zoomable brush chart",
+    "Line Chart",
+    "Area Chart, Stacked Area Chart",
+    "Bullet Chart",
+    "Bar Chart, Grouped Bar Chart, Stacked Bar Chart",
+    "Horizontal Bar Chart, Horizontal Grouped Bar Chart, Horizontal Stacked Bar Chart",
+    "Pie Chart, Donut Chart",
+    "Radial Gauge",
+    "Candle Stick Bar Chart"
+  ],
+  "homepage": "https://github.com/lujian98/icc-d3",
+  "license": "MIT",
+  "author": "Jimmy Lu",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lujian98/icc-d3"
+  },
   "peerDependencies": {
     "@angular/common": "^11.0.1",
     "@angular/core": "^11.0.1"

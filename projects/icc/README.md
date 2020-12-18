@@ -1,11 +1,18 @@
-# Icc
+# Icc-d3
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.1.
+
+## Demos
+
+Online demos:
+
+1. stackblitz demo: https://angular-d3-demos.stackblitz.io or https://stackblitz.com/edit/angular-d3-demos
+2. Angular d3 demo: https://github.com/lujian98/angular-d3-demo
 
 ## Code scaffolding
 
 Run `ng generate component component-name --project icc` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project icc`.
-> Note: Don't forget to add `--project icc` or else it will be added to the default project in your `angular.json` file. 
+> Note: Don't forget to add `--project icc` or else it will be added to the default project in your `angular.json` file.
 
 ## Build
 
