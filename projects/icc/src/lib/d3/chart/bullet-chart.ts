@@ -8,9 +8,15 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
   setRangeScale(data: IccD3BulletChartData[]): void {
     const minv = d3Array.min(data, (c) => d3Array.min(c.range, (d) => d.value));
     const maxv = d3Array.max(data, (c) => d3Array.max(c.range, (d) => d.value));
-    this.scale.x.domain([minv, maxv]);
-    this.scale.x2.domain([minv, maxv]);
-    this.svg.select('.axis--x').call(this.scale.xAxis).call(this.scale.xAxis.tickSize(2));
+    if (this.options.bullet.type === 'horizontal') {
+      this.scale.x.domain([minv, maxv]);
+      this.scale.x2.domain([minv, maxv]);
+      this.svg.select('.axis--x').call(this.scale.xAxis).call(this.scale.xAxis.tickSize(2));
+    } else if (this.options.bullet.type === 'vertical') {
+      this.scale.y.domain([minv, maxv]);
+      this.scale.y2.domain([minv, maxv]);
+      this.svg.select('.axis--y').call(this.scale.yAxis).call(this.scale.yAxis.tickSize(2));
+    }
   }
 
   private getRangeData(data: IccD3Range[]): IccD3Range[] {
@@ -26,10 +32,10 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       });
   }
 
-  private getMeasuredRange(data: IccD3Range[]): IccD3Range[] {
-    data = IccUtils.dataSortByField(data, this.options.x, 'asc');
+  private getMeasuredRange(data: IccD3Range[], optionX: Function, minv: number): IccD3Range[] {
+    data = IccUtils.dataSortByField(data, optionX, 'asc');
     data.forEach((d, i) => {
-      d.minv = i === 0 ? this.scale.x.domain()[0] : this.options.x(data[i - 1]);
+      d.minv = i === 0 ? minv : optionX(data[i - 1]);
     });
     return data;
   }
@@ -46,6 +52,15 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
   redrawContent(drawName: string, scaleX: IccScaleLinear, scaleY: IccScaleLinear): void {
     const data: IccD3BulletChartData = this.data[0];
     const range = this.getRangeData(data.range);
+    if (this.options.bullet.type === 'horizontal') {
+      this.drawHorizontalRange(drawName, scaleX, range);
+      this.drawHorizontalMeasures(data, scaleX);
+      this.drawHorizontalMakerLines(data.markerLines);
+      this.drawHorizontalLabel();
+    }
+  }
+
+  private drawHorizontalRange(drawName: string, scaleX: IccScaleLinear, range: IccD3Range[]): void {
     this.svg.select(drawName).selectAll('rect').data(range).join('rect')
       .attr('fill', (d, i) => this.getdrawColor(d, i))
       .attr('width', (d) => {
@@ -54,8 +69,10 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       })
       .attr('height', this.options.drawHeight)
       .attr('x', (d) => scaleX(d.minv));
+  }
 
-    const measures = this.getMeasuredRange(this.options.y0(data)) || [];
+  private drawHorizontalMeasures(data: IccD3BulletChartData, scaleX: IccScaleLinear): void {
+    const measures = this.getMeasuredRange(this.options.y0(data), this.options.x, scaleX.domain()[0]) || [];
     this.svg.select('.bulletMeasures').selectAll('rect').data(measures).join('rect')
       .attr('fill', (d) => d.color)
       .attr('width', (d) => {
@@ -69,24 +86,28 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
     const h3 = this.options.drawHeight / 6;
     this.svg.select('.bulletMarkers').selectAll('path.markerTriangle').data(measures).join('path')
       .attr('class', 'markerTriangle')
-      .attr('fill',  (d) => d.color)
+      .attr('fill', (d) => d.color)
       .attr('d', `M0,${h3}L${h3},${-h3} ${-h3},${-h3}Z`)
       .attr('transform', (d, i) => {
         const dy = i % 2 === 0 ? this.options.bullet.valueMarkerDy : -this.options.bullet.valueMarkerDy;
         const r = i % 2 === 0 ? 180 : 0;
-        return `translate(${scaleX(this.options.x(d))}, ${dy + this.options.drawHeight / 2}) rotate(${r})`;
+        return `translate(${this.scale.x(this.options.x(d))}, ${dy + this.options.drawHeight / 2}) rotate(${r})`;
       });
+  }
 
+  private drawHorizontalMakerLines(data: any[]): void {
     this.svg.select('.bulletMarkerLines').selectAll('line.markerLine')
-      .data(data.markerLines || []).join('line')
+      .data(data || []).join('line')
       .attr('class', 'markerLine')
       .attr('stroke', (d) => d.color)
       .attr('stroke-width', this.options.bullet.markerLineWidth)
-      .attr('x1', (d) => scaleX(this.options.x(d)))
+      .attr('x1', (d) => this.scale.x(this.options.x(d)))
       .attr('y1', 2)
-      .attr('x2', (d) => scaleX(this.options.x(d)))
+      .attr('x2', (d) => this.scale.x(this.options.x(d)))
       .attr('y2', this.options.drawHeight - 2);
+  }
 
+  private drawHorizontalLabel(): void {
     const yAxisDraw = this.svg.select('.yAxisDraw');
     yAxisDraw.selectAll('g').remove();
     const textSize = Math.round(this.options.drawHeight * 1 / 3);

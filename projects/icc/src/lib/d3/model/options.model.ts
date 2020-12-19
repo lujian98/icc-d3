@@ -48,7 +48,7 @@ export interface IccD3Options {
   popover?: IccD3PopoverOptions;
   zoom?: IccD3ZoomOptions;
 
-  maxDrawHeight?: number;
+  // maxDrawHeight?: number;
   brushYWidth?: number;
   legendHeight?: number;
   drawHeight?: number;
