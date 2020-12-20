@@ -13,6 +13,7 @@ import { IccD3Options, IccD3BulletChartData } from 'icc';
 export class AppBulletChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'bulletChart',
+    x: (d) => d.x,
     margin: { left: 100 },
     yAxis: {
       axisLabel: 'Power (kw)',
@@ -24,6 +25,7 @@ export class AppBulletChartDemoComponent implements OnInit {
 
   options2: IccD3Options = {
     chartType: 'bulletChart',
+    x: (d) => d.x,
     margin: { left: 120 },
     bullet: {
       markerLineWidth: 4
@@ -38,7 +40,7 @@ export class AppBulletChartDemoComponent implements OnInit {
 
   options3: IccD3Options = {
     chartType: 'bulletChart',
-    x: (d) => d.value,
+    // x: (d) => d.value,
     margin: { left: 120, bottom: 50 },
     bullet: {
       markerLineWidth: 8

@@ -24,21 +24,7 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
     bullet: {
       type: 'vertical',
     },
-
-    yScaleType: 'linear',
-    margin: { top: 20, right: 0, bottom: 40, left: 40 },
-    y0: (d) => d.measures,
-    x: (d) => d.label,
     y: (d) => d.x,
-
-    zoom: {
-      enabled: true,
-      horizontalOff: true,
-      horizontalBrushShow: false,
-      verticalOff: false,
-      verticalBrushShow: false
-    },
-
     xAxis: {
       axisLabel: 'Power (kw)',
       textAnchor: 'end',
@@ -52,27 +38,13 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       type: 'vertical',
       markerLineWidth: 4
     },
-
-    yScaleType: 'linear',
-    margin: { top: 20, right: 0, bottom: 40, left: 90 },
-    y0: (d) => d.measures,
-    x: (d) => d.label,
+    margin: { left: 90 },
     y: (d) => d.x,
-
-    zoom: {
-      enabled: true,
-      horizontalOff: true,
-      horizontalBrushShow: false,
-      verticalOff: false,
-      verticalBrushShow: false
-    },
-
     xAxis: {
       axisLabel: 'Temperature (F)',
       textAnchor: 'end',
       axisLabelDistance: 20,
     },
-
     yAxis: {
       axisLabel: 'Temperature (F)',
     },
@@ -81,27 +53,11 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
   options3: IccD3Options = {
     chartType: 'bulletChart',
     // x: (d) => d.value,
-
     bullet: {
       type: 'vertical',
       markerLineWidth: 8
     },
-
-    yScaleType: 'linear',
-    margin: { top: 20, right: 0, bottom: 40, left: 90 },
-    y0: (d) => d.measures,
-    x: (d) => d.label,
-
-    y: (d) => d.value,
-
-    zoom: {
-      enabled: true,
-      horizontalOff: true,
-      horizontalBrushShow: false,
-      verticalOff: false,
-      verticalBrushShow: false
-    },
-
+    margin: { left: 90 },
     xAxis: {
       axisLabel: 'Temperature (F)',
       textAnchor: 'end',

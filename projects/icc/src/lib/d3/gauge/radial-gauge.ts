@@ -41,8 +41,8 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
       const pie = new IccPieData(this.options);
       pie.pieOptions = this.options.radialGauge;
       this.sxy = pie.setPieScaleXY();
-      this.values = this.options.y0(data[0]) || []; // TODO null values
-      console.log('this.values =', this.values)
+      this.values = this.options.y0(data[0]) || [];
+      // console.log('this.values =', this.values)
       if (this.isDataChangeOnly()) {
         this.inintCenterNeedle();
         this.drawCenterNeedle();

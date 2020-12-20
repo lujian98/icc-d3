@@ -1,7 +1,7 @@
 import { ElementRef } from '@angular/core';
 import {
   DEFAULT_CHART_OPTIONS,
-  DEFAULT_BULLET_CHART_OPTIONS,
+  DEFAULT_BULLET_CHART_OPTIONS, DEFAULT_VERTICAL_BULLET_CHART_OPTIONS,
   DEFAULT_PIE_CHART_OPTIONS,
   DEFAULT_RADIAL_GAUGE_OPTIONS,
   IccD3Options
@@ -54,7 +54,9 @@ export class IccD3Config {
   private init(): void {
     let options = DEFAULT_CHART_OPTIONS;
     if (this.options.chartType === 'bulletChart') {
-      options = this.getOptions(DEFAULT_BULLET_CHART_OPTIONS, options);
+      const bulletType = this.options.bullet && this.options.bullet.type ? this.options.bullet.type : 'horizontal';
+      const dOptions = bulletType === 'vertical' ? DEFAULT_VERTICAL_BULLET_CHART_OPTIONS : DEFAULT_BULLET_CHART_OPTIONS;
+      options = this.getOptions(dOptions, options);
     } else if (this.options.chartType === 'pieChart') {
       options = this.getOptions(DEFAULT_PIE_CHART_OPTIONS, options);
     } else if (this.options.chartType === 'radialGauge') {
