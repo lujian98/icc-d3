@@ -75,7 +75,7 @@ export class IccAxisDraw<T> {
     yAxisDraw.select('.yAxis--label')
       .attr('transform', `rotate(${this.options.yAxis.rotate}, ${this.options.yAxis.axisLabelDistance}, ${y})`)
       .style('text-anchor', anchorY)
-      .attr('y', y)
+      .attr('y', anchorY === 'end' ? y + 15 : y) // TODO not sure for this 15 for font size
       .attr('dx', this.options.yAxis.axisLabelDistance)
       .text(this.options.yAxis.axisLabel);
   }

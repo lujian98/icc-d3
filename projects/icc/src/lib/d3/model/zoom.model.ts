@@ -9,3 +9,11 @@ export interface IccD3ZoomOptions {
   verticalBrushShow?: boolean;
   // unzoomEventType?: 'dblclick.zoom'
 }
+
+export const DEFAULT_D3ZOOM_OPTIONS: IccD3ZoomOptions = {
+  enabled: true,
+  horizontalOff: false,
+  horizontalBrushShow: true,
+  verticalOff: false,
+  verticalBrushShow: true
+};

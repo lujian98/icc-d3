@@ -7,36 +7,51 @@ import { IccD3Options, IccD3BulletChartData } from 'icc';
   template: `
     <icc-d3 [options]="options" [data]="data" style="height: 60px"></icc-d3>
     <icc-d3 [options]="options2" [data]="data2" style="height: 60px"></icc-d3>
-    <icc-d3 [options]="options3" [data]="data3" style="height: 60px"></icc-d3>
+    <icc-d3 [options]="options3" [data]="data3" style="height: 90px"></icc-d3>
   `,
 })
 export class AppBulletChartDemoComponent implements OnInit {
   options: IccD3Options = {
     chartType: 'bulletChart',
-    bullet: {
-      label: 'Power',
-      unit: 'kw',
+    margin: { left: 100 },
+    yAxis: {
+      axisLabel: 'Power (kw)',
+      // textAnchor: 'end',
+      axisLabelDistance: -40,
+      rotate: 0
     },
   };
 
   options2: IccD3Options = {
     chartType: 'bulletChart',
-    margin: { left: 100 },
+    margin: { left: 120 },
     bullet: {
-      label: 'Temperature',
-      unit: 'F',
       markerLineWidth: 4
+    },
+    yAxis: {
+      axisLabel: 'Temperature (F)',
+      textAnchor: 'end',
+      axisLabelDistance: -10,
+      rotate: 0
     },
   };
 
   options3: IccD3Options = {
     chartType: 'bulletChart',
     x: (d) => d.value,
-    margin: { left: 100 },
+    margin: { left: 120, bottom: 50 },
     bullet: {
-      label: 'Temperature',
-      unit: 'F',
       markerLineWidth: 8
+    },
+    yAxis: {
+      axisLabel: 'Temperature (F)',
+      textAnchor: 'end',
+      axisLabelDistance: -10,
+      rotate: 0
+    },
+
+    xAxis: {
+      axisLabel: 'Temperature (F)',
     },
   };
 

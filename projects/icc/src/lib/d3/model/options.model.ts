@@ -1,11 +1,11 @@
 import * as d3Format from 'd3-format';
 import { IccD3BulletChartOptions } from './bullet.model';
 import { IccD3RadialGaugeOptions } from './gauge.model';
-import { IccD3LegendOptions } from './legend.model';
+import { IccD3LegendOptions, DEFAULT_D3LEGEND_OPTIONS } from './legend.model';
 import { IccD3PieChartOptions } from './pie.model';
-import { IccD3PopoverOptions } from './popover.model';
-import { IccD3ZoomOptions } from './zoom.model';
-import { IccD3AxisOptions } from './axis.model';
+import { IccD3PopoverOptions, DEFAULT_D3POPOVER_OPTIONS } from './popover.model';
+import { IccD3ZoomOptions, DEFAULT_D3ZOOM_OPTIONS } from './zoom.model';
+import { IccD3AxisOptions, DEFAULT_D3XAXIS_OPTIONS, DEFAULT_D3YAXIS_OPTIONS } from './axis.model';
 
 export interface IccPosition {
   x: number;
@@ -48,7 +48,6 @@ export interface IccD3Options {
   popover?: IccD3PopoverOptions;
   zoom?: IccD3ZoomOptions;
 
-  // maxDrawHeight?: number;
   brushYWidth?: number;
   legendHeight?: number;
   drawHeight?: number;
@@ -74,36 +73,10 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   drawColor: (d, i) => d.key,
   duration: 0,
   axisEnabled: true,
-  xAxis: {
-    axisLabelDistance: 30,
-    position: 'bottom',
-    textAnchor: 'middle',
-    rotate: 0
-  },
-  yAxis: {
-    axisLabelDistance: -30,
-    position: 'bottom',
-    textAnchor: 'middle',
-    rotate: -90
-  },
-  legend: {
-    enabled: true,
-    position: 'top',
-    align: 'right'
-  },
-  popover: {
-    totalLable: 'Total',
-    axisFormatter: (d) => d,
-    serieFormatter: (d) => d,
-    valueFormatter: (d) => d3Format.format(',.2f')(d),
-    normalizedFormatter: (d) => d3Format.format(',.2f')(d)
-  },
-  zoom: {
-    enabled: true,
-    horizontalOff: false,
-    horizontalBrushShow: true,
-    verticalOff: false,
-    verticalBrushShow: true
-  }
+  xAxis: DEFAULT_D3XAXIS_OPTIONS,
+  yAxis: DEFAULT_D3YAXIS_OPTIONS,
+  legend: DEFAULT_D3LEGEND_OPTIONS,
+  popover: DEFAULT_D3POPOVER_OPTIONS,
+  zoom: DEFAULT_D3ZOOM_OPTIONS
 };
 

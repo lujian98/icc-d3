@@ -9,8 +9,6 @@ export interface IccD3BulletChartData {
 
 export interface IccD3BulletChartOptions {
   type?: 'horizontal' | 'vertical';
-  label?: string;
-  unit?: string;
   // valueMarkerColor?: string; // TODO not sure to use only one color for all value markers or value colors?
   markerLineWidth?: number;
 }
@@ -23,9 +21,6 @@ export const DEFAULT_BULLET_CHART_OPTIONS: IccD3Options = {
   y: (d) => d.label,
   bullet: {
     type: 'horizontal',
-    label: '',
-    unit: '',
-    // valueMarkerColor: 'yellow',
     markerLineWidth: 2,
   },
   legend: {

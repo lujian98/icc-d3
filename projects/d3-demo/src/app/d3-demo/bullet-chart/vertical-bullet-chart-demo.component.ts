@@ -23,8 +23,6 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
     chartType: 'bulletChart',
     bullet: {
       type: 'vertical',
-      label: 'Power',
-      unit: 'kw',
     },
 
     yScaleType: 'linear',
@@ -41,9 +39,10 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       verticalBrushShow: false
     },
 
-    yAxis: {
-      // axisLabel: 'Time (ms)',
-      axisLabelDistance: 0
+    xAxis: {
+      axisLabel: 'Power (kw)',
+      textAnchor: 'end',
+      axisLabelDistance: 20,
     },
   };
 
@@ -51,8 +50,6 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
     chartType: 'bulletChart',
     bullet: {
       type: 'vertical',
-      label: 'Temperature',
-      unit: 'F',
       markerLineWidth: 4
     },
 
@@ -69,9 +66,15 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       verticalOff: false,
       verticalBrushShow: false
     },
+
     xAxis: {
-      // axisLabel: 'Temperature',
-      axisLabelDistance: 0
+      axisLabel: 'Temperature (F)',
+      textAnchor: 'end',
+      axisLabelDistance: 20,
+    },
+
+    yAxis: {
+      axisLabel: 'Temperature (F)',
     },
   };
 
@@ -81,8 +84,6 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
 
     bullet: {
       type: 'vertical',
-      label: 'Temperature',
-      unit: 'F',
       markerLineWidth: 8
     },
 
@@ -99,7 +100,13 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       horizontalBrushShow: false,
       verticalOff: false,
       verticalBrushShow: false
-    }
+    },
+
+    xAxis: {
+      axisLabel: 'Temperature (F)',
+      textAnchor: 'end',
+      axisLabelDistance: 20,
+    },
   };
 
   data: IccD3BulletChartData[] = [{

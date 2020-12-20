@@ -89,7 +89,8 @@ export class AppLineChartDemoComponent implements OnInit {
     yAxis: {
       axisLabel: 'Voltage (v)',
       textAnchor: 'end',
-      rotate: -90
+      rotate: -90,
+      axisLabelDistance: -40,
     },
     zoom: {
       enabled: true,

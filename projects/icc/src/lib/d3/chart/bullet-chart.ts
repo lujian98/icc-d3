@@ -56,33 +56,13 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       this.drawHorizontalRange(drawName, scaleX, range);
       this.drawHorizontalMeasures(data, scaleX);
       this.drawHorizontalMakerLines(data.markerLines);
-      this.drawHorizontalLabel();
+      // this.drawHorizontalLabel();
     } else if (this.options.bullet.type === 'vertical') {
       this.drawVerticalRange(drawName, scaleY, range);
       this.drawVerticalMeasures(data, scaleY);
       this.drawVerticalMakerLines(data.markerLines);
-      this.drawVerticalLabel(); // TODO move label to axis draw
+      // this.drawVerticalLabel(); // TODO move label to axis draw
     }
-  }
-
-  private drawVerticalLabel(): void {
-    const yAxisDraw = this.svg.select('.xAxisDraw');
-    yAxisDraw.selectAll('g').remove();
-    const textSize = Math.round(this.options.drawWidth * 1 / 3);
-    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label')
-      .style('text-anchor', 'end')
-      .style('font', `${textSize}px Courier`)
-      .attr('y', this.options.drawHeight + 20)
-      .attr('dx', this.options.drawWidth)
-      .text(this.options.bullet.label);
-
-    const textSize2 = Math.round(this.options.drawWidth * 1 / 4);
-    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label-unit')
-      .style('text-anchor', 'end')
-      .style('font', `${textSize2}px Courier`)
-      .attr('y', this.options.drawHeight + 35)
-      .attr('dx', this.options.drawWidth)
-      .text(`(${this.options.bullet.unit})`);
   }
 
   private drawVerticalMakerLines(data: any[]): void {
@@ -175,6 +155,27 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .attr('y2', this.options.drawHeight - 2);
   }
 
+  /*
+  private drawVerticalLabel(): void {
+    const yAxisDraw = this.svg.select('.xAxisDraw');
+    yAxisDraw.selectAll('g').remove();
+    const textSize = Math.round(this.options.drawWidth * 1 / 3);
+    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label')
+      .style('text-anchor', 'end')
+      .style('font', `${textSize}px Courier`)
+      .attr('y', this.options.drawHeight + 20)
+      .attr('dx', this.options.drawWidth)
+      .text(this.options.bullet.label);
+
+    const textSize2 = Math.round(this.options.drawWidth * 1 / 4);
+    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label-unit')
+      .style('text-anchor', 'end')
+      .style('font', `${textSize2}px Courier`)
+      .attr('y', this.options.drawHeight + 35)
+      .attr('dx', this.options.drawWidth)
+      .text(`(${this.options.bullet.unit})`);
+  }
+
   private drawHorizontalLabel(): void {
     const yAxisDraw = this.svg.select('.yAxisDraw');
     yAxisDraw.selectAll('g').remove();
@@ -193,7 +194,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .attr('y', this.options.drawHeight * 2 / 3 + 2)
       .attr('dx', -5)
       .text(`(${this.options.bullet.unit})`);
-  }
+  } */
 
   legendMouseover(e, data, mouseover: boolean): void { }
 }
