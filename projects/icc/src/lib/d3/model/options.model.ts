@@ -78,6 +78,7 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
     axisLabelDistance: 30,
     position: 'bottom',
     textAnchor: 'middle',
+    rotate: 0
   },
   yAxis: {
     axisLabelDistance: -30,

@@ -46,13 +46,13 @@ export class IccAxisDraw<T> {
         .attr('x', 0).attr('y', 0);
     }
 
+    const anchorX = this.options.xAxis.textAnchor;
+    const x = anchorX === 'middle' ? this.options.drawWidth / 2 : anchorX === 'end' ? this.options.drawWidth : 0;
+    const y = this.options.xAxis.axisLabelDistance;
     xAxisDraw.select('.xAxis--label')
-      .attr('transform', 'translate(0,' + this.options.drawHeight + ')')
-      .style('text-anchor', this.options.xAxis.textAnchor)
-      .attr('x', () => {
-        const anchor = this.options.xAxis.textAnchor;
-        return anchor === 'middle' ? this.options.drawWidth / 2 : anchor === 'end' ? this.options.drawWidth : 0;
-      })
+      .attr('transform', `translate(0, ${this.options.drawHeight}) rotate(${this.options.xAxis.rotate}, ${x}, ${y}) `)
+      .style('text-anchor', anchorX)
+      .attr('x', x)
       .attr('dy', this.options.xAxis.axisLabelDistance)
       .text(this.options.xAxis.axisLabel);
   }
@@ -70,13 +70,13 @@ export class IccAxisDraw<T> {
         .attr('x', -this.options.margin.left).attr('y', 0);
     }
 
-    const anchor = this.options.xAxis.textAnchor;
-    const y = anchor === 'middle' ? this.options.drawHeight / 2 : anchor === 'end' ? this.options.drawHeight : 0;
+    const anchorY = this.options.yAxis.textAnchor;
+    const y = anchorY === 'start' ? this.options.drawHeight : anchorY === 'middle' ? this.options.drawHeight / 2 : 0;
     yAxisDraw.select('.yAxis--label')
       .attr('transform', `rotate(${this.options.yAxis.rotate}, ${this.options.yAxis.axisLabelDistance}, ${y})`)
-      .style('text-anchor', this.options.yAxis.textAnchor)
+      .style('text-anchor', anchorY)
       .attr('y', y)
-      .attr('dx', this.options.yAxis.axisLabelDistance) // TODO seems need correct draw on vertical text
+      .attr('dx', this.options.yAxis.axisLabelDistance)
       .text(this.options.yAxis.axisLabel);
   }
 

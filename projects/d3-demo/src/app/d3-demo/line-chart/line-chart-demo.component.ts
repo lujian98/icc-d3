@@ -37,6 +37,7 @@ export class AppLineChartDemoComponent implements OnInit {
     drawColor: (d, i) => d.key,
     xAxis: {
       axisLabel: 'Time (ms)',
+      // rotate: -90
     },
     yAxis: {
       axisLabel: 'Voltage (v)',
@@ -63,7 +64,7 @@ export class AppLineChartDemoComponent implements OnInit {
     },
     yAxis: {
       axisLabel: 'Voltage (v)',
-      textAnchor: 'end',
+      textAnchor: 'start',
     },
     zoom: {
       enabled: true,
@@ -88,6 +89,7 @@ export class AppLineChartDemoComponent implements OnInit {
     yAxis: {
       axisLabel: 'Voltage (v)',
       textAnchor: 'end',
+      rotate: -90
     },
     zoom: {
       enabled: true,
