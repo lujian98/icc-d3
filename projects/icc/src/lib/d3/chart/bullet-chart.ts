@@ -61,7 +61,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       this.drawVerticalRange(drawName, scaleY, range);
       this.drawVerticalMeasures(data, scaleY);
       this.drawVerticalMakerLines(data.markerLines);
-      this.drawVerticalLabel();
+      this.drawVerticalLabel(); // TODO move label to axis draw
     }
   }
 

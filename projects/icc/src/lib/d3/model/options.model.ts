@@ -75,10 +75,15 @@ export const DEFAULT_CHART_OPTIONS: IccD3Options = {
   duration: 0,
   axisEnabled: true,
   xAxis: {
-    axisLabelDistance: 0
+    axisLabelDistance: 30,
+    position: 'bottom',
+    textAnchor: 'middle',
   },
   yAxis: {
-    axisLabelDistance: 0
+    axisLabelDistance: -30,
+    position: 'bottom',
+    textAnchor: 'middle',
+    rotate: -90
   },
   legend: {
     enabled: true,

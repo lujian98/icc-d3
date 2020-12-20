@@ -39,7 +39,12 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       horizontalBrushShow: false,
       verticalOff: false,
       verticalBrushShow: false
-    }
+    },
+
+    yAxis: {
+      // axisLabel: 'Time (ms)',
+      axisLabelDistance: 0
+    },
   };
 
   options2: IccD3Options = {
@@ -63,7 +68,11 @@ export class AppVerticalBulletChartDemoComponent implements OnInit {
       horizontalBrushShow: false,
       verticalOff: false,
       verticalBrushShow: false
-    }
+    },
+    xAxis: {
+      // axisLabel: 'Temperature',
+      axisLabelDistance: 0
+    },
   };
 
   options3: IccD3Options = {
