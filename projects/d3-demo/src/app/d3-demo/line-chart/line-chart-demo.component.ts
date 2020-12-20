@@ -31,15 +31,20 @@ export class AppLineChartDemoComponent implements OnInit {
   options1: IccD3Options = {
     chartType: 'lineChart',
     xScaleType: 'linear',
+    margin: { top: 50, right: 80, bottom: 10, left: 10 },
     useInteractiveGuideline: true,
     x0: (d) => d.key,
     y0: (d) => d.values,
     drawColor: (d, i) => d.key,
     xAxis: {
+      position: 'top',
+      axisLabelDistance: -30,
       axisLabel: 'Time (ms)',
       // rotate: -90
     },
     yAxis: {
+      position: 'right',
+      axisLabelDistance: 50,
       axisLabel: 'Voltage (v)',
       rotate: -90
     },

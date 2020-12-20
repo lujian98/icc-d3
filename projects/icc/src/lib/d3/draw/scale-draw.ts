@@ -2,7 +2,7 @@ import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
 import { IccScaleFactory } from './../scale/scale-factory';
-import { IccScale, IccScaleColor, IccScaleBand, IccScaleAxis, IccD3Options } from '../model';
+import { IccScale, IccScaleColor, IccScaleLinear, IccScaleBand, IccScaleAxis, IccD3Options } from '../model';
 
 export class IccScaleDraw<T> {
 
@@ -14,6 +14,7 @@ export class IccScaleDraw<T> {
   x: IccScale;
   xAxis: IccScaleAxis;
   xGroup: IccScaleBand;
+  xGrid: IccScaleAxis;
 
   x2: IccScale;
   x2Axis: IccScaleAxis;
@@ -25,6 +26,7 @@ export class IccScaleDraw<T> {
   y: IccScale;
   yAxis: IccScaleAxis;
   yGroup: IccScaleBand;
+  yGrid: IccScaleAxis;
 
   y2: IccScale;
   y2Group: IccScaleBand;
@@ -137,13 +139,25 @@ export class IccScaleDraw<T> {
   }
 
   setXAxis(): void {
-    this.xAxis = d3Axis.axisBottom(this.x as any);
-    this.x2Axis = d3Axis.axisBottom(this.x2 as any);
+    if (this.options.xAxis.position === 'bottom') {
+      this.xAxis = d3Axis.axisBottom(this.x as IccScaleLinear);
+      this.xGrid = d3Axis.axisBottom(this.x as IccScaleLinear).tickFormat(() => '');
+    } else if (this.options.xAxis.position === 'top') {
+      this.xAxis = d3Axis.axisTop(this.x as IccScaleLinear);
+      this.xGrid = d3Axis.axisTop(this.x as IccScaleLinear).tickFormat(() => '');
+    }
+    this.x2Axis = d3Axis.axisBottom(this.x2 as IccScaleLinear);
   }
 
   setYAxis(): void {
-    this.yAxis = d3Axis.axisLeft(this.y as any);
-    this.y3Axis = d3Axis.axisRight(this.y3 as any);
+    if (this.options.yAxis.position === 'left') {
+      this.yAxis = d3Axis.axisLeft(this.y as IccScaleLinear);
+      this.yGrid = d3Axis.axisLeft(this.y as IccScaleLinear).tickFormat(() => '');
+    } else if (this.options.yAxis.position === 'right') {
+      this.yAxis = d3Axis.axisRight(this.y as IccScaleLinear);
+      this.yGrid = d3Axis.axisRight(this.y as IccScaleLinear).tickFormat(() => '');
+    }
+    this.y3Axis = d3Axis.axisRight(this.y3 as IccScaleLinear);
   }
 
   // TODO move this to scale factory

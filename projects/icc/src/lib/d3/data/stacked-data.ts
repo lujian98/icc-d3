@@ -64,12 +64,14 @@ export class IccStackedData<T> {
   setStackedYDomain(data: T[]): void {
     this.scale.setYDomain(data, this.normalized ? 'normalized' : 'stacked');
     this.svg.select('.axis--y').call(this.scale.yAxis);
+    this.svg.select('.axis--ygrid').call(this.scale.yGrid);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 
   setStackedXDomain(data: T[]): void {
     this.scale.setXDomain(data, this.normalized ? 'normalized' : 'stacked');
     this.svg.select('.axis--x').call(this.scale.xAxis);
+    this.svg.select('.axis--xgrid').call(this.scale.xGrid);
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);
   }
 }

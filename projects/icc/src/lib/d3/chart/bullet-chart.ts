@@ -11,11 +11,13 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
     if (this.options.bullet.type === 'horizontal') {
       this.scale.x.domain([minv, maxv]);
       this.scale.x2.domain([minv, maxv]);
-      this.svg.select('.axis--x').call(this.scale.xAxis).call(this.scale.xAxis.tickSize(2));
+      this.svg.select('.axis--x').call(this.scale.xAxis);
+      this.svg.select('.axis--xgrid').call(this.scale.xGrid);
     } else if (this.options.bullet.type === 'vertical') {
       this.scale.y.domain([minv, maxv]);
       this.scale.y3.domain([minv, maxv]);
-      this.svg.select('.axis--y').call(this.scale.yAxis).call(this.scale.yAxis.tickSize(2));
+      this.svg.select('.axis--y').call(this.scale.yAxis);
+      this.svg.select('.axis--ygrid').call(this.scale.yGrid);
     }
   }
 

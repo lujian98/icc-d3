@@ -41,8 +41,8 @@ export interface IccD3Options {
   axisEnabled?: boolean;
   xAxis?: IccD3AxisOptions;
   yAxis?: IccD3AxisOptions;
-  legend?: IccD3LegendOptions,
-  bullet?: IccD3BulletChartOptions,
+  legend?: IccD3LegendOptions;
+  bullet?: IccD3BulletChartOptions;
   pie?: IccD3PieChartOptions;
   radialGauge?: IccD3RadialGaugeOptions;
   popover?: IccD3PopoverOptions;

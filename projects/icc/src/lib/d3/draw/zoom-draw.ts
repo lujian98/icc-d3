@@ -236,7 +236,9 @@ export class IccZoomDraw<T> {
   private redraw(): void {
     this.draw.redraw();
     this.svg.select('.axis--x').call(this.scale.xAxis);
+    this.svg.select('.axis--xgrid').call(this.scale.xGrid);
     this.svg.select('.axis--y').call(this.scale.yAxis);
+    this.svg.select('.axis--ygrid').call(this.scale.yGrid);
   }
 }
 
