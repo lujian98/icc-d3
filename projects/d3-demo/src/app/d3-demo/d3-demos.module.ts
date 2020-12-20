@@ -34,6 +34,7 @@ import { AppRadialGaugeDemoComponent } from './gauge/radial-gauge-demo.component
 import { AppRadialGaugeDemo2Component } from './gauge/radial-gauge-demo2.component';
 
 import { AppBulletChartDemoComponent } from './bullet-chart/bullet-chart-demo.component';
+import { AppVerticalBulletChartDemoComponent } from './bullet-chart/vertical-bullet-chart-demo.component';
 
 const components = [
   AppD3DemosComponent,
@@ -63,7 +64,8 @@ const components = [
 
   AppRadialGaugeDemoComponent,
   AppRadialGaugeDemo2Component,
-  AppBulletChartDemoComponent
+  AppBulletChartDemoComponent,
+  AppVerticalBulletChartDemoComponent
 ];
 
 @NgModule({

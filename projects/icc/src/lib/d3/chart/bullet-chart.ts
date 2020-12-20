@@ -14,7 +14,7 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       this.svg.select('.axis--x').call(this.scale.xAxis).call(this.scale.xAxis.tickSize(2));
     } else if (this.options.bullet.type === 'vertical') {
       this.scale.y.domain([minv, maxv]);
-      this.scale.y2.domain([minv, maxv]);
+      this.scale.y3.domain([minv, maxv]);
       this.svg.select('.axis--y').call(this.scale.yAxis).call(this.scale.yAxis.tickSize(2));
     }
   }
@@ -57,7 +57,75 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       this.drawHorizontalMeasures(data, scaleX);
       this.drawHorizontalMakerLines(data.markerLines);
       this.drawHorizontalLabel();
+    } else if (this.options.bullet.type === 'vertical') {
+      this.drawVerticalRange(drawName, scaleY, range);
+      this.drawVerticalMeasures(data, scaleY);
+      this.drawVerticalMakerLines(data.markerLines);
+      this.drawVerticalLabel();
     }
+  }
+
+  private drawVerticalLabel(): void {
+    const yAxisDraw = this.svg.select('.xAxisDraw');
+    yAxisDraw.selectAll('g').remove();
+    const textSize = Math.round(this.options.drawWidth * 1 / 3);
+    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label')
+      .style('text-anchor', 'end')
+      .style('font', `${textSize}px Courier`)
+      .attr('y', this.options.drawHeight + 20)
+      .attr('dx', this.options.drawWidth)
+      .text(this.options.bullet.label);
+
+    const textSize2 = Math.round(this.options.drawWidth * 1 / 4);
+    yAxisDraw.append('g').append('text').attr('class', 'axis bullet-label-unit')
+      .style('text-anchor', 'end')
+      .style('font', `${textSize2}px Courier`)
+      .attr('y', this.options.drawHeight + 35)
+      .attr('dx', this.options.drawWidth)
+      .text(`(${this.options.bullet.unit})`);
+  }
+
+  private drawVerticalMakerLines(data: any[]): void {
+    this.svg.select('.bulletMarkerLines').selectAll('line.markerLine')
+      .data(data || []).join('line')
+      .attr('class', 'markerLine')
+      .attr('stroke', (d) => d.color)
+      .attr('stroke-width', this.options.bullet.markerLineWidth)
+      .attr('x1', 2)
+      .attr('y1', (d) => this.scale.y(this.options.y(d)))
+      .attr('x2', this.options.drawWidth - 2)
+      .attr('y2', (d) => this.scale.y(this.options.y(d)));
+  }
+
+  private drawVerticalRange(drawName: string, scaleY: IccScaleLinear, range: IccD3Range[]): void {
+    this.svg.select(drawName).selectAll('rect').data(range).join('rect')
+      .attr('fill', (d, i) => this.getdrawColor(d, i))
+      .attr('width', this.options.drawWidth)
+      .attr('y', (d, i) => scaleY(d.maxv))
+      .attr('height', (d, i) => scaleY(d.minv) - scaleY(d.maxv));
+  }
+
+  private drawVerticalMeasures(data: IccD3BulletChartData, scaleY: IccScaleLinear): void {
+    const measures = this.getMeasuredRange(this.options.y0(data), this.options.y, scaleY.domain()[0]) || [];
+    this.svg.select('.bulletMeasures').selectAll('rect').data(measures).join('rect')
+      .attr('fill', (d) => d.color)
+      .attr('width', this.options.drawWidth / 3)
+      .attr('x', this.options.drawWidth / 3)
+      .attr('y', (d) => scaleY(this.options.y(d)))
+      .attr('height', (d) => {
+        const h = scaleY(d.minv) - scaleY(this.options.y(d));
+        return h > 0 ? h : 0;
+      });
+    const h3 = this.options.drawWidth / 6 - 1;
+    this.svg.select('.bulletMarkers').selectAll('path.markerTriangle').data(measures).join('path')
+      .attr('class', 'markerTriangle')
+      .attr('fill', (d) => d.color)
+      .attr('d', `M${h3},0L${-h3},${-h3} ${-h3},${h3}Z`)
+      .attr('transform', (d, i) => {
+        const dh = i % 2 === 0 ? 2 * (h3 + 0.5) : -2 * (h3 + 0.5);
+        const r = i % 2 === 0 ? 180 : 0;
+        return `translate(${dh + this.options.drawWidth / 2}, ${this.scale.y(this.options.y(d))}) rotate(${r})`;
+      });
   }
 
   private drawHorizontalRange(drawName: string, scaleX: IccScaleLinear, range: IccD3Range[]): void {
@@ -83,15 +151,15 @@ export class IccbulletChart<T> extends IccAbstractDraw<T> {
       .attr('y', this.options.drawHeight / 3)
       .attr('x', (d) => scaleX(d.minv));
 
-    const h3 = this.options.drawHeight / 6;
+    const h3 = this.options.drawHeight / 6 - 1;
     this.svg.select('.bulletMarkers').selectAll('path.markerTriangle').data(measures).join('path')
       .attr('class', 'markerTriangle')
       .attr('fill', (d) => d.color)
       .attr('d', `M0,${h3}L${h3},${-h3} ${-h3},${-h3}Z`)
       .attr('transform', (d, i) => {
-        const dy = i % 2 === 0 ? this.options.bullet.valueMarkerDy : -this.options.bullet.valueMarkerDy;
+        const dh = i % 2 === 0 ? 2 * (h3 + 0.5) : -2 * (h3 + 0.5);
         const r = i % 2 === 0 ? 180 : 0;
-        return `translate(${this.scale.x(this.options.x(d))}, ${dy + this.options.drawHeight / 2}) rotate(${r})`;
+        return `translate(${this.scale.x(this.options.x(d))}, ${dh + this.options.drawHeight / 2}) rotate(${r})`;
       });
   }
 

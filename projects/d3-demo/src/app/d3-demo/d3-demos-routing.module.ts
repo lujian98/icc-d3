@@ -29,6 +29,7 @@ import { AppCandleStickChartDemoComponent } from './candle-stick-chart/candle-st
 import { AppRadialGaugeDemoComponent } from './gauge/radial-gauge-demo.component';
 import { AppRadialGaugeDemo2Component } from './gauge/radial-gauge-demo2.component';
 import { AppBulletChartDemoComponent } from './bullet-chart/bullet-chart-demo.component';
+import { AppVerticalBulletChartDemoComponent } from './bullet-chart/vertical-bullet-chart-demo.component';
 
 const routes: Routes = [
   { path: 'line-chart', component: AppLineChartDemoComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path: 'radial-gauge-demo', component: AppRadialGaugeDemoComponent },
   { path: 'radial-gauge-demo2', component: AppRadialGaugeDemo2Component },
   { path: 'bullet-chart-demo', component: AppBulletChartDemoComponent },
+  { path: 'vertical-bullet-chart-demo', component: AppVerticalBulletChartDemoComponent },
 ];
 
 @NgModule({
