@@ -149,11 +149,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   setDrawDomain(data: T[]): void {
     this.scale.setDrawDomain(data);
-    this.svg.select('.axis--x').call(this.scale.xAxis);
-    this.svg.select('.axis--xgrid').call(this.scale.xGrid);
+    this.drawAxis.update();
     this.svg.select('.context').select('.axis--x').call(this.scale.x2Axis);
-    this.svg.select('.axis--y').call(this.scale.yAxis);
-    this.svg.select('.axis--ygrid').call(this.scale.yGrid);
     this.svg.select('.contextBrushY').select('.axis--y').call(this.scale.y3Axis);
   }
 

@@ -38,27 +38,14 @@ export const DEFAULT_D3YAXIS_OPTIONS: IccD3AxisOptions = {
 
 /*
 
-
-axisLabel: ~ -,
 dispatch: {...} + ~ -,
-axisLabelDistance: ~ -,
 staggerLabels: ~ -,
-rotateLabels: ~ -,
-rotateYLabel: ~ -,
 showMaxMin: ~ -,
 height: ~ -,
 ticks: ~ -,
 width: ~ -,
-fontSize: ~ -,
-margin: {...} + ~ -,
 duration: ~ -,
-scale: ~ -,
-orient: ~ -,
 tickValues: ~ -,
 tickSubdivide: ~ -,
-tickSize: ~ -,
-tickPadding: ~ -,
 tickFormat: ~ -,
-domain: [...] + ~ -,
-range: [...] + ~ -
 */
