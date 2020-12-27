@@ -1,7 +1,7 @@
 export interface IccD3AxisOptions {
   axisLabel?: string;
   axisLabelDistance?: number;
-  position?: 'top' | 'bottom' | 'left' | 'right'; // TODO not used yet
+  position?: 'top' | 'bottom' | 'left' | 'right';
   textAnchor?: 'middle' | 'start' | 'end';
   rotate?: number;
   tickSize?: number;
@@ -40,7 +40,6 @@ export const DEFAULT_D3YAXIS_OPTIONS: IccD3AxisOptions = {
 
 dispatch: {...} + ~ -,
 staggerLabels: ~ -,
-showMaxMin: ~ -,
 height: ~ -,
 ticks: ~ -,
 width: ~ -,
