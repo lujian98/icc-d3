@@ -71,6 +71,13 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.options) {
+      this.config.initOptions(this.options);
+      this._clearDataSource(true);
+      if (!changes.options.firstChange && this.data) {
+        this._setDataSource(this.data);
+      }
+    }
     if (changes.dataSource) {
       this._setDataSource(this.dataSource);
     } else if (changes.data) {
@@ -79,9 +86,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   }
 
   public updateChart(data: T[]): void {
-    if (!this.config.options) { // only set once
-      this.config.initOptions(this.options); // TODO reconfig the options???
-    }
     this.data = this.config.checkData(data);
     this.chartTypes = this.config.getChartTypes(this.data);
     if (this.isViewReady && this.data) {
@@ -206,9 +210,12 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     }
   }
 
-  private _clearDataSource(): void {
+  private _clearDataSource(clearElemet: boolean = false): void {
     if (this.dataSource && typeof (this.dataSource as IccD3DataSource<T[]>).disconnect === 'function') {
       (this.dataSource as IccD3DataSource<T[]>).disconnect();
+      clearElemet = true;
+    }
+    if (clearElemet) {
       d3.select(this.elementRef.nativeElement).select('g').remove();
       this.svg = null;
     }
