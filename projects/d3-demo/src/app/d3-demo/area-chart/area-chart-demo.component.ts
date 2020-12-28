@@ -12,8 +12,8 @@ interface Stock {
   selector: 'd3-demo-area-chart-demo',
   styles: [':host { height: 100%; display: flex; flex-direction: column;'],
   template: `
-    <icc-d3 [options]="options" [data]="data"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data"></icc-d3>
+    <icc-d3 [options]="options" [dataSource]="data"></icc-d3>
+    <icc-d3 [options]="options2" [dataSource]="data"></icc-d3>
   `,
 })
 export class AppAreaChartDemoComponent implements OnInit {

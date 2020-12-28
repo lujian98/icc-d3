@@ -44,10 +44,12 @@ export class IccD3Config {
   }
 
   flexDirection(): string {
-    switch (this.options.legend.position) {
-      case 'top': return 'column-reverse';
-      case 'bottom': return 'column';
-      case 'right': return '';
+    if (this.options) {
+      switch (this.options.legend.position) {
+        case 'top': return 'column-reverse';
+        case 'bottom': return 'column';
+        case 'right': return '';
+      }
     }
   }
 
@@ -94,7 +96,10 @@ export class IccD3Config {
     return chartTypes;
   }
 
+  cloneData = <T>(data: T[]) => data && data.map((d) => typeof d === 'object' ? Object.assign({}, d) : d);
+
   checkData<T>(data: T[]): any[] {
+    data = this.cloneData(data);
     return data && this.options.chartType === 'pieChart' && !this.options.y0(data[0]) ?
       [{
         key: 'Pie Chart',

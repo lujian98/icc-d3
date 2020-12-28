@@ -1,5 +1,6 @@
 export * from './d3.module';
 export * from './d3.component';
+export * from './d3-data-source';
 
 export * from './config';
 

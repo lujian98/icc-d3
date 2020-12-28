@@ -7,12 +7,12 @@ import { IccD3Options } from 'icc';
   styles: [':host {height: 100%; display: flex; flex-direction: column;}'],
   template: `
   <div style="height: 100%; display: flex;">
-    <icc-d3 [options]="options1" [data]="data"></icc-d3>
-    <icc-d3 [options]="options2" [data]="data"></icc-d3>
+    <icc-d3 [options]="options1" [dataSource]="data"></icc-d3>
+    <icc-d3 [options]="options2" [dataSource]="data"></icc-d3>
   </div>
   <div style="height: 100%; display: flex; margin-top: 20px;">
-    <icc-d3 [options]="options3" [data]="data"></icc-d3>
-    <icc-d3 [options]="options4" [data]="data"></icc-d3>
+    <icc-d3 [options]="options3" [dataSource]="data"></icc-d3>
+    <icc-d3 [options]="options4" [dataSource]="data"></icc-d3>
   </div>
   `,
 })

@@ -1,5 +1,5 @@
 <svg width="100%"></svg>
-<icc-d3-legend *ngIf="config.options.legend.enabled"
+<icc-d3-legend *ngIf="config.options && config.options.legend.enabled"
   [options]="config.options"
   [data]="data"
   [scale]="scale$ | async"
