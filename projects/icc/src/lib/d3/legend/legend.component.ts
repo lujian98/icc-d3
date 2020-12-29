@@ -1,4 +1,6 @@
-import { Component, ElementRef, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Subject } from 'rxjs';
+import { delay, takeWhile } from 'rxjs/operators';
 import * as d3 from 'd3-selection';
 import * as d3Dispatch from 'd3-dispatch';
 import { IccScaleDraw } from '../draw/scale-draw';
@@ -9,11 +11,13 @@ import { IccD3Options } from '../model';
   templateUrl: './legend.component.html',
   styleUrls: ['./legend.component.scss']
 })
-export class IccD3LegendComponent<T> implements OnChanges {
+export class IccD3LegendComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() options: IccD3Options;
   @Input() data: T[];
   @Input() scale: IccScaleDraw<T>;
   @Input() dispatch: d3Dispatch.Dispatch<{}>;
+  private alive = true;
+  stateChange$ = new Subject<boolean>();
   availableWidth = 0;
   columnWidths = [];
   legendData: T[][];
@@ -30,6 +34,14 @@ export class IccD3LegendComponent<T> implements OnChanges {
   constructor(
     private elementRef: ElementRef,
   ) { }
+
+  ngOnInit(): void {
+    this.stateChange$.pipe(
+      takeWhile(() => this.alive),
+      delay(0)).subscribe(() => {
+        this.dispatch.call('legendResize', this, this.getData());
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if ((changes.options && this.availableWidth !== this.options.drawWidth - this.options.margin.left)
@@ -61,9 +73,7 @@ export class IccD3LegendComponent<T> implements OnChanges {
       } else {
         this.legendData.push(data);
       }
-      setTimeout(() => {
-        this.dispatch.call('legendResize', this, data);
-      }, 1);
+      this.stateChange$.next(true);
     }
   }
 
@@ -149,4 +159,9 @@ export class IccD3LegendComponent<T> implements OnChanges {
   itemMouseOut(event, d: T): void {
     this.dispatch.call('legendMouseout', this, d);
   }
+
+  ngOnDestroy(): void {
+    this.alive = false;
+  }
 }
+
