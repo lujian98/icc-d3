@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import * as d3Axis from 'd3-axis';
 import * as d3Scale from 'd3-scale';
 import * as d3ScaleChromatic from 'd3-scale-chromatic';
@@ -35,6 +36,8 @@ export class IccScaleDraw<T> {
   y3Axis: IccScaleAxis;
   y3Group: IccScaleBand;
 
+  scaleChange$ = new Subject<IccScaleDraw<T>>();
+
   private options: IccD3Options;
 
   constructor() { }
@@ -46,6 +49,7 @@ export class IccScaleDraw<T> {
     this.update(options);
     this.setXAxis();
     this.setYAxis();
+    this.scaleChange$.next(this); // TODO may need track change for all?
   }
 
   update(options: IccD3Options): void {

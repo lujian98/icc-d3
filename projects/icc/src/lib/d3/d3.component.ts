@@ -32,7 +32,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   dispatch: d3Dispatch.Dispatch<{}>;
   chartTypes: string[] = [];
   scale: IccScaleDraw<T> = new IccScaleDraw();
-  scaleChange$ = new Subject<IccScaleDraw<T>>();
   scale$ = new Subject<IccScaleDraw<T>>();
   view = new IccView(this.elementRef);
   draws: IccAbstractDraw<T>[] = [];
@@ -60,7 +59,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   ngOnInit(): void {
     this.isWindowReszie$.pipe(takeWhile(() => this.alive), debounceTime(100))
       .subscribe(() => this.resizeChart(this.data));
-    this.scaleChange$.pipe(delay(0)).subscribe((scale: any) => this.scale$.next(scale));
+    this.scale.scaleChange$.pipe(takeWhile(() => this.alive), delay(0))
+      .subscribe((scale) => this.scale$.next(scale));
   }
 
   ngAfterViewInit(): void {
@@ -124,7 +124,6 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.svg = this.view.svg;
     this.scale.buildScales(this.config.options);
     this.drawAxis = new IccAxisDraw(this.svg, this.scale, this.config.options);
-    this.scaleChange$.next(this.scale);
     this.chartTypes.forEach((type) => {
       const draw = this.drawServie.getDraw(this.svg, this.scale, this.dispatch, type);
       this.draws.push(draw);
