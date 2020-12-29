@@ -5,6 +5,8 @@ import { IccD3Options } from '../model';
 export class IccView {
   private height: number;
   private _svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
+  private chartTypes: any[];
+  private options: IccD3Options;
 
   get svg(): d3.Selection<d3.BaseType, {}, HTMLElement, any> {
     return this._svg;
@@ -14,17 +16,18 @@ export class IccView {
     this._svg = v;
   }
 
-  constructor(
-    protected elementRef: ElementRef,
-    private chartTypes: any[],
-    private options: IccD3Options
-  ) {
-    this.clearElement();
-    this.initSvg();
-  }
+  constructor(protected elementRef: ElementRef) { }
 
   public clearElement(): void {
     d3.select(this.elementRef.nativeElement).select('g').remove();
+    this.svg = null;
+  }
+
+  initView(chartTypes: any[], options: IccD3Options): void {
+    this.chartTypes = chartTypes;
+    this.options = options;
+    this.clearElement();
+    this.initSvg();
   }
 
   update(options: IccD3Options): void {

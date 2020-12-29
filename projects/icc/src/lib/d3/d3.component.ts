@@ -31,10 +31,10 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
   protected svg: d3.Selection<d3.BaseType, {}, HTMLElement, any>;
   dispatch: d3Dispatch.Dispatch<{}>;
   chartTypes: string[] = [];
-  scale: IccScaleDraw<T>;
+  scale: IccScaleDraw<T> = new IccScaleDraw();
   scaleChange$ = new Subject<IccScaleDraw<T>>();
   scale$ = new Subject<IccScaleDraw<T>>();
-  view: IccView;
+  view = new IccView(this.elementRef);
   draws: IccAbstractDraw<T>[] = [];
   zoom: IccZoomDraw<T>;
   interactive: IccInteractiveDraw<T>;
@@ -118,9 +118,8 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
 
   public createChart(data: T[]): void {
     this.config.setViewDimension();
-    this.scale = new IccScaleDraw();
     this.scale.initColor(data, this.config.options);
-    this.view = new IccView(this.elementRef, this.chartTypes, this.config.options);
+    this.view.initView(this.chartTypes, this.config.options);
     this.view.update(this.config.options);
     this.svg = this.view.svg;
     this.scale.buildScales(this.config.options);
@@ -216,7 +215,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
       clearElemet = true;
     }
     if (clearElemet) {
-      d3.select(this.elementRef.nativeElement).select('g').remove();
+      this.view.clearElement();
       this.svg = null;
     }
     if (this._dataSubscription) {
@@ -229,7 +228,7 @@ export class IccD3Component<T> implements AfterViewInit, OnInit, OnChanges, OnDe
     this.alive = false;
     this.isWindowReszie$.complete();
     this._clearDataSource();
-    d3.select(this.elementRef.nativeElement).select('g').remove();
+    this.view.clearElement();
     this.svg = null;
   }
 
