@@ -30,7 +30,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'horizontalbar draw')
-      .attr('fill', (d: any, i) => this.getBarColor(d, i))
+      .attr('fill', (d, i) => this.getBarColor(d, i))
       .attr('y', (d) => scaleY(this.options.y(d)))
       .attr('height', this.scale.getYBarWidth(scaleY, this.data));
 
@@ -60,7 +60,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
       .style('fill-opacity', (d) => mouseover ? null : 0.75);
 
     this.svg.select(`.${this.chartType}`).selectAll('.series')
-      .filter((d: any, i) => this.options.x0(d) === this.options.x0(data))
+      .filter((d, i) => this.options.x0(d) === this.options.x0(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 
@@ -72,7 +72,7 @@ export class IccHorizontalBarChart<T> extends IccAbstractDraw<T> {
       this.hoveredIndex = -1;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .filter((d: any) => this.options.y(d) === this.options.y(data))
+      .filter((d) => this.options.y(d) === this.options.y(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 }

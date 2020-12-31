@@ -110,7 +110,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  legendStyles(): any {
+  legendStyles(): {} {
     const right = 10 + this.options.margin.right + (this.options.zoom.verticalBrushShow ? 80 : 0);
     let marginRight = `${right}px`;
     let marginLeft = `${this.options.margin.left}px`;
@@ -139,7 +139,7 @@ export class IccD3LegendComponent<T> implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  iconStyles(d, i): any {
+  iconStyles(d, i): {} {
     const color = this.legendColor(d, i);
     return {
       'background-color': !d.disabled ? color : null,

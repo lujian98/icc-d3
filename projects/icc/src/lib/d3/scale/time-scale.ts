@@ -13,8 +13,8 @@ export class IccTimeScale<T> extends IccAbstractScale<T> {
     scale.range(range);
   }
 
-  setXDomain(scale: IccScaleTime, data: any[], type: string = null): void {
-    const xdata = data.map((v) => v.values.map((d) => this.options.x(d)))[0];
+  setXDomain(scale: IccScaleTime, data: T[], type: string = null): void {
+    const xdata = data.map((v) => this.options.y0(v).map((d) => this.options.x(d)))[0];
     if (this.options.chartType === 'barChart') { // TODO options with add extra range for bar chart
       const max = d3Array.max(xdata);
       const addMax = new Date(max);

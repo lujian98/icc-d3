@@ -52,10 +52,10 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
 
   legendMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .style('fill-opacity', (d) => mouseover ? null : 0.75);
+      .style('fill-opacity', () => mouseover ? null : 0.75);
 
     this.svg.select(`.${this.chartType}`).selectAll('.series')
-      .filter((d: any, i) => d.key === this.options.x0(data)) // key is from stacked data
+      .filter((d: any) => d.key === this.options.x0(data)) // key is from stacked data
       .style('fill-opacity', (d) => mouseover ? 0.9 : null);
   }
 
@@ -67,7 +67,7 @@ export class IccStackedBarChart<T> extends IccAbstractDraw<T> {
       this.hoveredIndex = -1;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .filter((d: any, i) => data.data && this.options.x(d.data) === this.options.x(data.data))
+      .filter((d: any) => data.data && this.options.x(d.data) === this.options.x(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 }

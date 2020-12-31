@@ -35,7 +35,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     });
   }
 
-  drawChart(data: any[]): void {
+  drawChart(data: T[]): void {
     if (this.options.radialGauge.range.length > 0) {
       this.setRangeScale();
       const pie = new IccPieData(this.options);
@@ -94,7 +94,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
     this.scale.setColorDomain(this.options.radialGauge.range);
   }
 
-  private setColorScale(data: any[]): void {
+  private setColorScale(data: T[]): void {
     const range = [];
     const domain = [];
     data.forEach((d: any, i) => {
@@ -161,7 +161,7 @@ export class IccRadialGauge<T> extends IccAbstractDraw<T> {
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContents = this.svg.select(drawName).selectAll('g').select('.draw')
-      .attr('transform', (d: any) => `translate(${this.cxy.x}, ${this.cxy.y})`)
+      .attr('transform', () => `translate(${this.cxy.x}, ${this.cxy.y})`)
       .attr('d', this.drawArc())
       .attr('fill', (d: any, i) => this.options.radialGauge.enableGradients ? this.setGradients(d) : this.getdrawColor(d.data, i));
     if (drawName === `.${this.chartType}`) {

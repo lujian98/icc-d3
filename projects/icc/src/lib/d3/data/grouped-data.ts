@@ -11,7 +11,7 @@ export class IccGroupedData<T> {
     const options = isXGrouped ? { v: (d) => this.options.x(d) } : { v: (d) => this.options.y(d) };
     let tdata = [];
     data.forEach((d) => {
-      let sk; let kv;
+      let sk: string; let kv: string;
       for (const [k, v] of Object.entries(d)) {
         if (!Array.isArray(d[k])) {
           sk = k;

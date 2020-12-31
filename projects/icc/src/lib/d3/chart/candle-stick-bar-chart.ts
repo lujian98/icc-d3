@@ -47,7 +47,7 @@ export class IccCandleStickBarChart<T> extends IccAbstractDraw<T> {
       const barWidth = (range[1] / this.options.y0(this.data[0]).length) * .45;
       let scale = 1;
       if (drawName === `.${this.chartType}`) {
-        const xdomain = scaleX.domain() as any;
+        const xdomain = scaleX.domain() as any[];
         scale = (range[1] - range[0]) / (this.scale.x2(xdomain[1]) - this.scale.x2(xdomain[0]));
       }
       return Math.max(1, barWidth * scale);

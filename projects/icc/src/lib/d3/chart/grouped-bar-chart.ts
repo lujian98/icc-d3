@@ -33,17 +33,17 @@ export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
     }
 
     this.svg.selectAll(`${drawName}Group`)
-      .attr('transform', (d: any) => 'translate(' + scaleX(this.options.x(d)) + ',0)');
+      .attr('transform', (d) => 'translate(' + scaleX(this.options.x(d)) + ',0)');
 
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'groupbar draw')
       .style('fill-opacity', 0.75)
       .attr('fill', (d, i) => this.getdrawColor(d, i))
-      .attr('x', (d: any) => xGroup(this.options.x0(d)))
-      .attr('y', (d: any) => scaleY(Math.max(0, this.options.y(d))))
+      .attr('x', (d) => xGroup(this.options.x0(d)))
+      .attr('y', (d) => scaleY(Math.max(0, this.options.y(d))))
       .attr('width', xGroup.bandwidth())
-      .attr('height', (d: any) => scaleY(0) - scaleY(Math.abs(this.options.y(d))));
+      .attr('height', (d) => scaleY(0) - scaleY(Math.abs(this.options.y(d))));
 
     if (drawName === `.${this.chartType}`) {
       drawContents
@@ -62,7 +62,7 @@ export class IccGroupedBarChart<T> extends IccAbstractDraw<T> {
       }
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
+      .filter((d) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.y(d) === this.options.y(data)) || this.options.y0(data)))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }

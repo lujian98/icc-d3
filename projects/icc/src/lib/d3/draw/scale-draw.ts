@@ -71,7 +71,7 @@ export class IccScaleDraw<T> {
     this.yFactory.updateRange(this.y3, [this.options.drawHeight, 0], reverse);
   }
 
-  setDrawDomain(data: any[]): void {
+  setDrawDomain(data: T[]): void {
     const drawData = data.filter((d: any) => !d.disabled);
     if (drawData.length > 0 && this.options.axisEnabled) {
       this.setXDomain(drawData);
@@ -165,7 +165,7 @@ export class IccScaleDraw<T> {
   }
 
   // TODO move this to scale factory
-  getXBarWidth(scale, data: any[], isFirst: boolean = false): number {
+  getXBarWidth(scale, data: T[], isFirst: boolean = false): number {
     if (scale.bandwidth) {
       return Math.max(1, scale.bandwidth());
     } else if (data.length > 0) {
@@ -183,7 +183,7 @@ export class IccScaleDraw<T> {
     }
   }
 
-  getYBarWidth(scale, data: any[], isFirst: boolean = false): number {
+  getYBarWidth(scale, data: T[], isFirst: boolean = false): number {
     if (scale.bandwidth) {
       return Math.max(1, scale.bandwidth());
     } else if (data.length > 0) {

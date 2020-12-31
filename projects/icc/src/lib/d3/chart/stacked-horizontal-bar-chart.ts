@@ -42,7 +42,7 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d: any) => d).join('rect')
       .attr('class', 'stackedhorizontalbar draw')
-      .attr('x', (d, i) => scaleX(d[0]))
+      .attr('x', (d) => scaleX(d[0]))
       .attr('y', (d: any) => scaleY(this.options.y(d.data)))
       .attr('height', this.scale.getYBarWidth(scaleY, this.drawData))
       .attr('width', (d, i) => scaleX(d[1]) - scaleX(d[0]));
@@ -56,10 +56,10 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
 
   legendMouseover(e, data, mouseover: boolean): void {
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .style('fill-opacity', (d) => mouseover ? null : 0.75);
+      .style('fill-opacity', () => mouseover ? null : 0.75);
 
     this.svg.select(`.${this.chartType}`).selectAll('.series')
-      .filter((d: any, i) => d.key === this.options.x0(data))
+      .filter((d: any) => d.key === this.options.x0(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : null);
   }
 
@@ -71,7 +71,7 @@ export class IccStackedHorizontalBarChart<T> extends IccAbstractDraw<T> {
       this.hoveredIndex = -1;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').selectAll('.draw')
-      .filter((d: any, i) => data.data && this.options.y(d.data) === this.options.y(data.data))
+      .filter((d: any) => data.data && this.options.y(d.data) === this.options.y(data.data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }
 }

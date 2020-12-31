@@ -87,7 +87,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  scaleBandInvert(scale, x): any {
+  scaleBandInvert(scale: IccScaleBand, x: number): number {
     const domain = scale.domain();
     const paddingOuter = scale(domain[0]);
     const eachBand = scale.step();
@@ -95,7 +95,7 @@ export class IccInteractiveDraw<T> {
     return index < domain.length ? index : -1;
   }
 
-  private updateGuideLineCircle(data, x, mouseover: boolean): void {
+  private updateGuideLineCircle(data: any[], x: number, mouseover: boolean): void {
     if (this.options.yScaleType !== 'band') {
       this.svg.select('.interactiveDraw').selectAll('circle')
         .style('opacity', (d, i) => !data[i] || !mouseover || data[i].disabled || !data[i].cy ? 0 : 1)
@@ -106,7 +106,7 @@ export class IccInteractiveDraw<T> {
     }
   }
 
-  private getInteractiveData(idx): IccD3Interactive[] {
+  private getInteractiveData(idx: number): IccD3Interactive[] {
     const ndata: IccD3Interactive[] = [];
     this.draw.data.filter((d: any) => !d.disabled).forEach((d: any, i) => {
       this.draw.draws.forEach((draw) => {

@@ -38,17 +38,17 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
     }
 
     this.svg.selectAll(`${drawName}Group`)
-      .attr('transform', (d: any) => 'translate(0, ' + scaleY(this.options.y(d)) + ')');
+      .attr('transform', (d) => 'translate(0, ' + scaleY(this.options.y(d)) + ')');
 
     const drawContents = this.svg.select(drawName).selectAll('g').selectAll('rect')
       .data((d) => this.options.y0(d)).join('rect')
       .attr('class', 'groupbar draw')
       .style('fill-opacity', 0.75)
       .attr('fill', (d, i) => this.getdrawColor(d, i))
-      .attr('y', (d: any) => yGroup(this.options.x0(d))) /// MUST BE this.options.x0(d)
-      .attr('x', (d: any) => scaleX(Math.min(0, this.options.x(d))))
+      .attr('y', (d) => yGroup(this.options.x0(d))) /// MUST BE this.options.x0(d)
+      .attr('x', (d) => scaleX(Math.min(0, this.options.x(d))))
       .attr('height', yGroup.bandwidth())
-      .attr('width', (d: any) => scaleX(Math.abs(this.options.x(d))) - scaleX(0));
+      .attr('width', (d) => scaleX(Math.abs(this.options.x(d))) - scaleX(0));
 
     if (drawName === `.${this.chartType}`) {
       drawContents
@@ -67,7 +67,7 @@ export class IccGroupedHorizontalBarChart<T> extends IccAbstractDraw<T> {
       }
     }
     this.svg.select('.groupedHorizontalBarChart').selectAll('g').selectAll('.draw')
-      .filter((d: any) => this.options.x0(d) === this.options.x0(data) &&
+      .filter((d) => this.options.x0(d) === this.options.x0(data) &&
         ((!this.options.y0(data) && this.options.x(d) === this.options.x(data)) || this.options.y0(data)))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.75);
   }

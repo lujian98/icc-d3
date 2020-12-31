@@ -5,7 +5,7 @@ import { IccScale, IccScaleLinear } from '../model';
 
 export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
 
-  drawChart(data: any[]): void {
+  drawChart(data: T[]): void {
     this.isStacked = true;
     this.reverse = true;
     const stacked = new IccStackedData(this.svg, this.scale, this.options, this.chartType);
@@ -34,8 +34,8 @@ export class IccStackedAreaChart<T> extends IccAbstractDraw<T> {
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawContent = d3Shape.area()
       .x((d: any) => scaleX(this.options.x(d.data)))
-      .y0((d: any) => scaleY(d[0]))
-      .y1((d: any) => scaleY(d[1]));
+      .y0((d) => scaleY(d[0]))
+      .y1((d) => scaleY(d[1]));
     this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('fill', (d, i) => this.getStackeddrawColor(d, i))
       .attr('d', drawContent);

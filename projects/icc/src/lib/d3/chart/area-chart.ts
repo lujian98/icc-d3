@@ -22,9 +22,9 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
     const drawArea = d3Shape.area()
       .curve(d3Shape.curveLinear)
       .defined((d, i) => !isNaN(this.options.y(d)) && this.options.y(d) !== null)
-      .x((d: any) => scaleX(this.options.x(d)))
-      .y0((d) => scaleY.domain()[0] < 0 ? scaleY(0) : scaleY.range()[0])
-      .y1((d: any) => scaleY(this.options.y(d)));
+      .x((d) => scaleX(this.options.x(d)))
+      .y0(() => scaleY.domain()[0] < 0 ? scaleY(0) : scaleY.range()[0])
+      .y1((d) => scaleY(this.options.y(d)));
     const drawContent = (d) => drawArea(this.options.y0(d));
     this.svg.select(drawName).selectAll('g').select('.draw')
       .attr('fill', (d, i) => this.getdrawColor(d, i))
@@ -37,7 +37,7 @@ export class IccAreaChart<T> extends IccAbstractDraw<T> {
       this.hoveredKey = mouseover ? this.options.x0(data) : null;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      .filter((d: any) => this.options.x0(d) === this.options.x0(data))
+      .filter((d) => this.options.x0(d) === this.options.x0(data))
       .style('fill-opacity', (d) => mouseover ? 0.9 : 0.5);
   }
 }

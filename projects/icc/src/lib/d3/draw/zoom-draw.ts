@@ -6,7 +6,7 @@ import { IccScaleDraw } from './scale-draw';
 import { IccScaleLinear, IccD3Options } from '../model';
 
 export class IccZoomDraw<T> {
-  zoom: any;
+  zoom: any; // TODO define types
   brush: any;
   brushY: any;
   xRange: any[];

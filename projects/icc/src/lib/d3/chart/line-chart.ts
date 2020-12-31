@@ -18,8 +18,8 @@ export class IccLineChart<T> extends IccAbstractDraw<T> {
 
   redrawContent(drawName: string, scaleX: IccScale, scaleY: IccScaleLinear): void {
     const drawLine = d3Shape.line()
-      .x((d: any) => scaleX(this.options.x(d)))
-      .y((d: any) => scaleY(this.options.y(d)));
+      .x((d) => scaleX(this.options.x(d)))
+      .y((d) => scaleY(this.options.y(d)));
     const drawContent = (d) => drawLine(this.options.y0(d));
     this.svg.select(drawName).selectAll('g').select('.draw')
       .style('stroke', (d, i) => this.getdrawColor(d, i))
@@ -31,7 +31,7 @@ export class IccLineChart<T> extends IccAbstractDraw<T> {
       this.hoveredKey = mouseover ? this.options.x0(data) : null;
     }
     this.svg.select(`.${this.chartType}`).selectAll('g').select('.draw')
-      .filter((d: any) => this.options.x0(d) === this.options.x0(data))
+      .filter((d) => this.options.x0(d) === this.options.x0(data))
       .attr('stroke-width', (d) => mouseover ? 2.0 : 1.0);
   }
 }
